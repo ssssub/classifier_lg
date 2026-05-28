@@ -460,6 +460,68 @@ div[data-testid="stCheckbox"] label span {{
   flex-shrink: 0;
 }}
 
+/* ── 통계 박스 ── */
+.stat-row {{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.4rem;
+}}
+.stat-box {{
+  flex: 1;
+  background: #FAFAFA;
+  border: 1.5px solid #F0F0F0;
+  border-radius: 12px;
+  padding: 13px 14px;
+  text-align: center;
+}}
+.stat-num {{
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #111;
+  line-height: 1;
+  margin-bottom: 5px;
+}}
+.stat-num.highlight {{ color: #A50034; }}
+.stat-label {{
+  font-size: 0.69rem;
+  font-weight: 600;
+  color: #AAA;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}}
+
+/* ── 비교표 ── */
+.cmp-table {{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.79rem;
+  color: #333;
+}}
+.cmp-table th {{
+  background: #F5F5F7;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1.5px solid #E8E8E8;
+  white-space: nowrap;
+}}
+.cmp-table td {{
+  padding: 9px 10px;
+  border-bottom: 1px solid #F0F0F0;
+  vertical-align: top;
+  line-height: 1.4;
+}}
+.cmp-table tr:last-child td {{ border-bottom: none; }}
+.cmp-table tr.top-row td {{ background: #FFF8F9; }}
+.cmp-rank {{ font-weight: 800; color: #A50034; }}
+.cmp-name {{ font-weight: 600; color: #111; max-width: 180px; }}
+.cmp-fit  {{ font-weight: 700; color: #A50034; white-space: nowrap; }}
+.cmp-feat {{ color: #777; font-size: 0.72rem; }}
+
 /* ── 스펙 드롭다운 ── */
 .spec-sel-section {{
   margin-top: 14px;
@@ -1003,16 +1065,33 @@ elif q == "result":
             for rank_i, (_, p, _) in enumerate(top5)
         ]
 
-        # 결과 헤더
+        # 통계 박스
+        q_count = len(st.session_state.get("history", []))
+        db_total = len(PRODUCTS)
+        cand_count = len(cand)
         st.markdown(f"""
-        <div style="margin-bottom:1.4rem;">
+        <div style="margin-bottom:0.5rem;">
           <div style="font-size:0.72rem;font-weight:800;letter-spacing:0.12em;
-                      color:#A50034;text-transform:uppercase;margin-bottom:6px;">
+                      color:#A50034;text-transform:uppercase;margin-bottom:10px;">
             맞춤 추천 결과
           </div>
-          <div style="font-size:1.15rem;font-weight:700;color:#111;line-height:1.3;">
-            {len(scored)}개 제품을 찾았어요
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">{q_count}</div>
+            <div class="stat-label">답한 질문</div>
           </div>
+          <div class="stat-box">
+            <div class="stat-num highlight">{cand_count}</div>
+            <div class="stat-label">후보 제품</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">{db_total}</div>
+            <div class="stat-label">전체 DB</div>
+          </div>
+        </div>
+        <div style="font-size:1.08rem;font-weight:700;color:#111;margin-bottom:1.2rem;">
+          상위 {len(scored)}개 제품을 추천드려요
         </div>
         """, unsafe_allow_html=True)
 
@@ -1049,6 +1128,56 @@ elif q == "result":
             """, unsafe_allow_html=True)
             for fit_s, rank_s, p_s in scored[1:]:
                 show_result_card(p_s, rank=rank_s, fit=fit_s, ans=ans, applied_tier=tier)
+
+        # Top 5 한눈에 비교표
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+        with st.expander("📊 Top 5 한눈에 비교표"):
+            # 주요 기능 레이블 매핑
+            def _feat_labels(p):
+                feats = p.get("features", set())
+                labels = [SOFT_FEATURES[k][0].split(" (")[0] for k in sorted(feats)
+                          if k in SOFT_FEATURES]
+                return ", ".join(labels) if labels else "—"
+
+            rows_html = ""
+            for fit_c, rank_c, p_c in scored:
+                price_c = (
+                    f"{p_c['price_min']:,}원" if p_c.get("price_min") else "미정"
+                )
+                row_cls = "top-row" if rank_c == 1 else ""
+                rows_html += f"""
+                <tr class="{row_cls}">
+                  <td><span class="cmp-rank">#{rank_c}</span></td>
+                  <td><span class="cmp-name">{p_c['name']}</span></td>
+                  <td><span class="cmp-fit">{round(fit_c * 100)}%</span></td>
+                  <td>{price_c}</td>
+                  <td>{p_c.get('total_l', '—')}L</td>
+                  <td>{p_c.get('doors', '—')}</td>
+                  <td>{p_c.get('energy', '—')}등급</td>
+                  <td><span class="cmp-feat">{_feat_labels(p_c)}</span></td>
+                </tr>"""
+
+            st.markdown(f"""
+            <div style="overflow-x:auto;">
+            <table class="cmp-table">
+              <thead>
+                <tr>
+                  <th>순위</th>
+                  <th>제품명</th>
+                  <th>적합도</th>
+                  <th>최저가</th>
+                  <th>용량</th>
+                  <th>도어</th>
+                  <th>에너지</th>
+                  <th>주요기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows_html}
+              </tbody>
+            </table>
+            </div>
+            """, unsafe_allow_html=True)
 
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
     if st.button("처음부터 다시 상담", type="primary", use_container_width=True):
