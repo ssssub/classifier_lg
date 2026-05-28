@@ -933,11 +933,12 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
             f'<span>{b}</span></div>'
             for b in good_bullets
         )
-        bullets_html = f"""
-        <div class="bd-bullets">
-          <div class="bd-bullets-title">잘 맞는 조건</div>
-          {bullet_items}
-        </div>"""
+        bullets_html = (
+            '<div class="bd-bullets">'
+            '<div class="bd-bullets-title">잘 맞는 조건</div>'
+            + bullet_items +
+            '</div>'
+        )
     else:
         bullets_html = ""
 
@@ -953,11 +954,12 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
             f'<span class="bd-pct">{s}%</span>'
             f'</div>'
         )
-    bars_html = f"""
-    <div class="bd-section">
-      <div class="bd-section-title">조건별 적합도</div>
-      {bar_rows_html}
-    </div>"""
+    bars_html = (
+        '<div class="bd-section">'
+        '<div class="bd-section-title">조건별 적합도</div>'
+        + bar_rows_html +
+        '</div>'
+    )
 
     # 스펙 선택 드롭다운 HTML
     def _opts(vals):
@@ -967,27 +969,19 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
     mats_sel   = p.get("materials") or [p.get("material", "-")]
     codes_sel  = p.get("model_codes") or [p.get("code", "-")]
 
-    sel_html = f"""
-    <div class="spec-sel-section">
-      <div class="spec-sel-wrap">
-        <div class="spec-sel-label">색상</div>
-        <select class="spec-sel">
-          {_opts(colors_sel) if colors_sel else '<option>-</option>'}
-        </select>
-      </div>
-      <div class="spec-sel-wrap">
-        <div class="spec-sel-label">도어 재질</div>
-        <select class="spec-sel">
-          {_opts(mats_sel)}
-        </select>
-      </div>
-      <div class="spec-sel-wrap">
-        <div class="spec-sel-label">모델 코드</div>
-        <select class="spec-sel">
-          {_opts(codes_sel)}
-        </select>
-      </div>
-    </div>"""
+    color_opts  = _opts(colors_sel) if colors_sel else '<option>-</option>'
+    mat_opts    = _opts(mats_sel)
+    code_opts   = _opts(codes_sel)
+    sel_html = (
+        '<div class="spec-sel-section">'
+        '<div class="spec-sel-wrap"><div class="spec-sel-label">색상</div>'
+        f'<select class="spec-sel">{color_opts}</select></div>'
+        '<div class="spec-sel-wrap"><div class="spec-sel-label">도어 재질</div>'
+        f'<select class="spec-sel">{mat_opts}</select></div>'
+        '<div class="spec-sel-wrap"><div class="spec-sel-label">모델 코드</div>'
+        f'<select class="spec-sel">{code_opts}</select></div>'
+        '</div>'
+    )
 
     st.markdown(f"""
     <div class="{card_cls}">
