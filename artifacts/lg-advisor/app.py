@@ -264,21 +264,81 @@ div[data-testid="stCheckbox"] label span {{
   animation: lgFadeUp 0.25s ease both;
 }}
 .res-card.top-pick {{
-  border-color: #A50034;
+  border: 2.5px solid #A50034 !important;
   background: #FFF8FA;
+  box-shadow: 0 4px 20px rgba(165,0,52,0.10);
 }}
-.res-badge {{
+
+/* ── 적합도 헤더 줄 ── */
+.res-fit-row {{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}}
+.res-rank {{
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #BBB;
+  letter-spacing: 0.06em;
+}}
+.res-rank.top {{
+  color: #A50034;
+}}
+/* 적합도 숫자 + 바 */
+.res-fit-block {{
+  text-align: right;
+}}
+.res-fit-pct {{
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #111;
+}}
+.res-fit-pct.top {{ color: #A50034; }}
+.res-fit-label {{
+  font-size: 0.68rem;
+  color: #AAA;
+  font-weight: 500;
+  margin-top: 2px;
+}}
+.res-fit-bar-wrap {{
+  height: 4px;
+  background: #F0F0F0;
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}}
+.res-fit-bar {{
+  height: 4px;
+  border-radius: 2px;
+  background: #E8E8E8;
+  transition: width 0.6s ease;
+}}
+.res-fit-bar.top {{ background: #A50034; }}
+
+/* 적합도 배지 */
+.res-fit-badge {{
   display: inline-block;
-  background: #A50034;
-  color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
   padding: 3px 10px;
   border-radius: 100px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
 }}
+.res-fit-badge.great {{
+  background: #FFF0F3;
+  color: #A50034;
+  border: 1px solid #FFCCD6;
+}}
+.res-fit-badge.good {{
+  background: #F5F5F7;
+  color: #555;
+  border: 1px solid #E0E0E0;
+}}
+
 .res-name {{
   font-size: 1.05rem;
   font-weight: 700;
@@ -514,7 +574,57 @@ def option_buttons(q_id: str):
             st.rerun()
 
 
-def show_result_card(p: dict, is_top: bool = False):
+def compute_fit_score(p: dict, ans: dict, applied_tier) -> float:
+    """UI 표시용 종합 적합도 (0.0~1.0). 후보 필터링 로직은 engine.py 그대로."""
+    parts: list[tuple[float, float]] = []   # (score, weight)
+
+    # ① 용량 적합도 (40%) — 목표 tier와의 거리
+    if applied_tier and p.get("total_l"):
+        actual = E.tier_index(p["total_l"]) or applied_tier
+        diff = abs(actual - applied_tier)
+        vol = max(0.0, 1.0 - diff * 0.22)
+        parts.append((vol, 0.40))
+
+    # ② 원하는 기능 매칭 (35%)
+    wanted = set(ans.get("wanted_features", []))
+    if wanted:
+        hit = wanted & p.get("features", set())
+        parts.append((len(hit) / len(wanted), 0.35))
+
+    # ③ 에너지 등급 (15%): 1등급→1.0, 2→0.85, 3→0.70, …
+    energy = p.get("energy")
+    if energy:
+        parts.append((max(0.0, 1.0 - (energy - 1) * 0.15), 0.15))
+
+    # ④ 기본 매칭 보정 — 나머지 가중치는 항상 100%
+    used_w = sum(w for _, w in parts)
+    remaining = round(1.0 - used_w, 6)
+    if remaining > 0.001:
+        parts.append((1.0, remaining))
+
+    total_w = sum(w for _, w in parts)
+    if total_w == 0:
+        return 0.82
+    return sum(s * w for s, w in parts) / total_w
+
+
+def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
+    """rank: 1-based 순위, fit: 0.0~1.0 적합도."""
+    is_top = (rank == 1)
+    card_cls = "res-card top-pick" if is_top else "res-card"
+    rank_cls = "res-rank top" if is_top else "res-rank"
+    pct = round(fit * 100)
+    pct_cls = "res-fit-pct top" if is_top else "res-fit-pct"
+    bar_cls = "res-fit-bar top" if is_top else "res-fit-bar"
+
+    # 적합도 배지
+    if pct >= 90:
+        badge_html = '<span class="res-fit-badge great">매우 잘 맞아요</span>'
+    elif pct >= 75:
+        badge_html = '<span class="res-fit-badge good">잘 맞아요</span>'
+    else:
+        badge_html = ""
+
     price_str = (
         f"{p['price_min']:,}원" if p["price_min"] == p["price_max"]
         else f"{p['price_min']:,} ~ {p['price_max']:,}원"
@@ -524,11 +634,22 @@ def show_result_card(p: dict, is_top: bool = False):
         f'<span class="res-chip">{SOFT_FEATURES[k][0].split(" (")[0]}</span>'
         for k in sorted(p.get("features", []))
     )
-    badge = '<span class="res-badge">추천</span>' if is_top else ""
-    card_cls = "res-card top-pick" if is_top else "res-card"
+
     st.markdown(f"""
     <div class="{card_cls}">
-      {badge}
+      <div class="res-fit-row">
+        <div>
+          <div class="{rank_cls}">#{rank} 추천</div>
+          {badge_html}
+        </div>
+        <div class="res-fit-block">
+          <div class="{pct_cls}">{pct}<span style="font-size:1rem;font-weight:700;">%</span></div>
+          <div class="res-fit-label">종합 적합도</div>
+          <div class="res-fit-bar-wrap">
+            <div class="{bar_cls}" style="width:{pct}%;"></div>
+          </div>
+        </div>
+      </div>
       <div class="res-name">{p['name']}</div>
       <div class="res-spec">{p['code']} &nbsp;·&nbsp; {p['install']} &nbsp;·&nbsp;
         {p['doors']} &nbsp;·&nbsp; 총 {p['total_l']}L &nbsp;·&nbsp; 에너지 {p['energy']}등급</div>
@@ -596,7 +717,7 @@ elif q == "result":
     cand, tier = E.filter_candidates(PRODUCTS, ans)
     if "wanted_features" not in ans:
         ans["wanted_features"] = []
-    ranked = E.score_and_rank(cand, ans)
+    ranked = E.score_and_rank(cand, ans)   # engine.py 로직 그대로
 
     if not ranked:
         st.markdown("""
@@ -604,52 +725,61 @@ elif q == "result":
           조건에 딱 맞는 제품을 찾지 못했어요. 처음부터 다시 시도해 보세요.
         </div>""", unsafe_allow_html=True)
     else:
-        _, top, _ = ranked[0]
+        # Top 5만 표시
+        top5 = ranked[:5]
 
+        # 적합도 계산 (UI 표시 전용 — 필터링/랭킹 로직 불변)
+        scored = [
+            (compute_fit_score(p, ans, tier), rank_i + 1, p)
+            for rank_i, (_, p, _) in enumerate(top5)
+        ]
+
+        # 결과 헤더
         st.markdown(f"""
-        <div style="margin-bottom:1.2rem;">
+        <div style="margin-bottom:1.4rem;">
           <div style="font-size:0.72rem;font-weight:800;letter-spacing:0.12em;
                       color:#A50034;text-transform:uppercase;margin-bottom:6px;">
-            고객님께 딱 맞는 제품
+            맞춤 추천 결과
           </div>
           <div style="font-size:1.15rem;font-weight:700;color:#111;line-height:1.3;">
-            {top['name']}
+            {len(scored)}개 제품을 찾았어요
           </div>
         </div>
         """, unsafe_allow_html=True)
 
-        show_result_card(top, is_top=True)
+        # 1위 카드 + 추천 이유
+        fit1, _, top_p = scored[0]
+        show_result_card(top_p, rank=1, fit=fit1, ans=ans, applied_tier=tier)
 
-        # 추천 이유
-        reasons = E.reasons_for(top, ans, tier)
+        reasons = E.reasons_for(top_p, ans, tier)
         if reasons:
             reason_items = "".join(
                 f'<li style="margin-bottom:5px;">{r}</li>' for r in reasons
             )
             st.markdown(f"""
-            <div style="margin:16px 0 24px;padding:16px 20px;background:#F9F9FB;
-                        border-radius:12px;">
-              <div style="font-size:0.78rem;font-weight:700;color:#555;
-                          letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;">
+            <div style="margin:-4px 0 16px;padding:14px 20px;background:#F9F9FB;
+                        border-radius:0 0 12px 12px;border:1px solid #F0F0F0;border-top:none;">
+              <div style="font-size:0.74rem;font-weight:700;color:#777;
+                          letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">
                 추천 이유
               </div>
-              <ul style="margin:0;padding-left:18px;font-size:0.85rem;color:#444;line-height:1.6;">
+              <ul style="margin:0;padding-left:18px;font-size:0.83rem;color:#555;line-height:1.65;">
                 {reason_items}
               </ul>
             </div>
             """, unsafe_allow_html=True)
 
-        # 비교 제품
-        alts = ranked[1:3]
-        if alts:
+        # 2~5위 카드
+        if len(scored) > 1:
             st.markdown("""
-            <div style="font-size:0.78rem;font-weight:700;color:#555;
-                        letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;">
-              함께 비교해보세요
+            <div style="font-size:0.74rem;font-weight:700;color:#999;
+                        letter-spacing:0.06em;text-transform:uppercase;
+                        margin:20px 0 10px;">
+              다른 후보도 살펴보세요
             </div>
             """, unsafe_allow_html=True)
-            for _, p, _ in alts:
-                show_result_card(p, is_top=False)
+            for fit_s, rank_s, p_s in scored[1:]:
+                show_result_card(p_s, rank=rank_s, fit=fit_s, ans=ans, applied_tier=tier)
 
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
     if st.button("처음부터 다시 상담", type="primary", use_container_width=True):
