@@ -969,17 +969,55 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
     mats_sel   = p.get("materials") or [p.get("material", "-")]
     codes_sel  = p.get("model_codes") or [p.get("code", "-")]
 
-    color_opts  = _opts(colors_sel) if colors_sel else '<option>-</option>'
-    mat_opts    = _opts(mats_sel)
-    code_opts   = _opts(codes_sel)
+    color_opts = _opts(colors_sel) if colors_sel else '<option>-</option>'
+    mat_opts   = _opts(mats_sel)
+    code_opts  = _opts(codes_sel)
+
+    # 색상·모델코드 개수가 일치하면 1:1 연동, 아니면 독립
+    linked = (len(colors_sel) == len(codes_sel) and len(colors_sel) > 0)
+    cid    = f"sel-color-{rank}"
+    mid_id = f"sel-mat-{rank}"
+    kid    = f"sel-code-{rank}"
+
+    if linked:
+        # 색상 선택 → 코드 동기화
+        color_onchange = (
+            f"var i=this.selectedIndex;"
+            f"document.getElementById('{kid}').selectedIndex=i;"
+        )
+        # 코드 선택 → 색상 동기화
+        code_onchange = (
+            f"var i=this.selectedIndex;"
+            f"document.getElementById('{cid}').selectedIndex=i;"
+        )
+        link_badge = (
+            '<span style="font-size:0.62rem;font-weight:700;color:#22C55E;'
+            'letter-spacing:0.05em;margin-left:4px;vertical-align:middle;">연동</span>'
+        )
+        color_label = f'색상{link_badge}'
+        code_label  = f'모델 코드{link_badge}'
+        color_sel_tag = (
+            f'<select class="spec-sel" id="{cid}" onchange="{color_onchange}">'
+            f'{color_opts}</select>'
+        )
+        code_sel_tag = (
+            f'<select class="spec-sel" id="{kid}" onchange="{code_onchange}">'
+            f'{code_opts}</select>'
+        )
+    else:
+        color_label   = '색상'
+        code_label    = '모델 코드'
+        color_sel_tag = f'<select class="spec-sel" id="{cid}">{color_opts}</select>'
+        code_sel_tag  = f'<select class="spec-sel" id="{kid}">{code_opts}</select>'
+
     sel_html = (
         '<div class="spec-sel-section">'
-        '<div class="spec-sel-wrap"><div class="spec-sel-label">색상</div>'
-        f'<select class="spec-sel">{color_opts}</select></div>'
-        '<div class="spec-sel-wrap"><div class="spec-sel-label">도어 재질</div>'
-        f'<select class="spec-sel">{mat_opts}</select></div>'
-        '<div class="spec-sel-wrap"><div class="spec-sel-label">모델 코드</div>'
-        f'<select class="spec-sel">{code_opts}</select></div>'
+        f'<div class="spec-sel-wrap"><div class="spec-sel-label">{color_label}</div>'
+        f'{color_sel_tag}</div>'
+        f'<div class="spec-sel-wrap"><div class="spec-sel-label">도어 재질</div>'
+        f'<select class="spec-sel" id="{mid_id}">{mat_opts}</select></div>'
+        f'<div class="spec-sel-wrap"><div class="spec-sel-label">{code_label}</div>'
+        f'{code_sel_tag}</div>'
         '</div>'
     )
 
