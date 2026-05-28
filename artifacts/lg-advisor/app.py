@@ -22,7 +22,9 @@ PRODUCTS, IS_SAMPLE = load_products()
 if "answers" not in st.session_state:
     st.session_state.answers = {}
 if "history" not in st.session_state:
-    st.session_state.history = []   # 답변한 q_id 순서 목록
+    st.session_state.history = []
+if "force_result" not in st.session_state:
+    st.session_state.force_result = False
 
 ans = st.session_state.answers
 
@@ -30,6 +32,7 @@ ans = st.session_state.answers
 def reset():
     st.session_state.answers = {}
     st.session_state.history = []
+    st.session_state.force_result = False
 
 
 def go_back():
@@ -635,6 +638,9 @@ ICON_JS = f"""
       '  font-size:.82rem!important;transform:none!important;',
       '}}',
       'button.lg-back-btn:hover{{color:#555!important;}}',
+      'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;font-weight:500!important;border-radius:8px!important;transform:none!important;padding:6px 18px!important;width:auto!important;}}',
+      'button.lg-skip-btn:hover{{color:#A50034!important;border-color:#A50034!important;}}',
+      'button.lg-skip-btn p{{text-align:center!important;font-size:.76rem!important;font-weight:500!important;}}',
     ].join('\\n');
     parentDoc.head.appendChild(s);
   }}
@@ -650,6 +656,14 @@ ICON_JS = f"""
         /* 뒤로가기/이전/처음부터 텍스트 링크 스타일 */
         if (rawText.startsWith('←') || rawText.startsWith('↩')) {{
           btn.classList.add('lg-back-btn');
+          return;
+        }}
+        /* 바로 결과 보기 — 보조 버튼 스타일, 아이콘 처리 제외 */
+        if (rawText.includes('바로 결과')) {{
+          btn.classList.add('lg-skip-btn');
+          btn.style.width = 'auto';
+          btn.style.display = 'block';
+          btn.style.margin = '0 auto';
           return;
         }}
 
@@ -759,6 +773,18 @@ def option_buttons(q_id: str):
             else:
                 h.append(q_id)
             ans[q_id] = opt.value
+            st.rerun()
+
+
+def show_skip_btn():
+    """현재까지 답한 조건만으로 바로 결과 보기 — 보조 버튼."""
+    if not ans:   # 아직 아무것도 답하지 않은 첫 화면엔 표시 안 함
+        return
+    st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+    _, mid, _ = st.columns([3, 4, 3])
+    with mid:
+        if st.button("지금 바로 결과 보기 →", key="skip_to_result", use_container_width=False):
+            st.session_state.force_result = True
             st.rerun()
 
 
@@ -1009,7 +1035,10 @@ if IS_SAMPLE:
     </div>
     """, unsafe_allow_html=True)
 
-q = E.next_question(PRODUCTS, ans)
+if st.session_state.force_result:
+    q = "result"
+else:
+    q = E.next_question(PRODUCTS, ans)
 
 # ── 질문 흐름 ──
 if q == "install":
@@ -1017,15 +1046,19 @@ if q == "install":
 
 elif q == "household":
     option_buttons("household")
+    show_skip_btn()
 
 elif q == "cooking":
     option_buttons("cooking")
+    show_skip_btn()
 
 elif q == "door_style":
     option_buttons("door_style")
+    show_skip_btn()
 
 elif q == "space":
     option_buttons("space")
+    show_skip_btn()
 
 elif q == "features":
     cand, _ = E.filter_candidates(PRODUCTS, ans)
@@ -1042,6 +1075,7 @@ elif q == "features":
             h.append("features")
         ans["wanted_features"] = chosen
         st.rerun()
+    show_skip_btn()
 
 # ── 결과 ──
 elif q == "result":
