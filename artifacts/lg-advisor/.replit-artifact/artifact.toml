@@ -5,7 +5,7 @@ version = "1.0.0"
 id = "lg-advisor"
 
 [[services]]
-localPort = 8080
+localPort = 8501
 name = "web"
 paths = ["/"]
 
@@ -20,7 +20,7 @@ args = ["pip", "install", "-r", "artifacts/lg-advisor/requirements.txt", "--quie
 [services.production.run]
 args = [
   "streamlit", "run", "artifacts/lg-advisor/app.py",
-  "--server.port", "8080",
+  "--server.port", "8501",
   "--server.address", "0.0.0.0",
   "--server.headless", "true",
   "--server.enableCORS", "false",
@@ -28,7 +28,7 @@ args = [
 ]
 
 [services.production.run.env]
-PORT = "8080"
+PORT = "8501"
 
 [services.production.health.startup]
 path = "/_stcore/health"
