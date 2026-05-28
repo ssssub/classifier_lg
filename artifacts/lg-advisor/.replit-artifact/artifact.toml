@@ -5,30 +5,9 @@ version = "1.0.0"
 id = "lg-advisor"
 
 [[services]]
-localPort = 8501
+localPort = 5000
 name = "web"
 paths = ["/"]
 
 [services.development]
 run = "cd /home/runner/workspace/artifacts/lg-advisor && streamlit run app.py"
-
-[services.production]
-
-[services.production.build]
-args = ["pip", "install", "-r", "artifacts/lg-advisor/requirements.txt", "--quiet"]
-
-[services.production.run]
-args = [
-  "streamlit", "run", "artifacts/lg-advisor/app.py",
-  "--server.port", "8501",
-  "--server.address", "0.0.0.0",
-  "--server.headless", "true",
-  "--server.enableCORS", "false",
-  "--server.enableXsrfProtection", "false"
-]
-
-[services.production.run.env]
-PORT = "8501"
-
-[services.production.health.startup]
-path = "/_stcore/health"

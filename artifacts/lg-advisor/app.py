@@ -108,18 +108,6 @@ GLOBAL_CSS = f"""
   box-sizing: border-box;
 }}
 
-/* Streamlit이 이모지 라벨을 Material Symbols 폰트로 렌더링하는 span 복원 */
-span[style*="Material Symbols"],
-span[style*="material-symbols"],
-span[style*="Material Icons"],
-span[style*="material-icons"] {{
-  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons' !important;
-}}
-/* 폰트 로드 실패 시 ligature 텍스트("bar_chart" 등)가 노출되지 않도록 숨김 */
-[data-testid="stIconEmoji"] {{
-  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons' !important;
-}}
-
 /* ── 배경 / 레이아웃 ── */
 .stApp, [data-testid="stAppViewContainer"] > .main {{
   background: #FFFFFF !important;
@@ -1358,7 +1346,7 @@ elif q == "result":
 
         # Top 5 한눈에 비교표
         st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-        with st.expander("Top 5 한눈에 비교표"):
+        with st.expander("📊 Top 5 한눈에 비교표"):
             # 주요 기능 레이블 매핑
             def _feat_labels(p):
                 feats = p.get("features", set())
