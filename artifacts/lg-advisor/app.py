@@ -2,11 +2,42 @@
 카테고리·질문·선택지는 모두 ui_config.py에서 주입받습니다.
 """
 import json
+import os
 import streamlit as st
 import streamlit.components.v1 as components
 from data_loader import load_products, SOFT_FEATURES
 import engine as E
 from ui_config import REFRIGERATOR_CONFIG, ICONS
+
+# ── SKU 데이터 (색상 변형 연동용) ──
+_SKU_PATH = os.path.join(os.path.dirname(__file__), "lg_products_sku.json")
+try:
+    with open(_SKU_PATH, encoding="utf-8") as _f:
+        _SKU_INDEX = {p["rep_code"]: p for p in json.load(_f)}
+except Exception:
+    _SKU_INDEX = {}
+
+# 색상명 → 배경색 hex 매핑 (시각적 스와치용)
+_COLOR_HEX: dict[str, str] = {
+    "화이트":        "#F5F5F5",
+    "슈퍼 화이트":   "#FAFAFA",
+    "크림 화이트":   "#FDF8EF",
+    "퓨어":          "#E8E8E8",
+    "샤인":          "#D4C8B0",
+    "다크 그라파이트": "#3C3C3C",
+    "그라파이트":    "#5A5A5A",
+    "베이지":        "#D4B896",
+    "크림":          "#EFE8D8",
+    "네이처 그린":   "#7C9E7E",
+    "오브제 블루":   "#8DA5BD",
+    "오브제 그린":   "#8FA67E",
+    "오브제 핑크":   "#D4A5A0",
+    "오브제 크림":   "#EFE8D8",
+    "블랙":          "#1C1C1C",
+    "미스트 블루":   "#A8BFD4",
+    "미스트 그린":   "#A8C4A4",
+    "미스트 베이지": "#D8C8B4",
+}
 
 # ── 설정 선택 (향후 다른 카테고리 추가 시 이 줄만 변경) ──
 CFG = REFRIGERATOR_CONFIG
@@ -525,7 +556,78 @@ div[data-testid="stCheckbox"] label span {{
 .cmp-fit  {{ font-weight: 700; color: #A50034; white-space: nowrap; }}
 .cmp-feat {{ color: #777; font-size: 0.72rem; }}
 
-/* ── 스펙 드롭다운 ── */
+/* ── 색상 스와치 섹션 ── */
+.cs-section {{
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #F0F0F0;
+}}
+.cs-row-label {{
+  font-size: 0.67rem;
+  font-weight: 700;
+  color: #BBB;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}}
+.cs-chips {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
+}}
+.cs-chip {{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 8px;
+  border: 1.5px solid #E8E8E8;
+  border-radius: 100px;
+  background: #FAFAFA;
+  font-size: 0.76rem;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  color: #444;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}}
+.cs-chip:hover {{ border-color: #A50034; }}
+.cs-chip.active {{
+  border-color: #A50034;
+  background: #FFF5F7;
+  color: #A50034;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(165,0,52,0.10);
+}}
+.cs-dot {{
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.12);
+  flex-shrink: 0;
+}}
+.cs-info-row {{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  color: #666;
+}}
+.cs-info-label {{
+  font-size: 0.67rem;
+  font-weight: 700;
+  color: #BBB;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}}
+.cs-info-val {{
+  font-weight: 600;
+  color: #333;
+  transition: color 0.15s;
+}}
+.cs-info-sep {{ color: #DDD; margin: 0 2px; }}
+/* ── 스펙 드롭다운 (폴백용) ── */
 .spec-sel-section {{
   margin-top: 14px;
   padding-top: 14px;
@@ -961,65 +1063,115 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         '</div>'
     )
 
-    # 스펙 선택 드롭다운 HTML
-    def _opts(vals):
-        return "".join(f'<option>{v}</option>' for v in vals)
+    # ── SKU 색상 스와치 섹션 ──────────────────────────────────────────
+    rep_code   = p.get("code", "")
+    sku        = _SKU_INDEX.get(rep_code)
+    variants   = sku["variants"] if sku else []
 
-    colors_sel = p.get("colors") or []
-    mats_sel   = p.get("materials") or [p.get("material", "-")]
-    codes_sel  = p.get("model_codes") or [p.get("code", "-")]
+    # 초기 표시값: variants[0] 또는 제품 기본값
+    init_v     = variants[0] if variants else {}
+    init_code  = init_v.get("code")  or rep_code
+    init_mat   = init_v.get("material") or p.get("material", "")
+    init_price = init_v.get("price")
+    if init_price:
+        disp_price = f"{int(init_price):,}원"
+    else:
+        disp_price = price_str  # data_loader 계산값 그대로
 
-    color_opts = _opts(colors_sel) if colors_sel else '<option>-</option>'
-    mat_opts   = _opts(mats_sel)
-    code_opts  = _opts(codes_sel)
+    ccode_id = f"card-code-{rank}"
+    cprc_id  = f"card-price-{rank}"
+    cmat_id  = f"card-mat-{rank}"
 
-    # 색상·모델코드 개수가 일치하면 1:1 연동, 아니면 독립
-    linked = (len(colors_sel) == len(codes_sel) and len(colors_sel) > 0)
-    cid    = f"sel-color-{rank}"
-    mid_id = f"sel-mat-{rank}"
-    kid    = f"sel-code-{rank}"
+    if sku and len(variants) > 1:
+        # 여러 색상 → 클릭형 스와치
+        chip_items = ""
+        for idx, v in enumerate(variants):
+            cname     = v.get("color", "")
+            hex_bg    = _COLOR_HEX.get(cname, "#DDDDDD")
+            is_light  = hex_bg.upper() in ("#F5F5F5","#FAFAFA","#FDF8EF","#E8E8E8","#FFFFFF","#FFF")
+            dot_border = "rgba(0,0,0,0.18)" if is_light else "rgba(0,0,0,0.08)"
+            active_cls = "active" if idx == 0 else ""
+            v_code  = (v.get("code")     or "").replace("'", "\\'")
+            v_mat   = (v.get("material") or "").replace("'", "\\'")
+            v_price = int(v.get("price") or 0)
+            v_price_fmt = f"{v_price:,}원" if v_price else ""
+            onclick = (
+                f"document.getElementById('{ccode_id}').textContent='{v_code}';"
+                f"document.getElementById('{cprc_id}').textContent='{v_price_fmt}';"
+                f"document.getElementById('{cmat_id}').textContent='{v_mat}';"
+                f"this.closest('.cs-chips').querySelectorAll('.cs-chip')"
+                f".forEach(function(c){{c.classList.remove('active')}});"
+                f"this.classList.add('active');"
+            )
+            chip_items += (
+                f'<button class="cs-chip {active_cls}" onclick="{onclick}">'
+                f'<span class="cs-dot" style="background:{hex_bg};border:1px solid {dot_border};"></span>'
+                f'{cname}</button>'
+            )
 
-    if linked:
-        # 색상 선택 → 코드 동기화
-        color_onchange = (
-            f"var i=this.selectedIndex;"
-            f"document.getElementById('{kid}').selectedIndex=i;"
+        mat_display = f'<span class="cs-info-sep">·</span><span class="cs-info-label">재질</span><span class="cs-info-val" id="{cmat_id}">{init_mat}</span>' if init_mat else f'<span id="{cmat_id}"></span>'
+
+        sku_html = (
+            '<div class="cs-section">'
+            '<div class="cs-row-label">색상</div>'
+            f'<div class="cs-chips">{chip_items}</div>'
+            '<div class="cs-info-row">'
+            '<span class="cs-info-label">모델 코드</span>'
+            f'<span class="cs-info-val" id="{ccode_id}">{init_code}</span>'
+            f'{mat_display}'
+            '</div>'
+            '</div>'
         )
-        # 코드 선택 → 색상 동기화
-        code_onchange = (
-            f"var i=this.selectedIndex;"
-            f"document.getElementById('{cid}').selectedIndex=i;"
-        )
-        link_badge = (
-            '<span style="font-size:0.62rem;font-weight:700;color:#22C55E;'
-            'letter-spacing:0.05em;margin-left:4px;vertical-align:middle;">연동</span>'
-        )
-        color_label = f'색상{link_badge}'
-        code_label  = f'모델 코드{link_badge}'
-        color_sel_tag = (
-            f'<select class="spec-sel" id="{cid}" onchange="{color_onchange}">'
-            f'{color_opts}</select>'
-        )
-        code_sel_tag = (
-            f'<select class="spec-sel" id="{kid}" onchange="{code_onchange}">'
-            f'{code_opts}</select>'
+    elif sku and len(variants) == 1:
+        # 색상 1종 → 스와치 없이 정보만 표시
+        single_color = variants[0].get("color", "")
+        hex_bg = _COLOR_HEX.get(single_color, "#DDDDDD")
+        mat_display = (
+            f'<span class="cs-info-sep">·</span>'
+            f'<span class="cs-info-label">재질</span>'
+            f'<span class="cs-info-val" id="{cmat_id}">{init_mat}</span>'
+        ) if init_mat else f'<span id="{cmat_id}"></span>'
+        sku_html = (
+            '<div class="cs-section">'
+            '<div class="cs-chips" style="margin-bottom:10px;">'
+            f'<span class="cs-chip active" style="cursor:default;">'
+            f'<span class="cs-dot" style="background:{hex_bg};border:1px solid rgba(0,0,0,0.12);"></span>'
+            f'{single_color}</span></div>'
+            '<div class="cs-info-row">'
+            '<span class="cs-info-label">모델 코드</span>'
+            f'<span class="cs-info-val" id="{ccode_id}">{init_code}</span>'
+            f'{mat_display}'
+            '</div>'
+            '</div>'
         )
     else:
-        color_label   = '색상'
-        code_label    = '모델 코드'
-        color_sel_tag = f'<select class="spec-sel" id="{cid}">{color_opts}</select>'
-        code_sel_tag  = f'<select class="spec-sel" id="{kid}">{code_opts}</select>'
-
-    sel_html = (
-        '<div class="spec-sel-section">'
-        f'<div class="spec-sel-wrap"><div class="spec-sel-label">{color_label}</div>'
-        f'{color_sel_tag}</div>'
-        f'<div class="spec-sel-wrap"><div class="spec-sel-label">도어 재질</div>'
-        f'<select class="spec-sel" id="{mid_id}">{mat_opts}</select></div>'
-        f'<div class="spec-sel-wrap"><div class="spec-sel-label">{code_label}</div>'
-        f'{code_sel_tag}</div>'
-        '</div>'
-    )
+        # SKU 데이터 없음 → 기존 드롭다운 폴백
+        def _opts(vals):
+            return "".join(f'<option>{v}</option>' for v in vals)
+        colors_sel = p.get("colors") or []
+        mats_sel   = p.get("materials") or [p.get("material", "-")]
+        codes_sel  = p.get("model_codes") or [p.get("code", "-")]
+        color_opts = _opts(colors_sel) if colors_sel else '<option>-</option>'
+        mat_opts   = _opts(mats_sel)
+        code_opts  = _opts(codes_sel)
+        linked     = (len(colors_sel) == len(codes_sel) and len(colors_sel) > 0)
+        cid = f"sel-color-{rank}"; kid = f"sel-code-{rank}"; mid_id = f"sel-mat-{rank}"
+        if linked:
+            co = f"var i=this.selectedIndex;document.getElementById('{kid}').selectedIndex=i;"
+            ko = f"var i=this.selectedIndex;document.getElementById('{cid}').selectedIndex=i;"
+            color_sel_tag = f'<select class="spec-sel" id="{cid}" onchange="{co}">{color_opts}</select>'
+            code_sel_tag  = f'<select class="spec-sel" id="{kid}" onchange="{ko}">{code_opts}</select>'
+        else:
+            color_sel_tag = f'<select class="spec-sel" id="{cid}">{color_opts}</select>'
+            code_sel_tag  = f'<select class="spec-sel" id="{kid}">{code_opts}</select>'
+        sku_html = (
+            '<div class="spec-sel-section">'
+            f'<div class="spec-sel-wrap"><div class="spec-sel-label">색상</div>{color_sel_tag}</div>'
+            f'<div class="spec-sel-wrap"><div class="spec-sel-label">도어 재질</div>'
+            f'<select class="spec-sel" id="{mid_id}">{mat_opts}</select></div>'
+            f'<div class="spec-sel-wrap"><div class="spec-sel-label">모델 코드</div>{code_sel_tag}</div>'
+            '</div>'
+        )
 
     st.markdown(f"""
     <div class="{card_cls}">
@@ -1037,12 +1189,12 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         </div>
       </div>
       <div class="res-name">{p['name']}</div>
-      <div class="res-spec">{p['code']} &nbsp;·&nbsp; {p['install']} &nbsp;·&nbsp;
+      <div class="res-spec"><span id="{ccode_id}-spec">{init_code}</span> &nbsp;·&nbsp; {p['install']} &nbsp;·&nbsp;
         {p['doors']} &nbsp;·&nbsp; 총 {p['total_l']}L &nbsp;·&nbsp; 에너지 {p['energy']}등급
         &nbsp;·&nbsp; {p['size_raw']}</div>
-      <div class="res-price">{price_str}</div>
+      <div class="res-price"><span id="{cprc_id}">{disp_price}</span></div>
       <div class="res-chips">{chips_html}</div>
-      {sel_html}
+      {sku_html}
       {bullets_html}
       {bars_html}
     </div>

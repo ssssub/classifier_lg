@@ -1,0 +1,3937 @@
+[
+  {
+    "rep_code": "B103S14",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "1도어",
+    "energy_grade": 4,
+    "capacity_total": 90.0,
+    "capacity_fridge": 90.0,
+    "capacity_freezer": null,
+    "power": 19.4,
+    "size": "463 X 820 X 482",
+    "features": [],
+    "promo_tags": [
+      "미니멀 사이즈",
+      "수납공간"
+    ],
+    "price_min": 280000.0,
+    "price_max": 290000.0,
+    "variants": [
+      {
+        "code": "B103S14",
+        "color": "퓨어",
+        "material": null,
+        "price": 280000.0
+      },
+      {
+        "code": "B103W14",
+        "color": "슈퍼 화이트",
+        "material": null,
+        "price": 290000.0
+      }
+    ],
+    "colors": [
+      "퓨어",
+      "슈퍼 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B124W14",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 4,
+    "capacity_total": 121.0,
+    "capacity_fridge": 94.0,
+    "capacity_freezer": 27.0,
+    "power": 36.1,
+    "size": "475 x 1,170 x 487",
+    "features": [],
+    "promo_tags": [
+      "미니멀 사이즈",
+      "수납공간"
+    ],
+    "price_min": 350000.0,
+    "price_max": 360000.0,
+    "variants": [
+      {
+        "code": "B124W14",
+        "color": "화이트",
+        "material": "네이처(메탈)",
+        "price": 350000.0
+      },
+      {
+        "code": "B124S14",
+        "color": "퓨어",
+        "material": "네이처(메탈)",
+        "price": 360000.0
+      }
+    ],
+    "colors": [
+      "화이트",
+      "퓨어"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B182DS13",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 215.0,
+    "capacity_fridge": 161.0,
+    "capacity_freezer": 54.0,
+    "power": 34.9,
+    "size": "555 x 1,400 x 585",
+    "features": [],
+    "promo_tags": [
+      "신선야채실",
+      "이동 도어바스켓"
+    ],
+    "price_min": 500000.0,
+    "price_max": 500000.0,
+    "variants": [
+      {
+        "code": "B182DS13",
+        "color": "다크 그라파이트",
+        "material": null,
+        "price": 500000.0
+      }
+    ],
+    "colors": [
+      "다크 그라파이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B182W13",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 189.0,
+    "capacity_fridge": 143.0,
+    "capacity_freezer": 46.0,
+    "power": 29.8,
+    "size": "555 x 1,400 x 585",
+    "features": [],
+    "promo_tags": [
+      "신선야채실",
+      "이동 도어바스켓"
+    ],
+    "price_min": 440000.0,
+    "price_max": 440000.0,
+    "variants": [
+      {
+        "code": "B182W13",
+        "color": "화이트",
+        "material": null,
+        "price": 440000.0
+      }
+    ],
+    "colors": [
+      "화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B245DS22",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 241.0,
+    "capacity_fridge": 185.0,
+    "capacity_freezer": 56.0,
+    "power": 28.9,
+    "size": "555 x 1,573 x 637",
+    "features": [],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "자동정온",
+      "실용적인 수납공간"
+    ],
+    "price_min": 540000.0,
+    "price_max": 540000.0,
+    "variants": [
+      {
+        "code": "B245W22",
+        "color": "화이트",
+        "material": "네이처(메탈)",
+        "price": 540000.0
+      },
+      {
+        "code": "B245DS22",
+        "color": "다크 그라파이트",
+        "material": "네이처(메탈)",
+        "price": 540000.0
+      }
+    ],
+    "colors": [
+      "화이트",
+      "다크 그라파이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B312W31",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 1,
+    "capacity_total": 317.0,
+    "capacity_fridge": 238.0,
+    "capacity_freezer": 79.0,
+    "power": 27.8,
+    "size": "600 x 1,640 x 710",
+    "features": [],
+    "promo_tags": [
+      "25시간 자동 정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 509000.0,
+    "price_max": 509000.0,
+    "variants": [
+      {
+        "code": "B312W31",
+        "color": "화이트",
+        "material": "네이처(메탈)",
+        "price": 509000.0
+      }
+    ],
+    "colors": [
+      "화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B315DS11",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 1,
+    "capacity_total": 317.0,
+    "capacity_fridge": 238.0,
+    "capacity_freezer": 79.0,
+    "power": 27.8,
+    "size": "600 x 1,640 x 710",
+    "features": [],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "자동정온",
+      "실용적인 수납공간"
+    ],
+    "price_min": 620000.0,
+    "price_max": 700000.0,
+    "variants": [
+      {
+        "code": "B315DS11",
+        "color": "다크 그라파이트",
+        "material": "네이처(메탈)",
+        "price": 620000.0
+      },
+      {
+        "code": "B312S31",
+        "color": "퓨어",
+        "material": "네이처(메탈)",
+        "price": 663000.0
+      },
+      {
+        "code": "B315W11",
+        "color": "화이트",
+        "material": "네이처(메탈)",
+        "price": 700000.0
+      }
+    ],
+    "colors": [
+      "다크 그라파이트",
+      "퓨어",
+      "화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B332W34",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 4,
+    "capacity_total": 335.0,
+    "capacity_fridge": 256.0,
+    "capacity_freezer": 79.0,
+    "power": 30.0,
+    "size": "600 x 1,720 x 710",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 630000.0,
+    "price_max": 710000.0,
+    "variants": [
+      {
+        "code": "B332W34",
+        "color": "화이트",
+        "material": "네이처(메탈)",
+        "price": 630000.0
+      },
+      {
+        "code": "B332S34",
+        "color": "퓨어",
+        "material": "네이처(메탈)",
+        "price": 710000.0
+      }
+    ],
+    "colors": [
+      "화이트",
+      "퓨어"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "B502W33",
+    "name": "LG 일반냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 507.0,
+    "capacity_fridge": 376.0,
+    "capacity_freezer": 131.0,
+    "power": 37.3,
+    "size": "780 × 1,800 × 730",
+    "features": [],
+    "promo_tags": [
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 760000.0,
+    "price_max": 817000.0,
+    "variants": [
+      {
+        "code": "B502W33",
+        "color": "화이트",
+        "material": null,
+        "price": 760000.0
+      },
+      {
+        "code": "B502S33",
+        "color": "샤인",
+        "material": null,
+        "price": 785000.0
+      },
+      {
+        "code": "B502S53",
+        "color": "샤인",
+        "material": null,
+        "price": 817000.0
+      }
+    ],
+    "colors": [
+      "화이트",
+      "샤인",
+      "샤인"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D215MEE13",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 189.0,
+    "capacity_fridge": 143.0,
+    "capacity_freezer": 46.0,
+    "power": 29.8,
+    "size": "555 x 1,445 x 637",
+    "features": [],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "자동정온",
+      "실용적인 수납공간"
+    ],
+    "price_min": 500000.0,
+    "price_max": 500000.0,
+    "variants": [
+      {
+        "code": "D215MEE13",
+        "color": "베이지",
+        "material": "네이처(메탈)",
+        "price": 500000.0
+      }
+    ],
+    "colors": [
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D215MHH13",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 215.0,
+    "capacity_fridge": 161.0,
+    "capacity_freezer": 54.0,
+    "power": 34.9,
+    "size": "555 x 1,445 x 637",
+    "features": [],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "자동정온",
+      "실용적인 수납공간"
+    ],
+    "price_min": 460000.0,
+    "price_max": 460000.0,
+    "variants": [
+      {
+        "code": "D215MHH13",
+        "color": "크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 460000.0
+      }
+    ],
+    "colors": [
+      "크림 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D265MEE22",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 264.0,
+    "capacity_fridge": 208.0,
+    "capacity_freezer": 56.0,
+    "power": 32.5,
+    "size": "555 x 1,680 x 637",
+    "features": [],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "자동정온",
+      "실용적인 수납공간"
+    ],
+    "price_min": 670000.0,
+    "price_max": 670000.0,
+    "variants": [
+      {
+        "code": "D265MEE22",
+        "color": "베이지",
+        "material": "네이처(메탈)",
+        "price": 670000.0
+      }
+    ],
+    "colors": [
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D312MBE31",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 1,
+    "capacity_total": 317.0,
+    "capacity_fridge": 238.0,
+    "capacity_freezer": 79.0,
+    "power": 27.8,
+    "size": "600 x 1,640 x 710",
+    "features": [],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 670000.0,
+    "price_max": 670000.0,
+    "variants": [
+      {
+        "code": "D312MBE31",
+        "color": "베이지",
+        "material": "네이처(메탈)",
+        "price": 670000.0
+      }
+    ],
+    "colors": [
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D332MBE34",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 4,
+    "capacity_total": 335.0,
+    "capacity_fridge": 256.0,
+    "capacity_freezer": 79.0,
+    "power": 30.0,
+    "size": "600 x 1,720 x 710",
+    "features": [],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 770000.0,
+    "price_max": 770000.0,
+    "variants": [
+      {
+        "code": "D332MBE34",
+        "color": "베이지",
+        "material": "네이처(메탈)",
+        "price": 770000.0
+      }
+    ],
+    "colors": [
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D463MEE33",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 461.0,
+    "capacity_fridge": 361.0,
+    "capacity_freezer": 100.0,
+    "power": 29.0,
+    "size": "700 x 1,845 x 725",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 700000.0,
+    "price_max": 800000.0,
+    "variants": [
+      {
+        "code": "D463MRR33",
+        "color": "크림 그레이",
+        "material": "네이처(메탈)",
+        "price": 700000.0
+      },
+      {
+        "code": "D463MHH33",
+        "color": "크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 730000.0
+      },
+      {
+        "code": "D463MEE33",
+        "color": "네이처 베이지",
+        "material": "네이처(메탈)",
+        "price": 800000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이",
+      "크림 화이트",
+      "네이처 베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D502MEE33",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 507.0,
+    "capacity_fridge": 376.0,
+    "capacity_freezer": 121.0,
+    "power": 37.3,
+    "size": "780 x 1,800 x 730",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 860000.0,
+    "price_max": 860000.0,
+    "variants": [
+      {
+        "code": "D502MEE33",
+        "color": "네이처 베이지",
+        "material": "네이처(메탈)",
+        "price": 860000.0
+      }
+    ],
+    "colors": [
+      "네이처 베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D502MEE53",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 507.0,
+    "capacity_fridge": 376.0,
+    "capacity_freezer": 131.0,
+    "power": 37.3,
+    "size": "780 x 1,800 x 730",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 880000.0,
+    "price_max": 880000.0,
+    "variants": [
+      {
+        "code": "D502MEE53",
+        "color": "베이지",
+        "material": "네이처(메탈)",
+        "price": 880000.0
+      }
+    ],
+    "colors": [
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D604MPS33",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 612.0,
+    "capacity_fridge": 428.0,
+    "capacity_freezer": 184.0,
+    "power": 39.0,
+    "size": "831 x 1,860 x 741",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "도어쿨링+",
+      "자동정온",
+      "편리한 수납공간"
+    ],
+    "price_min": 1080000.0,
+    "price_max": 1130000.0,
+    "variants": [
+      {
+        "code": "D604MPS33",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 1080000.0
+      },
+      {
+        "code": "D604MQQ33",
+        "color": "에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1090000.0
+      },
+      {
+        "code": "D604MEE33",
+        "color": "베이지",
+        "material": "네이처(메탈)",
+        "price": 1130000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버",
+      "에센스 화이트",
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "D604MPS52",
+    "name": "LG 일반냉장고 오브제컬렉션",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 612.0,
+    "capacity_fridge": 428.0,
+    "capacity_freezer": 184.0,
+    "power": 37.0,
+    "size": "831 x 1,860 x 741",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "도어쿨링+",
+      "자동정온",
+      "편리한 수납공간"
+    ],
+    "price_min": 910000.0,
+    "price_max": 1290000.0,
+    "variants": [
+      {
+        "code": "D604MPS52",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 910000.0
+      },
+      {
+        "code": "D604MQQ52",
+        "color": "에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1290000.0
+      },
+      {
+        "code": "D604MEE52",
+        "color": "베이지",
+        "material": "네이처(메탈)",
+        "price": 1290000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버",
+      "에센스 화이트",
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "F904ND79E",
+    "name": "LG SIGNATURE 상냉장고",
+    "install_type": null,
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 905.0,
+    "capacity_fridge": 570.0,
+    "capacity_freezer": 335.0,
+    "power": 43.7,
+    "size": "912 X 1,784 X 929",
+    "features": [
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "노크온 매직스페이스",
+      "샤이니 유니버스",
+      "멀티쿨링 시스템"
+    ],
+    "price_min": 10500000.0,
+    "price_max": 10500000.0,
+    "variants": [
+      {
+        "code": "F904ND79E",
+        "color": "샤이니 유니버스",
+        "material": "솔리드(스테인리스)",
+        "price": 10500000.0
+      }
+    ],
+    "colors": [
+      "샤이니 유니버스"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "G646GBB081",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 635.0,
+    "capacity_fridge": 382.0,
+    "capacity_freezer": 253.0,
+    "power": 31.6,
+    "size": "914 x 1,860 x 709",
+    "features": [
+      "도어쿨링+",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "STEM 라인업 확대",
+      "Fit & Max",
+      "직수 SYSTEM",
+      "듀얼 신선맞춤실"
+    ],
+    "price_min": 4400000.0,
+    "price_max": 4400000.0,
+    "variants": [
+      {
+        "code": "G646GQQ081",
+        "color": "에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "G646GBB081",
+        "color": "베이지",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트",
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "G646GBB091",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 635.0,
+    "capacity_fridge": 382.0,
+    "capacity_freezer": 253.0,
+    "power": 31.6,
+    "size": "914 x 1,860 x 709",
+    "features": [
+      "도어쿨링+",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "STEM 라인업 확대",
+      "Fit & Max",
+      "직수 SYSTEM",
+      "듀얼 신선맞춤실"
+    ],
+    "price_min": 4500000.0,
+    "price_max": 4700000.0,
+    "variants": [
+      {
+        "code": "G646GBB091",
+        "color": "베이지",
+        "material": "미스트(글라스)",
+        "price": 4500000.0
+      },
+      {
+        "code": "G646SVV091",
+        "color": "오브제 컬렉션 실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4700000.0
+      },
+      {
+        "code": "G646SLL091",
+        "color": "실버",
+        "material": "솔리드(스테인리스)",
+        "price": 4700000.0
+      }
+    ],
+    "colors": [
+      "베이지",
+      "오브제 컬렉션 실버/실버",
+      "실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H875GBB011",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 2690000.0,
+    "price_max": 3250000.0,
+    "variants": [
+      {
+        "code": "H875GGA011",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 2690000.0
+      },
+      {
+        "code": "H875GBB011",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2690000.0
+      },
+      {
+        "code": "H875GGA031",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 3200000.0
+      },
+      {
+        "code": "H875GQQ031",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 3250000.0
+      },
+      {
+        "code": "H875GBB031",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3250000.0
+      }
+    ],
+    "colors": [
+      "토프/아몬드",
+      "베이지/베이지",
+      "토프/아몬드",
+      "에센스 화이트/에센스 화이트",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H875GBB012",
+    "name": "LG 디오스 오브제컬렉션 베이직 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 56.8,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "인공지능 냉기케어시스템",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 2900000.0,
+    "price_max": 2900000.0,
+    "variants": [
+      {
+        "code": "H875GCB012",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 2900000.0
+      },
+      {
+        "code": "H875GBB012",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2900000.0
+      }
+    ],
+    "colors": [
+      "클레이 브라운/베이지",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H875GBB141",
+    "name": "LG 디오스 오브제컬렉션 STEM 베이직 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 860.0,
+    "capacity_fridge": 498.0,
+    "capacity_freezer": 362.0,
+    "power": 43.3,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "안심 위생 케어",
+      "크래프트 아이스",
+      "인공지능 냉기케어시스템"
+    ],
+    "price_min": 3600000.0,
+    "price_max": 3600000.0,
+    "variants": [
+      {
+        "code": "H875GBC141",
+        "color": "베이지/클레이 브라운",
+        "material": "미스트(글라스)",
+        "price": 3600000.0
+      },
+      {
+        "code": "H875GBB141",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3600000.0
+      }
+    ],
+    "colors": [
+      "베이지/클레이 브라운",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H875GBB442",
+    "name": "LG 디오스 오브제컬렉션 STEM 베이직 냉장고 (노크온 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 860.0,
+    "capacity_fridge": 362.0,
+    "capacity_freezer": 498.0,
+    "power": 56.3,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "노크온"
+    ],
+    "promo_tags": [
+      "안심 위생 케어",
+      "크래프트 아이스",
+      "인공지능 냉기케어시스템"
+    ],
+    "price_min": 3700000.0,
+    "price_max": 3700000.0,
+    "variants": [
+      {
+        "code": "H875GBB442",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3700000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H876GBB011",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드",
+      "냉기케어 SYSTEM"
+    ],
+    "price_min": 2900000.0,
+    "price_max": 3300000.0,
+    "variants": [
+      {
+        "code": "H876GGA011",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 2900000.0
+      },
+      {
+        "code": "H876GBB011",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2900000.0
+      },
+      {
+        "code": "H876GQQ031",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "H876GBB031",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      }
+    ],
+    "colors": [
+      "토프/아몬드",
+      "베이지/베이지",
+      "에센스 화이트/에센스 화이트",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H876GBB111",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드",
+      "냉기케어 SYSTEM"
+    ],
+    "price_min": 3400000.0,
+    "price_max": 3400000.0,
+    "variants": [
+      {
+        "code": "H876GBB111",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3400000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H876GBB141",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 860.0,
+    "capacity_fridge": 498.0,
+    "capacity_freezer": 362.0,
+    "power": 43.3,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "크래프트 아이스",
+      "위생 케어 SYSTEM",
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드"
+    ],
+    "price_min": 3650000.0,
+    "price_max": 3650000.0,
+    "variants": [
+      {
+        "code": "H876GBB141",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "H876GBB442",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 (노크온 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 860.0,
+    "capacity_fridge": 498.0,
+    "capacity_freezer": 362.0,
+    "power": 56.3,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "크래프트 아이스",
+      "위생 케어 SYSTEM",
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드"
+    ],
+    "price_min": 3750000.0,
+    "price_max": 4750000.0,
+    "variants": [
+      {
+        "code": "H876GBB442",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3750000.0
+      },
+      {
+        "code": "M876GBB472",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4750000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "J842ND79",
+    "name": "LG SIGNATURE 얼음정수 냉장고",
+    "install_type": null,
+    "door_count": "4도어",
+    "energy_grade": 3,
+    "capacity_total": 840.0,
+    "capacity_fridge": 505.0,
+    "capacity_freezer": 335.0,
+    "power": 56.6,
+    "size": "912 X 1,784 X 929",
+    "features": [
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "샤이니 유니버스",
+      "노크온 매직 스페이스",
+      "혁신적 편의성"
+    ],
+    "price_min": 14500000.0,
+    "price_max": 14500000.0,
+    "variants": [
+      {
+        "code": "J842ND79",
+        "color": "샤이니 유니버스",
+        "material": "솔리드(스테인리스)",
+        "price": 14500000.0
+      }
+    ],
+    "colors": [
+      "샤이니 유니버스"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M301S31",
+    "name": "LG 모던엣지 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 1,
+    "capacity_total": 300.0,
+    "capacity_fridge": 201.0,
+    "capacity_freezer": 99.0,
+    "power": 28.8,
+    "size": "595 X 1,720 X 677",
+    "features": [],
+    "promo_tags": [
+      "24시간 자동정온",
+      "도어쿨링+",
+      "실용적인 수납공간"
+    ],
+    "price_min": 870000.0,
+    "price_max": 870000.0,
+    "variants": [
+      {
+        "code": "M344MB14",
+        "color": "몽블랑 네이처",
+        "material": "네이처(메탈)",
+        "price": 870000.0
+      },
+      {
+        "code": "M301S31",
+        "color": "샤인",
+        "material": null,
+        "price": 870000.0
+      }
+    ],
+    "colors": [
+      "몽블랑 네이처",
+      "샤인"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M402ND",
+    "name": "LG SIGNATURE 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "3도어",
+    "energy_grade": 3,
+    "capacity_total": 403.0,
+    "capacity_fridge": 291.0,
+    "capacity_freezer": 112.0,
+    "power": 30.3,
+    "size": "700 x 1,793 x 735",
+    "features": [
+      "노크온",
+      "음성인식"
+    ],
+    "promo_tags": [
+      "노크온 매직스페이스",
+      "편리함",
+      "스테인리스 디자인",
+      "푸드케어 시스템"
+    ],
+    "price_min": 6700000.0,
+    "price_max": 6700000.0,
+    "variants": [
+      {
+        "code": "M402ND",
+        "color": "난방향 스테인리스",
+        "material": "솔리드(스테인리스)",
+        "price": 6700000.0
+      }
+    ],
+    "colors": [
+      "난방향 스테인리스"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M451PS53",
+    "name": "LG 모던엣지 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 462.0,
+    "capacity_fridge": 329.0,
+    "capacity_freezer": 133.0,
+    "power": 34.9,
+    "size": "705 x 1,850 x 740",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "자동정온",
+      "도어쿨링+",
+      "편리한 수납공간"
+    ],
+    "price_min": 930000.0,
+    "price_max": 990000.0,
+    "variants": [
+      {
+        "code": "M451PS53",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 930000.0
+      },
+      {
+        "code": "M451MC53",
+        "color": "맨해튼 미드나잇",
+        "material": "네이처(메탈)",
+        "price": 990000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버",
+      "맨해튼 미드나잇"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M516MNQ012S",
+    "name": "LG 디오스 오브제컬렉션 냉장고 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 504.0,
+    "capacity_fridge": 300.0,
+    "capacity_freezer": 204.0,
+    "power": 32.9,
+    "size": "835 x 1,860 x 685",
+    "features": [
+      "도어쿨링+",
+      "신선맞춤실"
+    ],
+    "promo_tags": [
+      "Fit & Max 냉장고",
+      "신선맞춤실",
+      "편리한 수납공간"
+    ],
+    "price_min": 2700000.0,
+    "price_max": 3400000.0,
+    "variants": [
+      {
+        "code": "M516MRQ012S",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2700000.0
+      },
+      {
+        "code": "M516MQQ012S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2700000.0
+      },
+      {
+        "code": "M516MNQ012S",
+        "color": "네이비/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2700000.0
+      },
+      {
+        "code": "M516GQQ012S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 2890000.0
+      },
+      {
+        "code": "M516GGG012S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 2890000.0
+      },
+      {
+        "code": "M516GGA012S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 2890000.0
+      },
+      {
+        "code": "M516GCB012S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 2890000.0
+      },
+      {
+        "code": "M516GBB012S",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2890000.0
+      },
+      {
+        "code": "M516GAG012S",
+        "color": "아몬드/토프",
+        "material": "미스트(글라스)",
+        "price": 2890000.0
+      },
+      {
+        "code": "M516SVV012S",
+        "color": "실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 3400000.0
+      },
+      {
+        "code": "M516SGS012S",
+        "color": "그린/실버",
+        "material": "솔리드(스테인리스)",
+        "price": 3400000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "네이비/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "클레이 브라운/베이지",
+      "베이지/베이지",
+      "아몬드/토프",
+      "실버/실버",
+      "그린/실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M616GBB0M1",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 609.0,
+    "capacity_fridge": 380.0,
+    "capacity_freezer": 229.0,
+    "power": 29.5,
+    "size": "914 x 1,860 x 698",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "Fit & Max 냉장고",
+      "냉기케어시스템",
+      "편리한 수납공간"
+    ],
+    "price_min": 2680000.0,
+    "price_max": 3900000.0,
+    "variants": [
+      {
+        "code": "M616GBB0M1",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2680000.0
+      },
+      {
+        "code": "M616MQQ0M1",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2750000.0
+      },
+      {
+        "code": "M616MQR0M1",
+        "color": "에센스 화이트/크림 그레이",
+        "material": "네이처(메탈)",
+        "price": 2800000.0
+      },
+      {
+        "code": "M616GQQ0J1",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 3900000.0
+      },
+      {
+        "code": "M616GGA0J1",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 3900000.0
+      },
+      {
+        "code": "M616GBB0J1",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3900000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "에센스 화이트/에센스 화이트",
+      "에센스 화이트/크림 그레이",
+      "에센스 화이트/에센스 화이트",
+      "토프/아몬드",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M626MNQ022S",
+    "name": "LG 디오스 오브제컬렉션 냉장고 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 613.0,
+    "capacity_fridge": 384.0,
+    "capacity_freezer": 229.0,
+    "power": 38.0,
+    "size": "914 x 1,860 x 698",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "Fit & Max 냉장고",
+      "냉기케어시스템",
+      "편리한 수납공간"
+    ],
+    "price_min": 2900000.0,
+    "price_max": 4050000.0,
+    "variants": [
+      {
+        "code": "M626MRQ022S",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2900000.0
+      },
+      {
+        "code": "M626MQQ022S",
+        "color": "에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2900000.0
+      },
+      {
+        "code": "M626MNQ022S",
+        "color": "네이비/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2900000.0
+      },
+      {
+        "code": "M626MRQ032S",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3250000.0
+      },
+      {
+        "code": "M626MQQ032S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3250000.0
+      },
+      {
+        "code": "M626MNQ032S",
+        "color": "네이비/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3250000.0
+      },
+      {
+        "code": "M626GYQ022S",
+        "color": "크림 스카이/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "M626GQQ022S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "M626GGG022S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "M626GGA022S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "M626GCB022S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "M626GBB022S",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "M626GAG022S",
+        "color": "아몬드/토프",
+        "material": "미스트(글라스)",
+        "price": 3300000.0
+      },
+      {
+        "code": "M626SVV022S",
+        "color": "실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 3600000.0
+      },
+      {
+        "code": "M626SKV022S",
+        "color": "클레이 핑크/실버",
+        "material": "스톤(스테인리스)",
+        "price": 3600000.0
+      },
+      {
+        "code": "M626SGS022S",
+        "color": "그린/실버",
+        "material": "솔리드(스테인리스)",
+        "price": 3600000.0
+      },
+      {
+        "code": "M626GYQ032S",
+        "color": "크림 스카이/크림 화이트",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      },
+      {
+        "code": "M626GQQ032S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      },
+      {
+        "code": "M626GGG032S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      },
+      {
+        "code": "M626GGA032S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      },
+      {
+        "code": "M626GCB032S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      },
+      {
+        "code": "M626GBB032S",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      },
+      {
+        "code": "M626GAG032S",
+        "color": "아몬드/토프",
+        "material": "미스트(글라스)",
+        "price": 3650000.0
+      },
+      {
+        "code": "M626GBB032",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3750000.0
+      },
+      {
+        "code": "M626SVV032S",
+        "color": "실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626SKV032S",
+        "color": "클레이 핑크/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626SGS032S",
+        "color": "그린/실버",
+        "material": "솔리드(스테인리스)",
+        "price": 4050000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/에센스 화이트",
+      "에센스 화이트",
+      "네이비/에센스 화이트",
+      "크림 그레이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "네이비/에센스 화이트",
+      "크림 스카이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "클레이 브라운/베이지",
+      "베이지/베이지",
+      "아몬드/토프",
+      "실버/실버",
+      "클레이 핑크/실버",
+      "그린/실버",
+      "크림 스카이/크림 화이트",
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "클레이 브라운/베이지",
+      "베이지/베이지",
+      "아몬드/토프",
+      "베이지/베이지",
+      "실버/실버",
+      "클레이 핑크/실버",
+      "그린/실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M626MNQ052S",
+    "name": "LG 디오스 오브제컬렉션 STEM 베이직 냉장고 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 601.0,
+    "capacity_fridge": 378.0,
+    "capacity_freezer": 223.0,
+    "power": 38.0,
+    "size": "914 x 1,860 x 698",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "Fit & Max 냉장고",
+      "안심 위생 케어",
+      "인공지능 냉기케어시스템"
+    ],
+    "price_min": 3500000.0,
+    "price_max": 4300000.0,
+    "variants": [
+      {
+        "code": "M626MRQ052S",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3500000.0
+      },
+      {
+        "code": "M626MQQ052S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3500000.0
+      },
+      {
+        "code": "M626MNQ052S",
+        "color": "네이비/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3500000.0
+      },
+      {
+        "code": "M626GYQ052S",
+        "color": "크림 스카이/크림 화이트",
+        "material": "미스트(글라스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626GQQ052S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626GGG052S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626GGA052S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626GCB052S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626GBB052",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626GAG052S",
+        "color": "아몬드/토프",
+        "material": "미스트(글라스)",
+        "price": 4050000.0
+      },
+      {
+        "code": "M626SVV052S",
+        "color": "실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4300000.0
+      },
+      {
+        "code": "M626SKV052S",
+        "color": "클레이 핑크/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4300000.0
+      },
+      {
+        "code": "M626SGS052S",
+        "color": "그린/실버",
+        "material": "솔리드(스테인리스)",
+        "price": 4300000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "네이비/에센스 화이트",
+      "크림 스카이/크림 화이트",
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "클레이 브라운/베이지",
+      "베이지/베이지",
+      "아몬드/토프",
+      "실버/실버",
+      "클레이 핑크/실버",
+      "그린/실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M626MNQ332S",
+    "name": "LG 디오스 오브제컬렉션 냉장고 Fit & Max (노크온)",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 613.0,
+    "capacity_fridge": 384.0,
+    "capacity_freezer": 229.0,
+    "power": 38.0,
+    "size": "914 x 1,860 x 698",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "Fit & Max 냉장고",
+      "냉기케어시스템",
+      "편리한 수납공간"
+    ],
+    "price_min": 3700000.0,
+    "price_max": 4300000.0,
+    "variants": [
+      {
+        "code": "M626MRQ332S",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3700000.0
+      },
+      {
+        "code": "M626MQQ332S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3700000.0
+      },
+      {
+        "code": "M626MNQ332S",
+        "color": "네이비/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 3700000.0
+      },
+      {
+        "code": "M626GYQ332S",
+        "color": "크림 스카이/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626GQQ332S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626GGG332S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626GGA332S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626GCB332S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626GBB332S",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626GAG332S",
+        "color": "아몬드/토프",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626SVV332S",
+        "color": "실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4300000.0
+      },
+      {
+        "code": "M626SKV332S",
+        "color": "클레이 핑크/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4300000.0
+      },
+      {
+        "code": "M626SGS332S",
+        "color": "그린/실버",
+        "material": "솔리드(스테인리스)",
+        "price": 4300000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "네이비/에센스 화이트",
+      "크림 스카이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "클레이 브라운/베이지",
+      "베이지/베이지",
+      "아몬드/토프",
+      "실버/실버",
+      "클레이 핑크/실버",
+      "그린/실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M626MNQ352S",
+    "name": "LG 디오스 오브제컬렉션 STEM 베이직 냉장고 Fit & Max (노크온)",
+    "install_type": "Fit & Max",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 601.0,
+    "capacity_fridge": 378.0,
+    "capacity_freezer": 223.0,
+    "power": 38.0,
+    "size": "914 x 1,860 x 698",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "Fit & Max 냉장고",
+      "안심 위생 케어",
+      "인공지능 냉기케어시스템"
+    ],
+    "price_min": 4000000.0,
+    "price_max": 4600000.0,
+    "variants": [
+      {
+        "code": "M626MRQ352S",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626MQQ352S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626MNQ352S",
+        "color": "네이비/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 4000000.0
+      },
+      {
+        "code": "M626GYQ352S",
+        "color": "크림 스카이/화이트",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "M626GQQ352S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "M626GGG352S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "M626GGA352S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "M626GCB352S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "M626GBB352",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "M626GAG352S",
+        "color": "아몬드/토프",
+        "material": "미스트(글라스)",
+        "price": 4400000.0
+      },
+      {
+        "code": "M626SVV352S",
+        "color": "실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4600000.0
+      },
+      {
+        "code": "M626SKV352S",
+        "color": "클레이 핑크/실버",
+        "material": "스톤(스테인리스)",
+        "price": 4600000.0
+      },
+      {
+        "code": "M626SGS352S",
+        "color": "그린/실버",
+        "material": "솔리드(스테인리스)",
+        "price": 4600000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "네이비/에센스 화이트",
+      "크림 스카이/화이트",
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "클레이 브라운/베이지",
+      "베이지/베이지",
+      "아몬드/토프",
+      "실버/실버",
+      "클레이 핑크/실버",
+      "그린/실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876GBB131",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 871.0,
+    "capacity_fridge": 504.0,
+    "capacity_freezer": 367.0,
+    "power": 43.0,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 4300000.0,
+    "price_max": 4300000.0,
+    "variants": [
+      {
+        "code": "M876GBB131",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4300000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876GBB161",
+    "name": "LG 디오스 오브제컬렉션 STEM 베이직 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 854.0,
+    "capacity_fridge": 494.0,
+    "capacity_freezer": 360.0,
+    "power": 43.1,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "직수 SYSTEM",
+      "위생 케어 SYSTEM",
+      "AI 신선케어 SYSTEM"
+    ],
+    "price_min": 3550000.0,
+    "price_max": 3550000.0,
+    "variants": [
+      {
+        "code": "M876GGA161",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 3550000.0
+      },
+      {
+        "code": "M876GBB161",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 3550000.0
+      }
+    ],
+    "colors": [
+      "토프/아몬드",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876GBB181",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 854.0,
+    "capacity_fridge": 494.0,
+    "capacity_freezer": 360.0,
+    "power": 43.1,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터",
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "직수 SYSTEM",
+      "위생 케어 SYSTEM",
+      "AI 신선케어 SYSTEM"
+    ],
+    "price_min": 4800000.0,
+    "price_max": 4800000.0,
+    "variants": [
+      {
+        "code": "M876GBB181",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4800000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876GBB231",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (더블매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 871.0,
+    "capacity_fridge": 504.0,
+    "capacity_freezer": 367.0,
+    "power": 43.0,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 4500000.0,
+    "price_max": 4500000.0,
+    "variants": [
+      {
+        "code": "M876GQQ231",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 4500000.0
+      },
+      {
+        "code": "M876GGA231",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 4500000.0
+      },
+      {
+        "code": "M876GBB231",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4500000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트",
+      "토프/아몬드",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876GBB431",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (노크온 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 871.0,
+    "capacity_fridge": 504.0,
+    "capacity_freezer": 367.0,
+    "power": 43.8,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터",
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "직수 SYSTEM",
+      "위생 케어 SYSTEM",
+      "AI 신선케어 SYSTEM"
+    ],
+    "price_min": 4650000.0,
+    "price_max": 4650000.0,
+    "variants": [
+      {
+        "code": "M876GBB431",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4650000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876GGG132",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 871.0,
+    "capacity_fridge": 504.0,
+    "capacity_freezer": 367.0,
+    "power": 55.8,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 4000000.0,
+    "price_max": 4000000.0,
+    "variants": [
+      {
+        "code": "M876GGG132",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 4000000.0
+      }
+    ],
+    "colors": [
+      "토프/토프"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876GQQ282S",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 (더블매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 854.0,
+    "capacity_fridge": 494.0,
+    "capacity_freezer": 360.0,
+    "power": 56.2,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "신선맞춤실",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "직수 SYSTEM",
+      "위생 케어 SYSTEM",
+      "AI 신선케어 SYSTEM"
+    ],
+    "price_min": 4800000.0,
+    "price_max": 4800000.0,
+    "variants": [
+      {
+        "code": "M876GQQ282S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 4800000.0
+      },
+      {
+        "code": "M876GGG282S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 4800000.0
+      },
+      {
+        "code": "M876GGA282S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 4800000.0
+      },
+      {
+        "code": "M876GBB282",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 4800000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "M876MNQ582S",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 (노크온 더블매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 854.0,
+    "capacity_fridge": 494.0,
+    "capacity_freezer": 360.0,
+    "power": 56.2,
+    "size": "914 x 1,860 x 918",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "신선맞춤실",
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "직수 SYSTEM",
+      "위생 케어 SYSTEM",
+      "AI 신선케어 SYSTEM"
+    ],
+    "price_min": 4750000.0,
+    "price_max": 5350000.0,
+    "variants": [
+      {
+        "code": "M876MQQ582S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 4750000.0
+      },
+      {
+        "code": "M876MNQ582S",
+        "color": "네이비/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 4750000.0
+      },
+      {
+        "code": "M876GQQ582S",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "미스트(글라스)",
+        "price": 5150000.0
+      },
+      {
+        "code": "M876GGG582S",
+        "color": "토프/토프",
+        "material": "미스트(글라스)",
+        "price": 5150000.0
+      },
+      {
+        "code": "M876GGA582S",
+        "color": "토프/아몬드",
+        "material": "미스트(글라스)",
+        "price": 5150000.0
+      },
+      {
+        "code": "M876GBB582",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 5150000.0
+      },
+      {
+        "code": "M876SVV582S",
+        "color": "실버/실버",
+        "material": "스톤(스테인리스)",
+        "price": 5350000.0
+      },
+      {
+        "code": "M876SKV582S",
+        "color": "클레이 핑크/실버",
+        "material": "스톤(스테인리스)",
+        "price": 5350000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트",
+      "네이비/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "토프/토프",
+      "토프/아몬드",
+      "베이지/베이지",
+      "실버/실버",
+      "클레이 핑크/실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "Q336MEE153",
+    "name": "LG 모던엣지 AI 오브제컬렉션 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 333.0,
+    "capacity_fridge": 220.0,
+    "capacity_freezer": 113.0,
+    "power": 26.3,
+    "size": "597 x 1,860 x 674",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "Fit&Max 모던엣지",
+      "자동정온",
+      "편리한 수납공간"
+    ],
+    "price_min": 950000.0,
+    "price_max": 1350000.0,
+    "variants": [
+      {
+        "code": "Q336MEE153",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 950000.0
+      },
+      {
+        "code": "Q336MQQ153",
+        "color": "오브제컬렉션 에센스화이트",
+        "material": "네이처(메탈)",
+        "price": 1350000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "오브제컬렉션 에센스화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "Q342GBB133",
+    "name": "LG 모던엣지 냉장고 오브제컬렉션",
+    "install_type": "빌트인",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 344.0,
+    "capacity_fridge": 234.0,
+    "capacity_freezer": 110.0,
+    "power": 25.5,
+    "size": "595 x 1,860 x 676",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "도어쿨링+",
+      "자동정온",
+      "편리한 수납공간"
+    ],
+    "price_min": 1360000.0,
+    "price_max": 1650000.0,
+    "variants": [
+      {
+        "code": "Q342GBB133S",
+        "color": "베이지",
+        "material": "미스트(글라스)",
+        "price": 1360000.0
+      },
+      {
+        "code": "Q342GBB133",
+        "color": "베이지",
+        "material": "미스트(글라스)",
+        "price": 1360000.0
+      },
+      {
+        "code": "Q342GBB153",
+        "color": "베이지",
+        "material": "미스트(글라스)",
+        "price": 1430000.0
+      },
+      {
+        "code": "Q342GPP133S",
+        "color": "핑크",
+        "material": "미스트(글라스)",
+        "price": 1440000.0
+      },
+      {
+        "code": "Q342GPC133S",
+        "color": "핑크/클레이 브라운",
+        "material": "미스트(글라스)",
+        "price": 1440000.0
+      },
+      {
+        "code": "Q342GPB133S",
+        "color": "핑크/베이지",
+        "material": "미스트(글라스)",
+        "price": 1440000.0
+      },
+      {
+        "code": "Q342GCC133S",
+        "color": "클레이 브라운",
+        "material": "미스트(글라스)",
+        "price": 1440000.0
+      },
+      {
+        "code": "Q342GCB133S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 1440000.0
+      },
+      {
+        "code": "Q342GYY153S",
+        "color": "크림 스카이",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GWW153S",
+        "color": "크림 화이트",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GPP153S",
+        "color": "핑크",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GPC153S",
+        "color": "핑크/클레이 브라운",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GPB153S",
+        "color": "핑크/베이지",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GNN153S",
+        "color": "크림 레몬",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GLL153S",
+        "color": "크림 라벤더",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GHB153S",
+        "color": "크림 피치/베이지",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GCC153S",
+        "color": "클레이 브라운",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q342GCB153S",
+        "color": "클레이 브라운/베이지",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      }
+    ],
+    "colors": [
+      "베이지",
+      "베이지",
+      "베이지",
+      "핑크",
+      "핑크/클레이 브라운",
+      "핑크/베이지",
+      "클레이 브라운",
+      "클레이 브라운/베이지",
+      "크림 스카이",
+      "크림 화이트",
+      "핑크",
+      "핑크/클레이 브라운",
+      "핑크/베이지",
+      "크림 레몬",
+      "크림 라벤더",
+      "크림 피치/베이지",
+      "클레이 브라운",
+      "클레이 브라운/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "Q343GIC183S",
+    "name": "LG 모던엣지 냉장고 오브제컬렉션 노크온",
+    "install_type": "빌트인",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 349.0,
+    "capacity_fridge": 239.0,
+    "capacity_freezer": 110.0,
+    "power": 27.1,
+    "size": "595 x 1,860 x 676",
+    "features": [
+      "도어쿨링+",
+      "노크온"
+    ],
+    "promo_tags": [
+      "식품 맞춤, 취향 맞춤 가전",
+      "나를 표현하는 기능들",
+      "모던엣지 노크온만의 편리함"
+    ],
+    "price_min": 1650000.0,
+    "price_max": 2050000.0,
+    "variants": [
+      {
+        "code": "Q343GIY183S",
+        "color": "크림 스카이",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q343GIW183S",
+        "color": "크림 화이트",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q343GIP183S",
+        "color": "핑크",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q343GIN183S",
+        "color": "크림 레몬",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q343GIL183S",
+        "color": "크림 라벤더",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q343GIH183S",
+        "color": "크림 피치",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q343GIC183S",
+        "color": "클레이 브라운",
+        "material": "미스트(글라스)",
+        "price": 1650000.0
+      },
+      {
+        "code": "Q343GIB183",
+        "color": "베이지",
+        "material": "미스트(글라스)",
+        "price": 2050000.0
+      }
+    ],
+    "colors": [
+      "크림 스카이",
+      "크림 화이트",
+      "핑크",
+      "크림 레몬",
+      "크림 라벤더",
+      "크림 피치",
+      "클레이 브라운",
+      "베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "Q343MEEF53",
+    "name": "LG 모던엣지 냉장고 오브제컬렉션",
+    "install_type": "빌트인",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 344.0,
+    "capacity_fridge": 234.0,
+    "capacity_freezer": 110.0,
+    "power": 25.5,
+    "size": "595 x 1,860 x 676",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "24시간 자동정온",
+      "실용적인 수납공간"
+    ],
+    "price_min": 1100000.0,
+    "price_max": 1100000.0,
+    "variants": [
+      {
+        "code": "Q343MEEF53",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 1100000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "Q343MPSF33",
+    "name": "LG 모던엣지 냉장고 오브제컬렉션",
+    "install_type": "빌트인",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 344.0,
+    "capacity_fridge": 234.0,
+    "capacity_freezer": 110.0,
+    "power": 25.5,
+    "size": "597 x 1,860 x 674",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "24시간 자동정온",
+      "실용적인 수납공간"
+    ],
+    "price_min": 1025000.0,
+    "price_max": 1025000.0,
+    "variants": [
+      {
+        "code": "Q343MPSF33",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 1025000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "Q405MEE171",
+    "name": "LG 모던엣지 AI 오브제컬렉션 Fit & Max",
+    "install_type": "Fit & Max",
+    "door_count": "2도어",
+    "energy_grade": 1,
+    "capacity_total": 412.0,
+    "capacity_fridge": 273.0,
+    "capacity_freezer": 139.0,
+    "power": 19.4,
+    "size": "697 x 1,860 x 696",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "Fit & Max 모던엣지",
+      "자동정온",
+      "편리한 수납공간"
+    ],
+    "price_min": 1700000.0,
+    "price_max": 1700000.0,
+    "variants": [
+      {
+        "code": "Q405MEE171",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 1700000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S656GBB143",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형, 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 652.0,
+    "capacity_fridge": 413.0,
+    "capacity_freezer": 239.0,
+    "power": 52.5,
+    "size": "913 x 1,790 x 735",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 2500000.0,
+    "price_max": 2500000.0,
+    "variants": [
+      {
+        "code": "S656GBB143",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2500000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S656MQQ143",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형, 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 652.0,
+    "capacity_fridge": 413.0,
+    "capacity_freezer": 239.0,
+    "power": 52.5,
+    "size": "913 x 1,790 x 735",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+",
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1860000.0,
+    "price_max": 2150000.0,
+    "variants": [
+      {
+        "code": "S656MQQ143",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1860000.0
+      },
+      {
+        "code": "S836MQQ142",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2150000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트",
+      "에센스 화이트/에센스 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S656P003",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 661.0,
+    "capacity_fridge": 421.0,
+    "capacity_freezer": 240.0,
+    "power": 52.5,
+    "size": "913 x 1,790 x 735",
+    "features": [],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1330000.0,
+    "price_max": 1330000.0,
+    "variants": [
+      {
+        "code": "S656P003",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 1330000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S656P033",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 3,
+    "capacity_total": 652.0,
+    "capacity_fridge": 413.0,
+    "capacity_freezer": 239.0,
+    "power": 52.5,
+    "size": "913 x 1,790 x 735",
+    "features": [
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1480000.0,
+    "price_max": 1480000.0,
+    "variants": [
+      {
+        "code": "S656P033",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 1480000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S834MEE111",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형, 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 1,
+    "capacity_total": 832.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 308.0,
+    "power": 40.2,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "도어쿨링+",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1680000.0,
+    "price_max": 2350000.0,
+    "variants": [
+      {
+        "code": "S834MQQ111",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1680000.0
+      },
+      {
+        "code": "S834MEE111",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 1680000.0
+      },
+      {
+        "code": "S834MEE141",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2350000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트",
+      "베이지/베이지",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S834MTE011",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 1,
+    "capacity_total": 832.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 308.0,
+    "power": 40.2,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "도어쿨링+",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1650000.0,
+    "price_max": 1650000.0,
+    "variants": [
+      {
+        "code": "S834MTE011",
+        "color": "클레이 민트/베이지",
+        "material": "네이처(메탈)",
+        "price": 1650000.0
+      }
+    ],
+    "colors": [
+      "클레이 민트/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S836GBB162",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 (양문형, 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 827.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 303.0,
+    "power": 51.8,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "UV청정탈취필터+",
+      "도어쿨링+"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 2230000.0,
+    "price_max": 2510000.0,
+    "variants": [
+      {
+        "code": "S836GBB162",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2230000.0
+      },
+      {
+        "code": "S836GBB172",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2510000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S836MEE022",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 832.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 308.0,
+    "power": 49.0,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1280000.0,
+    "price_max": 1350000.0,
+    "variants": [
+      {
+        "code": "S836MEE022",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 1280000.0
+      },
+      {
+        "code": "S836MTE032",
+        "color": "클레이 민트/베이지",
+        "material": "네이처(메탈)",
+        "price": 1350000.0
+      },
+      {
+        "code": "S836MRQ032",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1350000.0
+      },
+      {
+        "code": "S836MEQ032",
+        "color": "베이지/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1350000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "클레이 민트/베이지",
+      "크림 그레이/에센스 화이트",
+      "베이지/에센스 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S836MQQ012",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 832.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 308.0,
+    "power": 49.0,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1350000.0,
+    "price_max": 1350000.0,
+    "variants": [
+      {
+        "code": "S836MQQ012",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1350000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S836MQQ022",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 832.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 308.0,
+    "power": 49.0,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1590000.0,
+    "price_max": 1590000.0,
+    "variants": [
+      {
+        "code": "S836MQQ022",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1590000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S836MQQ152",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고 (양문형, 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 827.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 303.0,
+    "power": 51.8,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1870000.0,
+    "price_max": 1870000.0,
+    "variants": [
+      {
+        "code": "S836MQQ152",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1870000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S836MRQ112",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형, 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 832.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 308.0,
+    "power": 51.5,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1650000.0,
+    "price_max": 2450000.0,
+    "variants": [
+      {
+        "code": "S836MRQ112",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 1650000.0
+      },
+      {
+        "code": "S836MEE122",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 1770000.0
+      },
+      {
+        "code": "S836GBB122",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2050000.0
+      },
+      {
+        "code": "S836GBB132",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2140000.0
+      },
+      {
+        "code": "S836GBB142",
+        "color": "베이지/베이지",
+        "material": "미스트(글라스)",
+        "price": 2450000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/에센스 화이트",
+      "베이지/베이지",
+      "베이지/베이지",
+      "베이지/베이지",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "S836P022",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (양문형)",
+    "install_type": "프리스탠딩",
+    "door_count": "2도어",
+    "energy_grade": 2,
+    "capacity_total": 832.0,
+    "capacity_fridge": 524.0,
+    "capacity_freezer": 308.0,
+    "power": 49.0,
+    "size": "913 x 1,790 x 913",
+    "features": [
+      "퓨어 프레시 필터"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 1400000.0,
+    "price_max": 1400000.0,
+    "variants": [
+      {
+        "code": "S836P022",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 1400000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T873MEE111",
+    "name": "LG 디오스 오브제컬렉션 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "공간인테리어 가전",
+      "매직스페이스",
+      "인공지능 냉기케어시스템",
+      "편리하고 효율적인 사용성"
+    ],
+    "price_min": 1940000.0,
+    "price_max": 2200000.0,
+    "variants": [
+      {
+        "code": "T873MEE111",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 1940000.0
+      },
+      {
+        "code": "T873MTE111",
+        "color": "클레이 민트/베이지",
+        "material": "네이처(메탈)",
+        "price": 2200000.0
+      },
+      {
+        "code": "T873MHH111",
+        "color": "크림 화이트/크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 2200000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "클레이 민트/베이지",
+      "크림 화이트/크림 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T875MEE011",
+    "name": "LG 디오스 AI 오브제컬렉션 베이직 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 2150000.0,
+    "price_max": 2150000.0,
+    "variants": [
+      {
+        "code": "T875MEE011",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2150000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T875MEE012",
+    "name": "LG 디오스 오브제컬렉션 베이직 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 56.8,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "인공지능 냉기케어시스템",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 2020000.0,
+    "price_max": 2020000.0,
+    "variants": [
+      {
+        "code": "T875P012",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 2020000.0
+      },
+      {
+        "code": "T875MHH012",
+        "color": "크림 화이트/크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 2020000.0
+      },
+      {
+        "code": "T875MEE012",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2020000.0
+      }
+    ],
+    "colors": [
+      "프라임 실버",
+      "크림 화이트/크림 화이트",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T875MEE041",
+    "name": "LG 디오스 AI 오브제컬렉션 STEM 베이직 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 860.0,
+    "capacity_fridge": 498.0,
+    "capacity_freezer": 362.0,
+    "power": 43.3,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "냉기케어 SYSTEM",
+      "편리한 수납공간"
+    ],
+    "price_min": 2690000.0,
+    "price_max": 2690000.0,
+    "variants": [
+      {
+        "code": "T875MEE041",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2690000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T875MEE111",
+    "name": "LG 디오스 오브제컬렉션 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "인공지능 냉기케어시스템",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 2400000.0,
+    "price_max": 2590000.0,
+    "variants": [
+      {
+        "code": "T875MRH111",
+        "color": "크림 그레이/크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      },
+      {
+        "code": "T875MKE111",
+        "color": "핑크/베이지",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      },
+      {
+        "code": "T875MHR111",
+        "color": "크림 화이트/크림 그레이",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      },
+      {
+        "code": "T875MHH111",
+        "color": "크림 화이트/크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      },
+      {
+        "code": "T875MHE111",
+        "color": "크림 화이트/베이지",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      },
+      {
+        "code": "T875MEE111",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      },
+      {
+        "code": "T875P111",
+        "color": "프라임 실버",
+        "material": "네이처(메탈)",
+        "price": 2590000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/크림 화이트",
+      "핑크/베이지",
+      "크림 화이트/크림 그레이",
+      "크림 화이트/크림 화이트",
+      "크림 화이트/베이지",
+      "베이지/베이지",
+      "프라임 실버"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T875MEH141",
+    "name": "LG 디오스 오브제컬렉션 STEM 베이직 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 860.0,
+    "capacity_fridge": 498.0,
+    "capacity_freezer": 362.0,
+    "power": 43.3,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "안심 위생 케어",
+      "취향대로 즐기는 얼음",
+      "인공지능 냉기케어시스템"
+    ],
+    "price_min": 2090000.0,
+    "price_max": 3150000.0,
+    "variants": [
+      {
+        "code": "T875MEH141",
+        "color": "베이지/크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 2090000.0
+      },
+      {
+        "code": "T875MHH141",
+        "color": "크림 화이트/크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 3150000.0
+      }
+    ],
+    "colors": [
+      "베이지/크림 화이트",
+      "크림 화이트/크림 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T875MHH312",
+    "name": "LG 디오스 오브제컬렉션 냉장고 (노크온)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 56.8,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "인공지능 냉기케어시스템",
+      "편리한 수납공간",
+      "공간인테리어 가전"
+    ],
+    "price_min": 2500000.0,
+    "price_max": 2500000.0,
+    "variants": [
+      {
+        "code": "T875MHH312",
+        "color": "크림 화이트/크림 화이트",
+        "material": "네이처(메탈)",
+        "price": 2500000.0
+      }
+    ],
+    "colors": [
+      "크림 화이트/크림 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T876MEE011",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드",
+      "냉기케어 SYSTEM"
+    ],
+    "price_min": 2500000.0,
+    "price_max": 2500000.0,
+    "variants": [
+      {
+        "code": "T876MQQ011",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2500000.0
+      },
+      {
+        "code": "T876MEE011",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2500000.0
+      }
+    ],
+    "colors": [
+      "에센스 화이트/에센스 화이트",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T876MEE111",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 1,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 43.7,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드",
+      "냉기케어 SYSTEM"
+    ],
+    "price_min": 2700000.0,
+    "price_max": 2800000.0,
+    "variants": [
+      {
+        "code": "T876MEE111",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2700000.0
+      },
+      {
+        "code": "T876MQQ111",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2730000.0
+      },
+      {
+        "code": "T876MQQ1H1",
+        "color": "에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2800000.0
+      },
+      {
+        "code": "T876MEE1H1",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2800000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "에센스 화이트/에센스 화이트",
+      "에센스 화이트",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T876MEE312",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (노크온)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 56.8,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드",
+      "냉기케어 SYSTEM"
+    ],
+    "price_min": 2590000.0,
+    "price_max": 2590000.0,
+    "variants": [
+      {
+        "code": "T876MEE312",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2590000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T876MEE412",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고 (노크온 매직스페이스)",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 865.0,
+    "capacity_fridge": 498.0,
+    "capacity_freezer": 367.0,
+    "power": 56.3,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "노크온",
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드",
+      "냉기케어 SYSTEM"
+    ],
+    "price_min": 2490000.0,
+    "price_max": 2600000.0,
+    "variants": [
+      {
+        "code": "T876MEE412",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2490000.0
+      },
+      {
+        "code": "T876MQQ412",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2600000.0
+      }
+    ],
+    "colors": [
+      "베이지/베이지",
+      "에센스 화이트/에센스 화이트"
+    ],
+    "category": "냉장고"
+  },
+  {
+    "rep_code": "T876MRQ012",
+    "name": "LG 디오스 AI 오브제컬렉션 냉장고",
+    "install_type": "프리스탠딩",
+    "door_count": "4도어",
+    "energy_grade": 2,
+    "capacity_total": 870.0,
+    "capacity_fridge": 503.0,
+    "capacity_freezer": 367.0,
+    "power": 56.8,
+    "size": "914 x 1,787 x 918",
+    "features": [
+      "인버터 리니어 컴프레서"
+    ],
+    "promo_tags": [
+      "AI 신선케어 SYSTEM",
+      "AI 세이빙 모드",
+      "냉기케어 SYSTEM"
+    ],
+    "price_min": 2320000.0,
+    "price_max": 2400000.0,
+    "variants": [
+      {
+        "code": "T876MRQ012",
+        "color": "크림 그레이/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2320000.0
+      },
+      {
+        "code": "T876MQQ012",
+        "color": "에센스 화이트/에센스 화이트",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      },
+      {
+        "code": "T876MEE012",
+        "color": "베이지/베이지",
+        "material": "네이처(메탈)",
+        "price": 2400000.0
+      }
+    ],
+    "colors": [
+      "크림 그레이/에센스 화이트",
+      "에센스 화이트/에센스 화이트",
+      "베이지/베이지"
+    ],
+    "category": "냉장고"
+  }
+]
