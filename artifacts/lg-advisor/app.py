@@ -21,11 +21,34 @@ PRODUCTS, IS_SAMPLE = load_products()
 
 if "answers" not in st.session_state:
     st.session_state.answers = {}
+if "history" not in st.session_state:
+    st.session_state.history = []   # 답변한 q_id 순서 목록
+
 ans = st.session_state.answers
 
 
 def reset():
     st.session_state.answers = {}
+    st.session_state.history = []
+
+
+def go_back():
+    """가장 최근 답변 하나를 취소하고 직전 질문으로 돌아간다."""
+    h = st.session_state.history
+    if h:
+        last_q = h.pop()
+        st.session_state.answers.pop(last_q, None)
+
+
+def jump_to(q_id: str):
+    """해당 질문 단계로 점프 — 그 단계 이후 답변은 모두 초기화."""
+    h = st.session_state.history
+    if q_id in h:
+        idx = h.index(q_id)
+        removed = h[idx:]
+        st.session_state.history = h[:idx]
+        for k in removed:
+            st.session_state.answers.pop(k, None)
 
 
 # ── 라벨 → 아이콘/설명 매핑 (JS에 주입) ───────────────────────────────
@@ -105,6 +128,12 @@ GLOBAL_CSS = f"""
   padding: 4px 11px;
   border-radius: 100px;
   letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}}
+.lg-crumb:hover {{
+  background: #FFEAEF;
+  color: #A50034;
 }}
 
 /* ── 질문 말풍선 ── */
@@ -368,8 +397,18 @@ ICON_JS = f"""
     parentDoc.querySelectorAll('button[data-testid="stBaseButton-secondary"]')
       .forEach(btn => {{
 
-        /* 뒤로가기 텍스트 링크 처리 */
         const rawText = (btn.textContent || '').trim();
+
+        /* 히든 점프 버튼 (__jump_xxx__) — 부모 컨테이너 완전히 숨김 */
+        if (rawText.startsWith('__jump_')) {{
+          const wrap = btn.closest('[data-testid="stButton"]') || btn.parentElement;
+          if (wrap) wrap.style.cssText =
+            'position:absolute!important;width:0!important;height:0!important;'
+            + 'overflow:hidden!important;opacity:0!important;pointer-events:none!important;';
+          return;
+        }}
+
+        /* 뒤로가기/이전/처음부터 텍스트 링크 스타일 */
         if (rawText.startsWith('←') || rawText.startsWith('↩')) {{
           btn.classList.add('lg-back-btn');
           return;
@@ -411,6 +450,20 @@ ICON_JS = f"""
         btn.dataset.lgDone = '1';
         _paused = false;
       }});
+
+    /* 크럼 칩 클릭 → 대응하는 히든 점프 버튼 클릭 */
+    parentDoc.querySelectorAll('.lg-crumb[data-qid]').forEach(chip => {{
+      if (chip.dataset.crumbReady) return;
+      chip.dataset.crumbReady = '1';
+      chip.addEventListener('click', () => {{
+        const qid = chip.dataset.qid;
+        const target = '__jump_' + qid + '__';
+        const jumpBtn = Array.from(
+          parentDoc.querySelectorAll('button[data-testid="stBaseButton-secondary"]')
+        ).find(b => (b.textContent || '').trim() === target);
+        if (jumpBtn) jumpBtn.click();
+      }});
+    }});
   }}
 
   /* 페이지 로드 후 즉시 + 짧은 간격 반복 실행 (React 렌더 완료 후 확실히 반영) */
@@ -427,23 +480,24 @@ ICON_JS = f"""
 # ── 헬퍼 함수 ────────────────────────────────────────────────────────
 
 def render_header():
-    crumb_labels = []
+    crumb_data: list[tuple[str, str]] = []   # (q_id, display_label)
     if ans.get("install"):
-        crumb_labels.append(ans["install"])
+        crumb_data.append(("install", ans["install"]))
     hh = dict(E.HOUSEHOLD_OPTS).get(ans.get("household"))
     if hh:
-        crumb_labels.append(hh.split(" (")[0])
+        crumb_data.append(("household", hh.split(" (")[0]))
     ck = dict(E.COOKING_OPTS).get(ans.get("cooking"))
     if ck:
-        crumb_labels.append(ck.split(" (")[0])
+        crumb_data.append(("cooking", ck.split(" (")[0]))
     if ans.get("door_style"):
         ds_map = {"양문형": "양문형", "4도어_no_ai": "4도어", "4도어_ai": "4도어 AI"}
-        crumb_labels.append(ds_map.get(ans["door_style"], ""))
+        crumb_data.append(("door_style", ds_map.get(ans["door_style"], "")))
 
     crumbs_html = ""
-    if crumb_labels:
+    if crumb_data:
         crumbs_html = '<div class="lg-crumbs">' + "".join(
-            f'<span class="lg-crumb">{lbl}</span>' for lbl in crumb_labels
+            f'<span class="lg-crumb" data-qid="{qid}">{lbl}</span>'
+            for qid, lbl in crumb_data
         ) + '</div>'
 
     st.markdown(f"""
@@ -454,6 +508,12 @@ def render_header():
     </div>
     {crumbs_html}
     """, unsafe_allow_html=True)
+
+    # 숨겨진 점프 버튼 (JS가 크럼 클릭 시 자동으로 클릭 — enhance()가 화면에서 감춤)
+    for qid, _ in crumb_data:
+        if st.button(f"__jump_{qid}__", key=f"_jump_{qid}"):
+            jump_to(qid)
+            st.rerun()
 
 
 def q_bubble(text: str):
@@ -469,6 +529,15 @@ def option_buttons(q_id: str):
     q_bubble(q_cfg.text)
     for opt in q_cfg.options:
         if st.button(opt.label, key=f"opt_{q_id}_{opt.value}", use_container_width=True):
+            h = st.session_state.history
+            if q_id in h:
+                # 이미 답변한 질문을 다시 선택 → 이후 답변 모두 초기화
+                idx = h.index(q_id)
+                for k in h[idx + 1:]:
+                    st.session_state.answers.pop(k, None)
+                st.session_state.history = h[:idx + 1]
+            else:
+                h.append(q_id)
             ans[q_id] = opt.value
             st.rerun()
 
@@ -544,6 +613,9 @@ elif q == "features":
             chosen.append(key)
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
     if st.button("이 기능으로 추천받기", type="primary", use_container_width=True):
+        h = st.session_state.history
+        if "features" not in h:
+            h.append("features")
         ans["wanted_features"] = chosen
         st.rerun()
 
@@ -612,12 +684,18 @@ elif q == "result":
         reset()
         st.rerun()
 
-# ── 뒤로가기 ──
+# ── 하단 네비게이션 (이전 / 처음부터) ──
 if q != "result" and ans:
-    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
-    if st.button("← 처음부터", key="restart_top"):
-        reset()
-        st.rerun()
+    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    col_prev, col_reset = st.columns(2)
+    with col_prev:
+        if st.button("← 이전", key="go_back", use_container_width=True):
+            go_back()
+            st.rerun()
+    with col_reset:
+        if st.button("← 처음부터", key="restart_top", use_container_width=True):
+            reset()
+            st.rerun()
 
 # ── 아이콘 JS 주입 (components.html → iframe → window.parent.document 접근) ──
 # height=0 으로 invisible iframe, 실제 DOM 조작은 부모 프레임에서 수행
