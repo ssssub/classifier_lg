@@ -378,6 +378,88 @@ div[data-testid="stCheckbox"] label span {{
   color: #aaa;
 }}
 
+/* ── 조건별 적합도 섹션 ── */
+.bd-section {{
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #F0F0F0;
+}}
+.bd-section-title {{
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #AAA;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}}
+.bd-row {{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}}
+.bd-label {{
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #555;
+  width: 38px;
+  flex-shrink: 0;
+}}
+.bd-track {{
+  flex: 1;
+  height: 6px;
+  background: #F0F0F0;
+  border-radius: 3px;
+  overflow: hidden;
+}}
+.bd-fill {{
+  height: 6px;
+  border-radius: 3px;
+  background: #22C55E;
+  transition: width 0.5s ease;
+}}
+.bd-fill.mid {{ background: #F59E0B; }}
+.bd-fill.low {{ background: #EF4444; }}
+.bd-pct {{
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #777;
+  width: 34px;
+  text-align: right;
+  flex-shrink: 0;
+}}
+/* 잘 맞는 조건 불릿 */
+.bd-bullets {{
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #F0F0F0;
+}}
+.bd-bullets-title {{
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #AAA;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}}
+.bd-bullet-item {{
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 3px;
+}}
+.bd-bullet-dot {{
+  width: 6px;
+  height: 6px;
+  background: #22C55E;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}}
+
 /* ── 애니메이션 ── */
 @keyframes lgFadeUp {{
   from {{ opacity: 0; transform: translateY(10px); }}
@@ -608,6 +690,78 @@ def compute_fit_score(p: dict, ans: dict, applied_tier) -> float:
     return sum(s * w for s, w in parts) / total_w
 
 
+def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
+    """조건별 점수(0-100) + 불릿 설명 반환. engine.py 로직 불변."""
+    rows: list[dict] = []
+
+    # 설치 — 하드 필터 통과한 후보이므로 항상 100
+    inst_label = {"빌트인": "빌트인", "Fit & Max": "Fit & Max",
+                  "프리스탠딩": "프리스탠딩"}.get(p.get("install", ""), p.get("install", ""))
+    rows.append({"label": "설치", "score": 100,
+                 "bullet": f"{inst_label} 타입에 딱 맞아요"})
+
+    # 용량 — 목표 tier와의 거리(단계당 25점 감점)
+    if applied_tier and p.get("total_l"):
+        actual = E.tier_index(p["total_l"]) or applied_tier
+        diff = abs(actual - applied_tier)
+        score = max(0, 100 - diff * 25)
+        tier_name = E.TIER_LABEL.get(applied_tier, "")
+        if diff == 0:
+            bullet = f"목표 용량({tier_name})에 딱 맞아요"
+        elif diff == 1:
+            bullet = f"목표 용량({tier_name})과 한 단계 차이나요"
+        else:
+            bullet = ""
+        rows.append({"label": "용량", "score": score,
+                     "bullet": bullet if score >= 75 else ""})
+
+    # 예산 — 현재 질문에 없으므로 ans에 budget 키가 있을 때만 표시
+    budget = ans.get("budget")
+    if budget is not None:
+        price = p.get("price_min") or p.get("price_max") or 0
+        if price:
+            if price <= budget:
+                b_score, bullet = 100, "예산 범위 안에 있어요"
+            else:
+                b_score = max(0, round(budget / price * 100))
+                bullet = ""
+            rows.append({"label": "예산", "score": b_score,
+                         "bullet": bullet if b_score >= 75 else ""})
+
+    # 기능 — 원하는 기능 충족 비율
+    wanted = set(ans.get("wanted_features", []))
+    if wanted:
+        hit = wanted & p.get("features", set())
+        f_score = round(len(hit) / len(wanted) * 100)
+        if f_score == 100:
+            bullet = "원하는 기능을 모두 갖췄어요"
+        elif hit:
+            labels = [SOFT_FEATURES[k][0].split(" (")[0] for k in list(hit)[:2]]
+            bullet = ", ".join(labels) + " 등을 갖췄어요"
+        else:
+            bullet = ""
+        rows.append({"label": "기능", "score": f_score,
+                     "bullet": bullet if f_score >= 75 else ""})
+
+    # 에너지 — 1등급 100, 2등급 85, 3등급 70, 4등급 55
+    energy = p.get("energy")
+    if energy:
+        e_map = {1: 100, 2: 85, 3: 70, 4: 55}
+        e_score = e_map.get(energy, max(0, 55 - (energy - 4) * 15))
+        if energy == 1:
+            bullet = "에너지 1등급으로 전기료가 절약돼요"
+        elif energy == 2:
+            bullet = "에너지 2등급으로 효율이 높아요"
+        elif e_score >= 75:
+            bullet = f"에너지 {energy}등급이에요"
+        else:
+            bullet = ""
+        rows.append({"label": "에너지", "score": e_score,
+                     "bullet": bullet if e_score >= 75 else ""})
+
+    return rows
+
+
 def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
     """rank: 1-based 순위, fit: 0.0~1.0 적합도."""
     is_top = (rank == 1)
@@ -635,6 +789,44 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         for k in sorted(p.get("features", []))
     )
 
+    # 조건별 적합도 계산
+    breakdown = compute_breakdown(p, ans, applied_tier)
+
+    # 잘 맞는 조건 불릿 HTML
+    good_bullets = [row["bullet"] for row in breakdown if row["bullet"]]
+    if good_bullets:
+        bullet_items = "".join(
+            f'<div class="bd-bullet-item">'
+            f'<div class="bd-bullet-dot"></div>'
+            f'<span>{b}</span></div>'
+            for b in good_bullets
+        )
+        bullets_html = f"""
+        <div class="bd-bullets">
+          <div class="bd-bullets-title">잘 맞는 조건</div>
+          {bullet_items}
+        </div>"""
+    else:
+        bullets_html = ""
+
+    # 조건별 막대 그래프 HTML
+    bar_rows_html = ""
+    for row in breakdown:
+        s = row["score"]
+        fill_cls = "bd-fill" if s >= 75 else ("bd-fill mid" if s >= 50 else "bd-fill low")
+        bar_rows_html += (
+            f'<div class="bd-row">'
+            f'<span class="bd-label">{row["label"]}</span>'
+            f'<div class="bd-track"><div class="{fill_cls}" style="width:{s}%;"></div></div>'
+            f'<span class="bd-pct">{s}%</span>'
+            f'</div>'
+        )
+    bars_html = f"""
+    <div class="bd-section">
+      <div class="bd-section-title">조건별 적합도</div>
+      {bar_rows_html}
+    </div>"""
+
     st.markdown(f"""
     <div class="{card_cls}">
       <div class="res-fit-row">
@@ -656,6 +848,8 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
       <div class="res-price">{price_str}</div>
       <div class="res-chips">{chips_html}</div>
       <div class="res-color">색상: {color_str}&nbsp;&nbsp;|&nbsp;&nbsp;크기(WxHxD): {p['size_raw']}</div>
+      {bullets_html}
+      {bars_html}
     </div>
     """, unsafe_allow_html=True)
 
