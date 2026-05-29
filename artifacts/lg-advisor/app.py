@@ -3,10 +3,13 @@
 """
 import json
 import os
+import time
+import uuid
 import streamlit as st
 import streamlit.components.v1 as components
 from data_loader import load_products, SOFT_FEATURES
 import engine as E
+import db as DB
 from ui_config import REFRIGERATOR_CONFIG, ICONS
 
 # ── SKU 데이터 (색상 변형 연동용) ──
@@ -56,6 +59,12 @@ if "history" not in st.session_state:
     st.session_state.history = []
 if "force_result" not in st.session_state:
     st.session_state.force_result = False
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
+if "session_start" not in st.session_state:
+    st.session_state.session_start = time.time()
+if "_db_logged" not in st.session_state:
+    st.session_state._db_logged = False
 
 ans = st.session_state.answers
 
@@ -64,6 +73,9 @@ def reset():
     st.session_state.answers = {}
     st.session_state.history = []
     st.session_state.force_result = False
+    st.session_state.session_id = str(uuid.uuid4())
+    st.session_state.session_start = time.time()
+    st.session_state._db_logged = False
 
 
 def go_back():
@@ -670,6 +682,11 @@ div[data-testid="stCheckbox"] label span {{
 }}
 .spec-sel:hover {{ border-color: #A50034; }}
 .spec-sel:focus {{ outline: none; border-color: #A50034; }}
+
+/* ── 사이드바 페이지 네비게이션 숨김 (일반 사용자에게 admin 링크 미노출) ── */
+[data-testid="stSidebarNav"], [data-testid="stSidebar"] {{
+  display: none !important;
+}}
 
 /* ── 애니메이션 ── */
 @keyframes lgFadeUp {{
@@ -1279,6 +1296,31 @@ elif q == "result":
             (compute_fit_score(p, ans, tier), rank_i + 1, p)
             for rank_i, (_, p, _) in enumerate(top5)
         ]
+
+        # ── DB 로그 (결과 화면 최초 진입 시 1회만) ──────────────────────
+        if not st.session_state._db_logged:
+            q_count_log = len(st.session_state.get("history", []))
+            # 후보 감소 흐름 계산
+            _cand_init, _ = E.filter_candidates(
+                PRODUCTS, {"install": ans.get("install")} if ans.get("install") else {}
+            )
+            _ans_q2 = {k: ans[k] for k in ("install", "household", "cooking") if k in ans}
+            _cand_q2, _ = E.filter_candidates(PRODUCTS, _ans_q2)
+            _top1_p   = scored[0][2]
+            _top1_fit = round(scored[0][0] * 100, 1)
+            DB.log_session(
+                ans           = ans,
+                q_count       = q_count_log,
+                force_result  = st.session_state.force_result,
+                cand_initial  = len(_cand_init),
+                cand_after_q2 = len(_cand_q2),
+                cand_final    = len(cand),
+                top1_code     = _top1_p.get("code", ""),
+                top1_fit_pct  = _top1_fit,
+                session_sec   = time.time() - st.session_state.session_start,
+                session_id    = st.session_state.session_id,
+            )
+            st.session_state._db_logged = True
 
         # 통계 박스
         q_count = len(st.session_state.get("history", []))
