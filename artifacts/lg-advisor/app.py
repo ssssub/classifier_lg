@@ -65,6 +65,12 @@ if "session_start" not in st.session_state:
     st.session_state.session_start = time.time()
 if "_db_logged" not in st.session_state:
     st.session_state._db_logged = False
+if "click_count" not in st.session_state:
+    st.session_state.click_count = 0
+if "_session_start_logged" not in st.session_state:
+    st.session_state._session_start_logged = False
+if "_rated" not in st.session_state:
+    st.session_state._rated = False
 
 ans = st.session_state.answers
 
@@ -76,6 +82,9 @@ def reset():
     st.session_state.session_id = str(uuid.uuid4())
     st.session_state.session_start = time.time()
     st.session_state._db_logged = False
+    st.session_state.click_count = 0
+    st.session_state._session_start_logged = False
+    st.session_state._rated = False
 
 
 def go_back():
@@ -688,6 +697,38 @@ div[data-testid="stCheckbox"] label span {{
   display: none !important;
 }}
 
+/* ── 만족도 팝업 ── */
+.sat-box {{
+  background: #FAFAFA;
+  border: 1.5px solid #E8E8E8;
+  border-radius: 16px;
+  padding: 22px 24px 18px;
+  margin: 20px 0 8px;
+  text-align: center;
+}}
+.sat-title {{
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 5px;
+}}
+.sat-sub {{
+  font-size: 0.82rem;
+  color: #888;
+  margin-bottom: 14px;
+}}
+.sat-thanks {{
+  background: #F0FFF4;
+  border: 1.5px solid #BBF7D0;
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin: 16px 0 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #166534;
+}}
+
 /* ── 애니메이션 ── */
 @keyframes lgFadeUp {{
   from {{ opacity: 0; transform: translateY(10px); }}
@@ -882,6 +923,7 @@ def option_buttons(q_id: str):
     q_bubble(q_cfg.text)
     for opt in q_cfg.options:
         if st.button(opt.label, key=f"opt_{q_id}_{opt.value}", use_container_width=True):
+            st.session_state.click_count += 1
             h = st.session_state.history
             if q_id in h:
                 # 이미 답변한 질문을 다시 선택 → 이후 답변 모두 초기화
@@ -903,6 +945,7 @@ def show_skip_btn():
     _, mid, _ = st.columns([3, 4, 3])
     with mid:
         if st.button("지금 바로 결과 보기 →", key="skip_to_result", use_container_width=False):
+            st.session_state.click_count += 1
             st.session_state.force_result = True
             st.rerun()
 
@@ -1238,6 +1281,11 @@ if st.session_state.force_result:
 else:
     q = E.next_question(PRODUCTS, ans)
 
+# ── Q1 첫 답변 시 세션 시작 기록 (이탈 추적 기준점) ──
+if "install" in ans and not st.session_state._session_start_logged:
+    DB.log_session_start(st.session_state.session_id)
+    st.session_state._session_start_logged = True
+
 # ── 질문 흐름 ──
 if q == "install":
     option_buttons("install")
@@ -1268,6 +1316,7 @@ elif q == "features":
             chosen.append(key)
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
     if st.button("이 기능으로 추천받기", type="primary", use_container_width=True):
+        st.session_state.click_count += 1
         h = st.session_state.history
         if "features" not in h:
             h.append("features")
@@ -1308,17 +1357,18 @@ elif q == "result":
             _cand_q2, _ = E.filter_candidates(PRODUCTS, _ans_q2)
             _top1_p   = scored[0][2]
             _top1_fit = round(scored[0][0] * 100, 1)
-            DB.log_session(
+            DB.log_session_result(
+                session_id    = st.session_state.session_id,
                 ans           = ans,
                 q_count       = q_count_log,
                 force_result  = st.session_state.force_result,
+                click_count   = st.session_state.get("click_count", 0),
                 cand_initial  = len(_cand_init),
                 cand_after_q2 = len(_cand_q2),
                 cand_final    = len(cand),
                 top1_code     = _top1_p.get("code", ""),
                 top1_fit_pct  = _top1_fit,
-                session_sec   = time.time() - st.session_state.session_start,
-                session_id    = st.session_state.session_id,
+                dwell_sec     = time.time() - st.session_state.session_start,
             )
             st.session_state._db_logged = True
 
@@ -1434,6 +1484,38 @@ elif q == "result":
               </tbody>
             </table>
             </div>
+            """, unsafe_allow_html=True)
+
+    # ── 탐색 만족도 팝업 ──────────────────────────────────────────────
+    if ranked:
+        if not st.session_state.get("_rated", False):
+            st.markdown("""
+            <div class="sat-box">
+              <div class="sat-title">이 추천이 도움이 됐나요?</div>
+              <div class="sat-sub">탐색 경험을 평가해 주시면 서비스 개선에 활용됩니다.</div>
+            </div>
+            """, unsafe_allow_html=True)
+            rating = st.feedback("stars", key="sat_feedback")
+            comment = st.text_input(
+                "한 줄 의견 (선택)",
+                placeholder="추천이 도움됐어요 / 원하는 제품이 없었어요 ...",
+                key="sat_comment",
+                label_visibility="collapsed",
+            )
+            if st.button("의견 제출", key="sat_submit", use_container_width=True):
+                if rating is not None:
+                    DB.log_satisfaction(
+                        st.session_state.session_id,
+                        score   = rating + 1,   # 0~4 → 1~5
+                        comment = comment or None,
+                    )
+                    st.session_state._rated = True
+                    st.rerun()
+                else:
+                    st.warning("별점을 먼저 선택해주세요.")
+        else:
+            st.markdown("""
+            <div class="sat-thanks">소중한 의견 감사합니다! 서비스 개선에 꼭 반영할게요.</div>
             """, unsafe_allow_html=True)
 
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
