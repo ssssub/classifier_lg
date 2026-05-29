@@ -1246,9 +1246,9 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         </div>
       </div>
       <div class="res-name">{p['name']}</div>
-      <div class="res-spec"><span id="{ccode_id}-spec">{init_code}</span> &nbsp;·&nbsp; {p['install']} &nbsp;·&nbsp;
-        {p['doors']} &nbsp;·&nbsp; 총 {p['total_l']}L &nbsp;·&nbsp; 에너지 {p['energy']}등급
-        &nbsp;·&nbsp; {p['size_raw']}</div>
+      <div class="res-spec"><span id="{ccode_id}-spec">{init_code}</span> &nbsp;·&nbsp; {p.get('install','—')} &nbsp;·&nbsp;
+        {p.get('doors','—')} &nbsp;·&nbsp; 총 {p.get('total_l') or '—'}L &nbsp;·&nbsp; 에너지 {p.get('energy') or '—'}등급
+        &nbsp;·&nbsp; {p.get('size_raw','—')}</div>
       <div class="res-price"><span id="{cprc_id}">{disp_price}</span></div>
       <div class="res-chips">{chips_html}</div>
       {sku_html}
@@ -1424,67 +1424,71 @@ elif q == "result":
             </div>
             """, unsafe_allow_html=True)
 
-        # 2~5위 카드
-        if len(scored) > 1:
-            st.markdown("""
-            <div style="font-size:0.74rem;font-weight:700;color:#999;
-                        letter-spacing:0.06em;text-transform:uppercase;
-                        margin:20px 0 10px;">
-              다른 후보도 살펴보세요
-            </div>
-            """, unsafe_allow_html=True)
-            for fit_s, rank_s, p_s in scored[1:]:
+        # 2~5위 카드 — 렌더링 가능한 카드만 표시
+        _shown_others = 0
+        for fit_s, rank_s, p_s in scored[1:]:
+            if not p_s or not p_s.get("name"):
+                continue
+            try:
+                if _shown_others == 0:
+                    st.markdown("""
+                    <div style="font-size:0.74rem;font-weight:700;color:#999;
+                                letter-spacing:0.06em;text-transform:uppercase;
+                                margin:20px 0 10px;">
+                      다른 후보도 살펴보세요
+                    </div>
+                    """, unsafe_allow_html=True)
                 show_result_card(p_s, rank=rank_s, fit=fit_s, ans=ans, applied_tier=tier)
+                _shown_others += 1
+            except Exception:
+                pass  # 렌더링 실패한 카드는 조용히 건너뜀
 
-        # Top 5 한눈에 비교표
-        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-        with st.expander("📊 Top 5 한눈에 비교표"):
-            # 주요 기능 레이블 매핑
-            def _feat_labels(p):
-                feats = p.get("features", set())
-                labels = [SOFT_FEATURES[k][0].split(" (")[0] for k in sorted(feats)
-                          if k in SOFT_FEATURES]
-                return ", ".join(labels) if labels else "—"
+        # Top 5 한눈에 비교표 — 후보가 2개 이상일 때만 표시
+        if len(scored) > 1:
+            st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+            with st.expander("📊 Top 5 한눈에 비교표"):
+                def _feat_labels(p):
+                    feats = p.get("features", set())
+                    labels = [SOFT_FEATURES[k][0].split(" (")[0] for k in sorted(feats)
+                              if k in SOFT_FEATURES]
+                    return ", ".join(labels) if labels else "—"
 
-            rows_html = ""
-            for fit_c, rank_c, p_c in scored:
-                price_c = (
-                    f"{p_c['price_min']:,}원" if p_c.get("price_min") else "미정"
-                )
-                row_cls = "top-row" if rank_c == 1 else ""
-                rows_html += f"""
-                <tr class="{row_cls}">
-                  <td><span class="cmp-rank">#{rank_c}</span></td>
-                  <td><span class="cmp-name">{p_c['name']}</span></td>
-                  <td><span class="cmp-fit">{round(fit_c * 100)}%</span></td>
-                  <td>{price_c}</td>
-                  <td>{p_c.get('total_l', '—')}L</td>
-                  <td>{p_c.get('doors', '—')}</td>
-                  <td>{p_c.get('energy', '—')}등급</td>
-                  <td><span class="cmp-feat">{_feat_labels(p_c)}</span></td>
-                </tr>"""
+                rows_html = ""
+                for fit_c, rank_c, p_c in scored:
+                    try:
+                        price_c = (
+                            f"{p_c['price_min']:,}원" if p_c.get("price_min") else "미정"
+                        )
+                        row_cls = "top-row" if rank_c == 1 else ""
+                        rows_html += f"""
+                        <tr class="{row_cls}">
+                          <td><span class="cmp-rank">#{rank_c}</span></td>
+                          <td><span class="cmp-name">{p_c['name']}</span></td>
+                          <td><span class="cmp-fit">{round(fit_c * 100)}%</span></td>
+                          <td>{price_c}</td>
+                          <td>{p_c.get('total_l') or '—'}L</td>
+                          <td>{p_c.get('doors') or '—'}</td>
+                          <td>{p_c.get('energy') or '—'}등급</td>
+                          <td><span class="cmp-feat">{_feat_labels(p_c)}</span></td>
+                        </tr>"""
+                    except Exception:
+                        pass
 
-            st.markdown(f"""
-            <div style="overflow-x:auto;">
-            <table class="cmp-table">
-              <thead>
-                <tr>
-                  <th>순위</th>
-                  <th>제품명</th>
-                  <th>적합도</th>
-                  <th>최저가</th>
-                  <th>용량</th>
-                  <th>도어</th>
-                  <th>에너지</th>
-                  <th>주요기능</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows_html}
-              </tbody>
-            </table>
-            </div>
-            """, unsafe_allow_html=True)
+                if rows_html:
+                    st.markdown(f"""
+                    <div style="overflow-x:auto;">
+                    <table class="cmp-table">
+                      <thead>
+                        <tr>
+                          <th>순위</th><th>제품명</th><th>적합도</th>
+                          <th>최저가</th><th>용량</th><th>도어</th>
+                          <th>에너지</th><th>주요기능</th>
+                        </tr>
+                      </thead>
+                      <tbody>{rows_html}</tbody>
+                    </table>
+                    </div>
+                    """, unsafe_allow_html=True)
 
     # ── 탐색 만족도 팝업 ──────────────────────────────────────────────
     if ranked:
