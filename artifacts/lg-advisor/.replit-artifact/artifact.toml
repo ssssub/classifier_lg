@@ -3,6 +3,7 @@ previewPath = "/"
 title = "LG 냉장고 상담 매니저"
 version = "1.0.0"
 id = "lg-advisor"
+deploymentTarget = "vm"
 
 [[services]]
 localPort = 5000
@@ -10,4 +11,7 @@ name = "web"
 paths = ["/"]
 
 [services.development]
+run = "cd /home/runner/workspace/artifacts/lg-advisor && streamlit run app.py"
+
+[services.production]
 run = "cd /home/runner/workspace/artifacts/lg-advisor && streamlit run app.py"
