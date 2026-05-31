@@ -1540,12 +1540,13 @@ ICON_JS = f"""
             + '<span class="lg-persona-chips">' + chipHtml + '</span>'
             + '</span>';
         }} else {{
-          p.style.cssText = 'display:flex!important;align-items:flex-start!important;'
-            + 'width:100%!important;margin:0!important;gap:14px!important;';
+          p.style.cssText = 'width:100%!important;display:flex!important;'
+            + 'justify-content:flex-start!important;align-items:center!important;'
+            + 'margin:0!important;gap:14px!important;';
           p.innerHTML =
             '<span style="display:flex;align-items:center;justify-content:center;'
             + 'width:40px;height:40px;min-width:40px;border-radius:10px;'
-            + 'background:#F5F5F7;color:#555555;flex-shrink:0;margin-top:1px;" class="lg-icon-box">'
+            + 'background:#F5F5F7;color:#555555;flex-shrink:0;" class="lg-icon-box">'
             + makeSvg(iKey) + '</span>'
             + '<span style="flex:1;min-width:0;text-align:left;">'
             + '<span style="display:block;font-size:0.93rem;font-weight:700;'
@@ -1555,7 +1556,7 @@ ICON_JS = f"""
                   + 'color:#999;margin-top:3px;line-height:1.3;">' + escapeHtml(desc) + '</span>'
                 : '')
             + '</span>'
-            + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;align-self:center;">›</span>';
+            + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;margin-left:auto;">›</span>';
         }}
         btn.dataset.lgDone = '1';
         _paused = false;
