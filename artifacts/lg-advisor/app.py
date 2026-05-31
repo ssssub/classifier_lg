@@ -161,7 +161,7 @@ GLOBAL_CSS = f"""
 [data-testid="stHeader"], [data-testid="stToolbar"],
 [data-testid="stDecoration"] {{ display: none !important; }}
 .block-container {{
-  max-width: 640px !important;
+  max-width: 940px !important;
   padding: 2.8rem 1.5rem 5rem !important;
   margin: 0 auto !important;
 }}
@@ -191,6 +191,38 @@ GLOBAL_CSS = f"""
   color: #888888;
   line-height: 1.45;
   font-weight: 400;
+}}
+
+/* ── 질문 진행률 ── */
+.lg-progress-wrap {{
+  margin: -0.6rem 0 1.5rem;
+}}
+.lg-progress-meta {{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+  color: #888;
+  font-size: 0.75rem;
+  font-weight: 700;
+}}
+.lg-progress-meta strong {{
+  color: #A50034;
+  font-weight: 800;
+}}
+.lg-progress-track {{
+  width: 100%;
+  height: 7px;
+  border-radius: 999px;
+  background: #F0F0F0;
+  overflow: hidden;
+}}
+.lg-progress-fill {{
+  height: 100%;
+  border-radius: inherit;
+  background: #A50034;
+  transition: width 0.24s ease;
 }}
 
 /* ── 진행 뱃지 ── */
@@ -229,6 +261,14 @@ GLOBAL_CSS = f"""
 }}
 .q-bubble strong {{ color: #111; font-weight: 700; }}
 .q-bubble .accent {{ color: #A50034; font-weight: 700; }}
+.q-bubble .hint {{
+  display: inline-block;
+  color: #9A9A9A;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.45;
+  margin-top: 4px;
+}}
 
 /* ── 선택지 카드 버튼 (secondary) ── */
 button[data-testid="stBaseButton-secondary"] {{
@@ -268,6 +308,76 @@ button[data-testid="stBaseButton-secondary"] p {{
 /* 카드 간격 */
 div[data-testid="stButton"] {{
   margin-bottom: 8px !important;
+}}
+
+/* ── 1번 질문: 라이프스타일 빅카드 ── */
+button.lg-persona-btn {{
+  height: 280px !important;
+  min-height: 286px !important;
+  border-radius: 10px !important;
+  padding: 22px 20px !important;
+  align-items: flex-start !important;
+  box-shadow: none !important;
+}}
+button.lg-persona-btn:hover {{
+  box-shadow: 0 10px 26px rgba(0,0,0,0.07) !important;
+}}
+button.lg-persona-btn > div {{
+  align-items: flex-start !important;
+}}
+button.lg-persona-btn p {{
+  display: block !important;
+  width: 100% !important;
+}}
+.lg-persona-content {{
+  display: block;
+  width: 100%;
+  text-align: left;
+}}
+.lg-persona-icon {{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  margin-bottom: 16px;
+}}
+.lg-persona-title {{
+  display: block;
+  color: #171717;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-bottom: 9px;
+}}
+.lg-persona-desc {{
+  display: block;
+  color: #4F4F4F;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.55;
+  min-height: 40px;
+  margin-bottom: 16px;
+}}
+.lg-persona-chips {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 7px;
+}}
+.lg-persona-chip {{
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  border: 1px solid #D7D7D7;
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: #4D4D4D;
+  padding: 4px 11px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.25;
+  word-break: keep-all;
 }}
 
 /* ── 뒤로가기 버튼 오버라이드 (JS가 .lg-back-btn 클래스 추가) ── */
@@ -644,6 +754,9 @@ div[data-testid="stCheckbox"] label span {{
   font-weight: 600;
   box-shadow: 0 0 0 2px rgba(165,0,52,0.10);
 }}
+.cs-chip.is-hidden {{
+  display: none !important;
+}}
 .cs-dot {{
   display: inline-block;
   width: 14px;
@@ -674,6 +787,29 @@ div[data-testid="stCheckbox"] label span {{
   transition: color 0.15s;
 }}
 .cs-info-sep {{ color: #DDD; margin: 0 2px; }}
+.cs-material-select {{
+  min-width: 150px;
+  max-width: 100%;
+  border: 1.5px solid #E8E8E8;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #333;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 6px 30px 6px 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888780' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+}}
+.cs-material-select:focus {{
+  outline: none;
+  border-color: #A50034;
+  box-shadow: 0 0 0 2px rgba(165,0,52,0.08);
+}}
 /* ── 스펙 드롭다운 (폴백용) ── */
 .spec-sel-section {{
   margin-top: 14px;
@@ -723,36 +859,88 @@ div[data-testid="stCheckbox"] label span {{
   display: none !important;
 }}
 
-/* ── 만족도 팝업 ── */
-.sat-box {{
-  background: #FAFAFA;
+/* ── Top 5 비교 섹션 ── */
+.lg-compare-box {{
+  margin: 22px 0 18px;
+  padding: 18px;
   border: 1.5px solid #E8E8E8;
-  border-radius: 16px;
-  padding: 22px 24px 18px;
-  margin: 20px 0 8px;
-  text-align: center;
-}}
-.sat-title {{
-  font-size: 1rem;
-  font-weight: 700;
-  color: #111;
-  margin-bottom: 5px;
-}}
-.sat-sub {{
-  font-size: 0.82rem;
-  color: #888;
-  margin-bottom: 14px;
-}}
-.sat-thanks {{
-  background: #F0FFF4;
-  border: 1.5px solid #BBF7D0;
   border-radius: 12px;
-  padding: 14px 20px;
-  margin: 16px 0 8px;
-  text-align: center;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #166534;
+  background: #FAFAFA;
+}}
+.lg-compare-title {{
+  margin: 0 0 4px;
+  color: #111;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}}
+.lg-compare-sub {{
+  margin: 0;
+  color: #888;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}}
+.lg-compare-table-wrap {{
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 12px;
+  border: 1px solid #ECECEC;
+  border-radius: 10px;
+  background: #FFFFFF;
+}}
+.lg-compare-table {{
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}}
+.lg-compare-table th,
+.lg-compare-table td {{
+  padding: 9px 11px;
+  border-bottom: 1px solid #EFEFEF;
+  vertical-align: top;
+  text-align: left;
+  line-height: 1.45;
+}}
+.lg-compare-table tr:last-child th,
+.lg-compare-table tr:last-child td {{
+  border-bottom: 0;
+}}
+.lg-compare-table th {{
+  width: 24%;
+  background: #F7F7F7;
+  color: #777;
+  font-weight: 800;
+  white-space: nowrap;
+}}
+.lg-compare-table td {{
+  width: 38%;
+  color: #333;
+  overflow-wrap: anywhere;
+}}
+.lg-compare-table thead th {{
+  background: #FFF5F7;
+  color: #A50034;
+  font-size: 0.72rem;
+}}
+.lg-compare-table tr.diff-row th,
+.lg-compare-table tr.diff-row td {{
+  background: #FFF9EC;
+}}
+.lg-compare-table tr.diff-row th {{
+  color: #A05A00;
+}}
+.lg-diff-badge {{
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #FFE6B8;
+  color: #8A4B00;
+  font-size: 0.58rem;
+  font-weight: 800;
+  vertical-align: middle;
 }}
 
 /* ── LG 결과 화면 리디자인 ── */
@@ -794,22 +982,23 @@ div[data-testid="stCheckbox"] label span {{
   background: #fff;
   border-radius: 12px;
   border: 2px solid var(--lg-red);
-  padding: 0.92rem;
+  padding: 1.85rem 0.92rem 0.92rem;
   margin: 0;
   position: relative;
   animation: lgFadeUp 0.25s ease both;
 }}
 .lg-best-badge {{
   position: absolute;
-  top: -10px;
+  top: -15px;
   left: 16px;
   background: var(--lg-red);
   color: #fff;
   font-size: 0.6rem;
   font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 10px;
+  padding: 5px 14px;
+  border-radius: 999px;
   letter-spacing: 0.04em;
+  z-index: 3;
 }}
 .lg-product-header {{
   display: flex;
@@ -1112,6 +1301,7 @@ div[data-testid="stCheckbox"] label span {{
 .lg-carousel-viewport {{
   overflow: hidden;
   border-radius: 12px;
+  padding-top: 16px;
 }}
 .lg-carousel-track {{
   display: flex;
@@ -1195,6 +1385,21 @@ ICON_JS = f"""
   const LABEL_ICONS = {label_icon_json};
   const LABEL_DESCS = {label_desc_json};
   const SVG_ICONS   = {icons_json};
+  const PERSONA_COLORS = {{
+    freshness: ['#E0F5EA', '#2C9B73'],
+    hygiene: ['#E8F2FF', '#3478D9'],
+    saving: ['#FFF2D8', '#C47A16'],
+    storage: ['#EEE7FF', '#7353D9'],
+    smart_home: ['#FFE8E7', '#C0473B'],
+    interior: ['#FFE6F1', '#C84A7A'],
+    default: ['#F5F5F7', '#555555'],
+  }};
+
+  function escapeHtml(value) {{
+    return String(value || '').replace(/[&<>"']/g, function(ch) {{
+      return ({{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}})[ch];
+    }});
+  }}
 
   function makeSvg(key) {{
     const d = SVG_ICONS[key] || SVG_ICONS['default'];
@@ -1209,9 +1414,9 @@ ICON_JS = f"""
   const parentDoc = window.parent.document;
 
   function injectHeadStyles() {{
-    if (parentDoc.getElementById('lg-runtime-styles')) return;
+    if (parentDoc.getElementById('lg-runtime-styles-v2')) return;
     const s = parentDoc.createElement('style');
-    s.id = 'lg-runtime-styles';
+    s.id = 'lg-runtime-styles-v2';
     s.textContent = [
       'button[data-testid="stBaseButton-secondary"] {{',
       '  background:#FFFFFF!important;',
@@ -1252,6 +1457,15 @@ ICON_JS = f"""
       'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;font-weight:500!important;border-radius:8px!important;transform:none!important;padding:6px 18px!important;width:auto!important;}}',
       'button.lg-skip-btn:hover{{color:#A50034!important;border-color:#A50034!important;}}',
       'button.lg-skip-btn p{{text-align:center!important;font-size:.76rem!important;font-weight:500!important;}}',
+      'button.lg-persona-btn{{height:340px!important;min-height:286px!important;border-radius:10px!important;padding:22px 20px!important;align-items:flex-start!important;box-shadow:none!important;}}',
+      'button.lg-persona-btn:hover{{box-shadow:0 10px 26px rgba(0,0,0,.07)!important;}}',
+      'button.lg-persona-btn>div{{align-items:flex-start!important;}}',
+      '.lg-persona-content{{display:block;width:100%;text-align:left;}}',
+      '.lg-persona-icon{{display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;margin-bottom:16px;}}',
+      '.lg-persona-title{{display:block;color:#171717;font-size:1rem;font-weight:800;line-height:1.35;margin-bottom:9px;}}',
+      '.lg-persona-desc{{display:block;color:#4F4F4F;font-size:.82rem;font-weight:500;line-height:1.55;min-height:40px;margin-bottom:16px;}}',
+      '.lg-persona-chips{{display:flex;flex-wrap:wrap;gap:6px 7px;}}',
+      '.lg-persona-chip{{display:inline-flex;align-items:center;min-height:27px;border:1px solid #D7D7D7;border-radius:999px;background:#FFF;color:#4D4D4D;padding:4px 11px;font-size:.74rem;font-weight:600;line-height:1.25;word-break:keep-all;}}',
     ].join('\\n');
     parentDoc.head.appendChild(s);
   }}
@@ -1286,31 +1500,59 @@ ICON_JS = f"""
 
         const title = (p.textContent || '').trim();
         if (!title) return;
-        const desc  = LABEL_DESCS[title] || '';
+        const rawDesc = LABEL_DESCS[title] || '';
+        const descParts = rawDesc.split('||');
+        const desc = descParts[0] || '';
+        const chips = descParts.length > 1
+          ? descParts.slice(1).join('||').split('|').map(v => v.trim()).filter(Boolean)
+          : [];
         const iKey  = LABEL_ICONS[title] || 'default';
+        const isPersona = chips.length > 0;
 
         /* 인라인 스타일 직접 설정 (Emotion CSS를 확실히 오버라이드) */
         btn.style.justifyContent = 'flex-start';
-        btn.style.padding = '16px 20px';
+        btn.style.padding = isPersona ? '22px 20px' : '16px 20px';
+        if (isPersona) {{
+          btn.classList.add('lg-persona-btn');
+          btn.style.height = '340px';
+          btn.style.minHeight = '286px';
+          btn.style.alignItems = 'flex-start';
+        }}
 
         /* MutationObserver 일시 중지 → DOM 수정 → 재개 */
         _paused = true;
-        p.style.cssText = 'display:flex!important;align-items:center!important;'
-          + 'width:100%!important;margin:0!important;gap:14px!important;';
-        p.innerHTML =
-          '<span style="display:flex;align-items:center;justify-content:center;'
-          + 'width:40px;height:40px;min-width:40px;border-radius:10px;'
-          + 'background:#F5F5F7;color:#555555;flex-shrink:0;" class="lg-icon-box">'
-          + makeSvg(iKey) + '</span>'
-          + '<span style="flex:1;min-width:0;text-align:left;">'
-          + '<span style="display:block;font-size:0.93rem;font-weight:700;'
-          + 'color:#111;line-height:1.3;">' + title + '</span>'
-          + (desc
-              ? '<span style="display:block;font-size:0.78rem;font-weight:400;'
-                + 'color:#999;margin-top:3px;line-height:1.3;">' + desc + '</span>'
-              : '')
-          + '</span>'
-          + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;">›</span>';
+        if (isPersona) {{
+          const personaColor = PERSONA_COLORS[iKey] || PERSONA_COLORS.default;
+          const chipHtml = chips
+            .map(chip => '<span class="lg-persona-chip">' + escapeHtml(chip) + '</span>')
+            .join('');
+          p.style.cssText = 'display:block!important;width:100%!important;margin:0!important;';
+          p.innerHTML =
+            '<span class="lg-persona-content">'
+            + '<span class="lg-persona-icon" style="background:' + personaColor[0] + ';color:' + personaColor[1] + ';">'
+            + makeSvg(iKey) + '</span>'
+            + '<span class="lg-persona-title">' + escapeHtml(title) + '</span>'
+            + '<span class="lg-persona-desc">' + escapeHtml(desc) + '</span>'
+            + '<span class="lg-persona-chips">' + chipHtml + '</span>'
+            + '</span>';
+        }} else {{
+          p.style.cssText = 'display:flex!important;align-items:center!important;'
+            + 'width:100%!important;margin:0!important;gap:14px!important;';
+          p.innerHTML =
+            '<span style="display:flex;align-items:center;justify-content:center;'
+            + 'width:40px;height:40px;min-width:40px;border-radius:10px;'
+            + 'background:#F5F5F7;color:#555555;flex-shrink:0;" class="lg-icon-box">'
+            + makeSvg(iKey) + '</span>'
+            + '<span style="flex:1;min-width:0;text-align:left;">'
+            + '<span style="display:block;font-size:0.93rem;font-weight:700;'
+            + 'color:#111;line-height:1.3;">' + escapeHtml(title) + '</span>'
+            + (desc
+                ? '<span style="display:block;font-size:0.78rem;font-weight:400;'
+                  + 'color:#999;margin-top:3px;line-height:1.3;">' + escapeHtml(desc) + '</span>'
+                : '')
+            + '</span>'
+            + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;">›</span>';
+        }}
         btn.dataset.lgDone = '1';
         _paused = false;
       }});
@@ -1364,8 +1606,77 @@ def render_header():
     """, unsafe_allow_html=True)
 
 
+def render_progress(q: str):
+    if q == "result":
+        return
+
+    labels = {
+        "lifestyle": "라이프스타일",
+        "install": "설치 타입",
+        "household": "사용 인원",
+        "cooking": "요리 빈도",
+        "door_style": "도어 방식",
+        "space": "설치 공간",
+        "features": "추가 기능",
+    }
+    steps = ["lifestyle", "install"]
+    if ans.get("install") != "빌트인":
+        steps.extend(["household", "cooking"])
+        if q == "door_style" or "door_style" in ans or "door_style" in st.session_state.get("history", []):
+            steps.append("door_style")
+        elif ans.get("household") and ans.get("cooking"):
+            cand_now, _ = E.filter_candidates(PRODUCTS, ans)
+            if E.needs_door_style(cand_now, ans):
+                steps.append("door_style")
+    steps.append("space")
+
+    include_features = q == "features" or "wanted_features" in ans
+    if not include_features and "space" in ans:
+        cand_now, _ = E.filter_candidates(PRODUCTS, ans)
+        include_features = len(cand_now) > 1 and bool(E.available_soft_features(cand_now))
+    elif not ans.get("install") or "space" not in ans:
+        include_features = True
+    if include_features:
+        steps.append("features")
+
+    if q not in steps:
+        steps.append(q)
+    total = max(1, len(steps))
+    current = steps.index(q) + 1
+    pct = min(100, max(0, round(current / total * 100)))
+    st.markdown(
+        f"""
+        <div class="lg-progress-wrap">
+          <div class="lg-progress-meta">
+            <span>질문 진행률</span>
+            <span><strong>{current}</strong> / {total} · {_html(labels.get(q, "질문"))}</span>
+          </div>
+          <div class="lg-progress-track">
+            <div class="lg-progress-fill" style="width:{pct}%;"></div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def q_bubble(text: str):
     st.markdown(f'<div class="q-bubble">{text}</div>', unsafe_allow_html=True)
+
+
+def _select_option(q_id: str, opt):
+    st.session_state.click_count += 1
+    h = st.session_state.history
+    if q_id in h:
+        # 이미 답변한 질문을 다시 선택 → 이후 답변 모두 초기화
+        idx = h.index(q_id)
+        for k in h[idx + 1:]:
+            st.session_state.answers.pop(k, None)
+        st.session_state.history = h[:idx + 1]
+    else:
+        h.append(q_id)
+    ans[q_id] = opt.value
+    st.rerun()
 
 
 def option_buttons(q_id: str):
@@ -1375,20 +1686,18 @@ def option_buttons(q_id: str):
     if not q_cfg:
         return
     q_bubble(q_cfg.text)
+    if q_id == "lifestyle":
+        for row_start in range(0, len(q_cfg.options), 3):
+            cols = st.columns(3, gap="medium")
+            for col, opt in zip(cols, q_cfg.options[row_start:row_start + 3]):
+                with col:
+                    if st.button(opt.label, key=f"opt_{q_id}_{opt.value}", use_container_width=True):
+                        _select_option(q_id, opt)
+        return
+
     for opt in q_cfg.options:
         if st.button(opt.label, key=f"opt_{q_id}_{opt.value}", use_container_width=True):
-            st.session_state.click_count += 1
-            h = st.session_state.history
-            if q_id in h:
-                # 이미 답변한 질문을 다시 선택 → 이후 답변 모두 초기화
-                idx = h.index(q_id)
-                for k in h[idx + 1:]:
-                    st.session_state.answers.pop(k, None)
-                st.session_state.history = h[:idx + 1]
-            else:
-                h.append(q_id)
-            ans[q_id] = opt.value
-            st.rerun()
+            _select_option(q_id, opt)
 
 
 def show_skip_btn():
@@ -1751,12 +2060,10 @@ def render_lg_result_page(scored: list[tuple[float, int, dict]], ans: dict, appl
 def _lg_result_card_html(fit: float, rank: int, p: dict, ans: dict, applied_tier, total: int) -> str:
     sku_html, init_code, init_mat, init_price = _lg_sku_html(p, rank)
     reasons = _lg_reason_tags(p, ans, applied_tier)
-    checks = _lg_check_bars(p, ans, applied_tier)
     ai_text = _lg_ai_text(p, ans, applied_tier, reasons)
     feature_chips = _lg_feature_tags(p, ans)
     price_html = _lg_price_html(init_price or p.get("price_min"))
     product_url = _lge_product_url(init_code)
-    pct = round(fit * 100)
     badge = "BEST MATCH" if rank == 1 else f"TOP {rank} / {total}"
     return "".join(
         [
@@ -1765,11 +2072,7 @@ def _lg_result_card_html(fit: float, rank: int, p: dict, ans: dict, applied_tier
             '<div class="lg-product-header">',
             '<div style="flex:1;min-width:0;">',
             f'<h3 class="lg-product-name">{_html(p.get("name") or "LG 냉장고")}<span class="lg-product-code-inline" id="card-code-{rank}">{_html(init_code)}</span></h3>',
-            f'<p class="lg-product-spec">{_html(_lg_spec_line(p, init_mat))}</p>',
-            "</div>",
-            '<div class="lg-fit-score">',
-            f'<span class="lg-fit-num">{pct}</span>',
-            '<span class="lg-fit-label">적합도</span>',
+            f'<p class="lg-product-spec" id="card-spec-{rank}">{_html(_lg_spec_line(p, init_mat))}</p>',
             "</div>",
             "</div>",
             '<div class="lg-ai-box">',
@@ -1782,18 +2085,6 @@ def _lg_result_card_html(fit: float, rank: int, p: dict, ans: dict, applied_tier
             '<div class="lg-section">',
             '<p class="lg-section-label">왜 이 모델을 추천하나요?</p>',
             f'<div class="lg-tag-wrap">{reasons}{feature_chips}</div>',
-            "</div>",
-            '<div class="lg-section">',
-            '<div class="lg-review-head">',
-            '<p class="lg-section-label" style="margin:0;">구매 전 체크 요약</p>',
-            '<div class="lg-rating">',
-            f'<span class="lg-rating-num">{_lg_fit_label(pct)}</span>',
-            '<span class="lg-rating-stars">★★★★★</span>',
-            '<span class="lg-rating-count">조건 기반</span>',
-            "</div>",
-            "</div>",
-            f'<div class="lg-bar-list">{checks}</div>',
-            f'<div class="lg-keywords">{_lg_keyword_chips(p, ans)}</div>',
             "</div>",
             f'<div class="lg-color-section">{sku_html}</div>',
             '<div class="lg-price-row">',
@@ -1987,29 +2278,67 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
 
     if variants:
         chip_items = ""
+        material_options: dict[str, dict] = {}
         for idx, v in enumerate(variants):
             cname = v.get("color", "")
             swatch_style = _color_swatch_style(cname)
             active_cls = "active" if idx == 0 else ""
             v_price = int(v.get("price") or 0)
             v_price_fmt = f"{v_price:,}원" if v_price else ""
+            v_code = v.get("code") or ""
+            v_mat = v.get("material") or ""
+            v_spec = _lg_spec_line(p, v_mat)
+            if v_mat and v_mat not in material_options:
+                material_options[v_mat] = {
+                    "idx": idx,
+                    "code": v_code,
+                    "price": v_price_fmt,
+                    "mat": v_mat,
+                    "url": _lge_product_url(v_code),
+                    "spec": v_spec,
+                }
             chip_items += (
                 f'<button class="cs-chip {active_cls}"'
                 f' data-rank="{rank}"'
-                f' data-code="{_html(v.get("code") or "")}"'
+                f' data-variant-index="{idx}"'
+                f' data-code="{_html(v_code)}"'
                 f' data-price="{_html(v_price_fmt)}"'
-                f' data-mat="{_html(v.get("material") or "")}"'
-                f' data-url="{_html(_lge_product_url(v.get("code") or ""))}">'
+                f' data-mat="{_html(v_mat)}"'
+                f' data-spec="{_html(v_spec)}"'
+                f' data-url="{_html(_lge_product_url(v_code))}">'
                 f'<span class="cs-dot" style="{swatch_style}"></span>'
                 f'{_html(cname)}</button>'
             )
+        material_select = ""
+        if len(material_options) > 1:
+            material_option_html = '<option value="all" selected>모두</option>'
+            for mat, meta in material_options.items():
+                material_option_html += (
+                    f'<option value="{_html(str(meta["idx"]))}"'
+                    f' data-filter-mat="{_html(mat)}"'
+                    f' data-code="{_html(meta["code"])}"'
+                    f' data-price="{_html(meta["price"])}"'
+                    f' data-mat="{_html(meta["mat"])}"'
+                    f' data-spec="{_html(meta["spec"])}"'
+                    f' data-url="{_html(meta["url"])}">'
+                    f'{_html(mat)}</option>'
+                )
+            material_select = (
+                f'<select class="cs-material-select" data-rank="{rank}" aria-label="도어 재질 선택">'
+                f'{material_option_html}</select>'
+            )
+            material_state = f'<span class="cs-info-val" id="card-mat-{rank}" style="display:none;">{_html(init_mat)}</span>'
+        else:
+            material_select = f'<span class="cs-info-val" id="card-mat-{rank}">{_html(init_mat)}</span>'
+            material_state = ""
         html = (
             '<div class="cs-section">'
             '<div class="cs-row-label">색상 선택</div>'
             f'<div class="cs-chips">{chip_items}</div>'
             '<div class="cs-info-row">'
             '<span class="cs-info-label">도어 재질</span>'
-            f'<span class="cs-info-val" id="card-mat-{rank}">{_html(init_mat)}</span>'
+            f'{material_select}'
+            f'{material_state}'
             '</div>'
             '</div>'
         )
@@ -2061,6 +2390,112 @@ def _other_candidate_rows(scored: list[tuple[float, int, dict]]) -> str:
     )
 
 
+def _compare_label(item: tuple[float, int, dict]) -> str:
+    fit, rank, p = item
+    code = p.get("code") or ""
+    name = p.get("name") or "LG 냉장고"
+    return f"TOP {rank} · {code} · {name}"
+
+
+def _join_values(values) -> str:
+    if values is None:
+        return "-"
+    if isinstance(values, set):
+        values = sorted(values)
+    if isinstance(values, (list, tuple)):
+        cleaned = [str(v).strip() for v in values if str(v).strip() and str(v).strip() != "-"]
+        return ", ".join(cleaned) if cleaned else "-"
+    value = str(values).strip()
+    return value if value and value != "None" else "-"
+
+
+def _compare_norm(value: str) -> str:
+    return re.sub(r"\s+", " ", str(value or "").replace("<br>", ", ")).strip().lower()
+
+
+def _product_specs_for_compare(p: dict, fit: float) -> dict[str, str]:
+    feature_names = [_lg_feature_name(key) for key in sorted(p.get("features", set()))]
+    raw_features = p.get("raw_features") or []
+    return {
+        "제품명": _join_values(p.get("name")),
+        "최저가": _lg_price_html(p.get("price_min")),
+        "최고가": _lg_price_html(p.get("price_max")),
+        "설치 타입": _join_values(p.get("install")),
+        "도어 개수": _join_values(p.get("doors")),
+        "총 용량": f"{p.get('total_l')}L" if p.get("total_l") else "-",
+        "냉장 용량": f"{p.get('fridge_l')}L" if p.get("fridge_l") is not None else "-",
+        "냉동 용량": f"{p.get('freezer_l')}L" if p.get("freezer_l") is not None else "-",
+        "에너지 등급": f"{p.get('energy')}등급" if p.get("energy") else "-",
+        "폭": f"{p.get('width')}mm" if p.get("width") else "-",
+        "제품 크기": _join_values(p.get("size_raw")),
+        "도어 재질 옵션": _join_values(p.get("materials")),
+        "색상": _join_values(p.get("colors")),
+        "AI 여부": "O" if p.get("is_ai") else "X",
+        "매칭 기능": _join_values(feature_names),
+    }
+
+
+def render_top5_compare(scored: list[tuple[float, int, dict]]) -> None:
+    if len(scored) < 2:
+        return
+
+    st.markdown(
+        """
+        <div class="lg-compare-box">
+          <p class="lg-compare-title">Top 5 냉장고 서로 비교하기</p>
+          <p class="lg-compare-sub">추천된 모델 중 두 가지를 선택해 저장된 스펙을 한눈에 비교해보세요.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    labels = [_compare_label(item) for item in scored]
+    left_col, right_col = st.columns(2)
+    with left_col:
+        left_idx = st.selectbox("비교 모델 A", range(len(scored)), format_func=lambda i: labels[i], key="compare_left")
+    with right_col:
+        default_right = 1 if len(scored) > 1 else 0
+        right_idx = st.selectbox(
+            "비교 모델 B",
+            range(len(scored)),
+            index=default_right,
+            format_func=lambda i: labels[i],
+            key="compare_right",
+        )
+
+    left_fit, left_rank, left_product = scored[left_idx]
+    right_fit, right_rank, right_product = scored[right_idx]
+    left_specs = _product_specs_for_compare(left_product, left_fit)
+    right_specs = _product_specs_for_compare(right_product, right_fit)
+
+    rows = []
+    for label in left_specs:
+        left_value = left_specs[label]
+        right_value = right_specs.get(label, "-")
+        is_diff = label != "제품명" and _compare_norm(left_value) != _compare_norm(right_value)
+        diff_cls = ' class="diff-row"' if is_diff else ""
+        label_html = _html(label) + ('<span class="lg-diff-badge">차이</span>' if is_diff else "")
+        rows.append(
+            f"<tr{diff_cls}>"
+            f"<th>{label_html}</th>"
+            f"<td>{left_value}</td>"
+            f"<td>{right_value}</td>"
+            "</tr>"
+        )
+    table_html = (
+        '<div class="lg-compare-table-wrap">'
+        '<table class="lg-compare-table">'
+        '<thead><tr>'
+        '<th>스펙</th>'
+        f'<th>TOP {left_rank} · {_html(left_product.get("code") or "")}</th>'
+        f'<th>TOP {right_rank} · {_html(right_product.get("code") or "")}</th>'
+        '</tr></thead>'
+        f'<tbody>{"".join(rows)}</tbody>'
+        '</table></div>'
+    )
+    st.markdown(table_html, unsafe_allow_html=True)
+
+
 # ════════════════════════════════════════════════════════════════════
 # 앱 렌더링
 # ════════════════════════════════════════════════════════════════════
@@ -2088,6 +2523,8 @@ else:
 if "lifestyle" in ans and not st.session_state._session_start_logged:
     DB.log_session_start(st.session_state.session_id)
     st.session_state._session_start_logged = True
+
+render_progress(q)
 
 # ── 질문 흐름 ──
 if q == "lifestyle":
@@ -2197,33 +2634,7 @@ elif q == "result":
         db_total = len(PRODUCTS)
         cand_count = len(cand)
         render_lg_result_page(scored, ans, tier, cand_count, db_total)
-
-    # ── 탐색 만족도 팝업 ──────────────────────────────────────────────
-    if ranked:
-        if not st.session_state.get("_rated", False):
-            st.markdown("""
-            <div class="sat-box">
-              <div class="sat-title">이 추천이 도움이 됐나요?</div>
-              <div class="sat-sub">탐색 경험을 평가해 주시면 서비스 개선에 활용됩니다.</div>
-            </div>
-            """, unsafe_allow_html=True)
-            col_ok, col_ng = st.columns(2)
-            with col_ok:
-                if st.button("😊  만족", key="sat_ok",
-                             type="primary", use_container_width=True):
-                    DB.log_satisfaction(st.session_state.session_id, score=1)
-                    st.session_state._rated = True
-                    st.rerun()
-            with col_ng:
-                if st.button("😞  불만족", key="sat_ng",
-                             use_container_width=True):
-                    DB.log_satisfaction(st.session_state.session_id, score=0)
-                    st.session_state._rated = True
-                    st.rerun()
-        else:
-            st.markdown("""
-            <div class="sat-thanks">소중한 의견 감사합니다! 서비스 개선에 꼭 반영할게요.</div>
-            """, unsafe_allow_html=True)
+        render_top5_compare(scored)
 
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
     if st.button("처음부터 다시 상담", type="primary", use_container_width=True):
@@ -2252,30 +2663,66 @@ SWATCH_JS = """
   var doc = window.parent.document;
   /* 부모 document 의 <head> 에 스크립트를 직접 주입 (ICON_JS 의 스타일 주입과 동일 패턴).
      주입된 스크립트는 부모 문서에 영구적으로 살아있어 Streamlit 리렌더 후에도 동작. */
-  if (doc.getElementById('lg-interaction-handler-v3')) return;
+  if (doc.getElementById('lg-interaction-handler-v6')) return;
 
   var code = [
     '(function(){',
+    '  function applyVariant(el){',
+    '    var r=el.dataset.rank;',
+    '    var ce=document.getElementById("card-code-"+r);',
+    '    var pe=document.getElementById("card-price-"+r);',
+    '    var me=document.getElementById("card-mat-"+r);',
+    '    var se=document.getElementById("card-spec-"+r);',
+    '    var le=document.getElementById("card-link-"+r);',
+    '    if(ce) ce.textContent=el.dataset.code||"";',
+    '    if(pe) pe.textContent=el.dataset.price||"";',
+    '    if(me) me.textContent=el.dataset.mat||"";',
+    '    if(se && el.dataset.spec) se.textContent=el.dataset.spec;',
+    '    if(le && el.dataset.url) le.href=el.dataset.url;',
+    '  }',
+    '  function filterMaterial(sel){',
+    '    var section=sel.closest(".cs-section");',
+    '    if(!section) return;',
+    '    var opt=sel.options[sel.selectedIndex];',
+    '    var mat=opt ? (opt.dataset.filterMat||"") : "";',
+    '    var isAll=sel.value==="all";',
+    '    var firstVisible=null;',
+    '    section.querySelectorAll(".cs-chip[data-rank]").forEach(function(chip){',
+    '      var show=isAll || chip.dataset.mat===mat;',
+    '      chip.classList.toggle("is-hidden", !show);',
+    '      if(show && !firstVisible) firstVisible=chip;',
+    '    });',
+    '    if(!isAll && firstVisible){',
+    '      applyVariant(firstVisible);',
+    '      section.querySelectorAll(".cs-chip[data-rank]").forEach(function(chip){ chip.classList.remove("active"); });',
+    '      firstVisible.classList.add("active");',
+    '    }',
+    '  }',
     '  function bind(){',
     '    document.querySelectorAll(".cs-chip[data-rank]:not([data-sw])").forEach(function(c){',
     '      c.setAttribute("data-sw","1");',
     '      c.addEventListener("click",function(){',
-    '        var r=c.dataset.rank;',
-    '        var ce=document.getElementById("card-code-"+r);',
-    '        var pe=document.getElementById("card-price-"+r);',
-    '        var me=document.getElementById("card-mat-"+r);',
-    '        var le=document.getElementById("card-link-"+r);',
-    '        if(ce) ce.textContent=c.dataset.code||"";',
-    '        if(pe) pe.textContent=c.dataset.price||"";',
-    '        if(me) me.textContent=c.dataset.mat||"";',
-    '        if(le && c.dataset.url) le.href=c.dataset.url;',
+    '        applyVariant(c);',
     '        var row=c.closest(".cs-chips");',
     '        if(row) row.querySelectorAll(".cs-chip").forEach(function(x){x.classList.remove("active");});',
     '        c.classList.add("active");',
     '      });',
     '    });',
-    '    document.querySelectorAll(".lg-carousel:not([data-lg-bound])").forEach(function(root){',
-    '      root.setAttribute("data-lg-bound","1");',
+    '    document.querySelectorAll(".cs-material-select[data-rank]:not([data-mat-bound])").forEach(function(sel){',
+    '      sel.setAttribute("data-mat-bound","1");',
+    '      sel.addEventListener("change",function(){',
+    '        var opt=sel.options[sel.selectedIndex];',
+    '        if(!opt) return;',
+    '        if(sel.value==="all"){',
+    '          filterMaterial(sel);',
+    '          return;',
+    '        }',
+    '        opt.dataset.rank=sel.dataset.rank;',
+    '        filterMaterial(sel);',
+    '      });',
+    '    });',
+    '    document.querySelectorAll(".lg-carousel:not([data-lg-bound-v6])").forEach(function(root){',
+    '      root.setAttribute("data-lg-bound-v6","1");',
     '      function setIndex(next){',
     '        var total=parseInt(root.dataset.total||"1",10);',
     '        var idx=Math.max(0,Math.min(total-1,next));',
@@ -2319,7 +2766,7 @@ SWATCH_JS = """
   ].join('\\n');
 
   var s = doc.createElement('script');
-  s.id = 'lg-interaction-handler-v3';
+  s.id = 'lg-interaction-handler-v6';
   s.textContent = code;
   doc.head.appendChild(s);
 })();

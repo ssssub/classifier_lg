@@ -35,12 +35,12 @@ INSTALL_OPTS = [
 ]
 
 LIFESTYLE_LABELS = {
-    "freshness_keeper": "신선 집착러",
-    "hygiene_master": "위생 마니아",
-    "saving_expert": "절약 고수",
-    "storage_optimizer": "수납 덕후",
-    "tech_early_adopter": "테크 얼리어답터",
-    "interior_stylist": "인테리어 감성러",
+    "freshness_keeper": "신선집착형",
+    "hygiene_master": "깔끔관리형",
+    "saving_expert": "효율중시형",
+    "storage_optimizer": "생활편의형",
+    "tech_early_adopter": "스마트생활형",
+    "interior_stylist": "인테리어감성형",
 }
 
 LIFESTYLE_FEATURES = {

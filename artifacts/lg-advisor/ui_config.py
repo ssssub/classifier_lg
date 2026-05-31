@@ -154,42 +154,42 @@ REFRIGERATOR_CONFIG = CategoryConfig(
     questions={
         "lifestyle": QuestionConfig(
             q_id="lifestyle",
-            text="<strong>당신은 어떤 사람인가요?</strong><br><span class=\"accent\">내 라이프 스타일</span>에 가장 가까운 것을 골라주세요.",
+            text="<strong>Q. 당신은 어떤 사람인가요?</strong><br><span class=\"hint\">내 라이프 스타일에 가장 가까운 것을 골라주세요</span>",
             options=[
                 OptionConfig(
                     "freshness_keeper",
                     "신선집착형",
-                    "장을 보면 식재료를 완벽하게 보관하는 사람 · AI가 온도 자동 조절 · 재료별 맞춤 보관 · 24시간 균일 냉기",
+                    "장을 보면 식재료를 완벽하게 보관하는 사람||AI가 온도 자동 조절|재료별 맞춤 보관|24시간 균일 냉기",
                     "freshness",
                 ),
                 OptionConfig(
                     "hygiene_master",
                     "깔끔관리형",
-                    "냉장고 안까지 늘 깨끗하게 관리하는 사람 · UV로 세균 제거 · 냄새 자동 탈취 · 향균 필터 내장",
+                    "냉장고 안까지 늘 깨끗하게 관리하는 사람|| UV로 세균 제거|냄새 자동 탈취|향균 필터 내장",
                     "hygiene",
                 ),
                 OptionConfig(
                     "saving_expert",
                     "효율중시형",
-                    "전기세까지 스마트하게 아끼고 사는 사람 · 전기요금 절반으로 · 저소음 운전 · AI 절전 모드",
+                    "전기세까지 스마트하게 아끼고 사는 사람||전기요금 절반으로|저소음 운전|AI 절전 모드",
                     "saving",
                 ),
                 OptionConfig(
                     "storage_optimizer",
                     "생활편의형",
-                    "냉장고 공간을 알차게 활용할 줄 아는 사람 · 공간 두 배 활용 · 문 안 열고 확인 · 정수기 기능 내장",
+                    "냉장고 공간을 알차게 활용할 줄 아는 사람||공간 두 배 활용|문 안 열고 확인|정수기 기능 내장",
                     "storage",
                 ),
                 OptionConfig(
                     "tech_early_adopter",
                     "스마트생활형",
-                    "집 안 모든 것을 스마트하게 연결하는 사람 · 음성으로 조작 · AI가 알아서 관리 · 앱 연동 제어",
+                    "집 안 모든 것을 스마트하게 연결하는 사람||음성으로 조작|AI가 알아서 관리| 앱 연동 제어",
                     "smart_home",
                 ),
                 OptionConfig(
                     "interior_stylist",
                     "인테리어감성형",
-                    "주방 분위기까지 직접 디자인하는 사람 · 컬러 맞춤 선택 · 프리미엄 소재 · 공간 인테리어 가전",
+                    "주방 분위기까지 직접 디자인하는 사람||컬러 맞춤 선택|프리미엄 소재|공간 인테리어 가전",
                     "interior",
                 ),
             ],
