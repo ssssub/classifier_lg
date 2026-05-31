@@ -1514,7 +1514,7 @@ ICON_JS = f"""
         const isPersona = chips.length > 0;
 
         /* 인라인 스타일 직접 설정 (Emotion CSS를 확실히 오버라이드) */
-        btn.style.justifyContent = (!isPersona && !hasIcon) ? 'center' : 'flex-start';
+        btn.style.justifyContent = 'flex-start';
         btn.style.padding = isPersona ? '22px 20px' : '16px 20px';
         if (isPersona) {{
           btn.classList.add('lg-persona-btn');
@@ -1539,7 +1539,7 @@ ICON_JS = f"""
             + '<span class="lg-persona-desc">' + escapeHtml(desc) + '</span>'
             + '<span class="lg-persona-chips">' + chipHtml + '</span>'
             + '</span>';
-        }} else if (hasIcon) {{
+        }} else {{
           p.style.cssText = 'display:flex!important;align-items:flex-start!important;'
             + 'width:100%!important;margin:0!important;gap:14px!important;';
           p.innerHTML =
@@ -1556,16 +1556,6 @@ ICON_JS = f"""
                 : '')
             + '</span>'
             + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;align-self:center;">›</span>';
-        }} else {{
-          p.style.cssText = 'display:block!important;width:100%!important;'
-            + 'margin:0!important;text-align:center!important;';
-          p.innerHTML =
-            '<span style="display:block;font-size:0.93rem;font-weight:700;'
-            + 'color:#111;line-height:1.3;text-align:center;">' + escapeHtml(title) + '</span>'
-            + (desc
-                ? '<span style="display:block;font-size:0.78rem;font-weight:400;'
-                  + 'color:#999;margin-top:3px;line-height:1.3;text-align:center;">' + escapeHtml(desc) + '</span>'
-                : '');
         }}
         btn.dataset.lgDone = '1';
         _paused = false;
