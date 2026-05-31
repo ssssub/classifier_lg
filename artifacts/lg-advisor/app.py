@@ -8,6 +8,7 @@ import time
 import uuid
 from html import escape
 import streamlit as st
+import streamlit.components.v1 as components
 from data_loader import load_products, SOFT_FEATURES
 import engine as E
 import db as DB
@@ -2873,5 +2874,5 @@ SWATCH_JS = """
 
 # ── 아이콘 JS 주입 (components.html → iframe → window.parent.document 접근) ──
 # height=0 으로 invisible iframe, 실제 DOM 조작은 부모 프레임에서 수행
-st.html(ICON_JS)
-st.html(SWATCH_JS)
+components.html(ICON_JS, height=0)
+components.html(SWATCH_JS, height=0)
