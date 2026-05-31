@@ -270,8 +270,8 @@ GLOBAL_CSS = f"""
   margin-top: 4px;
 }}
 
-/* ── 선택지 카드 버튼 (secondary) ── */
-button[data-testid="stBaseButton-secondary"] {{
+/* ── 선택지 카드 버튼 (.lg-option-btn) ── */
+button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn) {{
   background: #FFFFFF !important;
   border: 1.5px solid #E8E8E8 !important;
   border-radius: 14px !important;
@@ -283,26 +283,95 @@ button[data-testid="stBaseButton-secondary"] {{
   transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease !important;
   animation: lgFadeUp 0.22s ease both;
 }}
-button[data-testid="stBaseButton-secondary"]:hover {{
+button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn):hover {{
   border-color: #A50034 !important;
   box-shadow: 0 8px 24px rgba(165,0,52,0.09) !important;
   transform: translateY(-2px) !important;
   background: #FFFFFF !important;
 }}
-/* 버튼 내부 컨테이너 */
-button[data-testid="stBaseButton-secondary"] > div {{
+button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn) > div {{
   width: 100% !important;
   display: flex !important;
   align-items: center !important;
 }}
-/* 텍스트 단락 */
-button[data-testid="stBaseButton-secondary"] p {{
+button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn) p {{
   width: 100% !important;
   text-align: left !important;
   margin: 0 !important;
   font-size: 0.93rem !important;
   font-weight: 600 !important;
   color: #1A1A1A !important;
+}}
+
+/* ── 바로 결과 보기 버튼 (.lg-skip-btn) ── */
+button.lg-skip-btn {{
+  background: transparent !important;
+  border: 1.5px solid #E8E8E8 !important;
+  box-shadow: none !important;
+  color: #AAA !important;
+  font-size: 0.76rem !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  transform: none !important;
+  padding: 6px 18px !important;
+  width: auto !important;
+  min-width: 220px !important;
+  justify-content: center !important;
+  animation: none !important;
+}}
+button.lg-skip-btn:hover {{
+  color: #A50034 !important;
+  border-color: #A50034 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}}
+button.lg-skip-btn > div {{
+  justify-content: center !important;
+  width: auto !important;
+}}
+button.lg-skip-btn p {{
+  display: block !important;
+  width: auto !important;
+  text-align: center !important;
+  font-size: 0.76rem !important;
+  font-weight: 500 !important;
+}}
+[data-testid="stButton"]:has(button.lg-skip-btn) {{
+  display: flex !important;
+  justify-content: center !important;
+  margin: 34px auto 56px auto !important;
+}}
+
+/* ── 뒤로가기 버튼 (.lg-back-btn) ── */
+button.lg-back-btn {{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #AAA !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  padding: 4px 0 !important;
+  transform: none !important;
+  animation: none !important;
+  width: auto !important;
+  min-width: unset !important;
+}}
+button.lg-back-btn:hover {{
+  color: #555 !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}}
+button.lg-back-btn > div {{
+  width: auto !important;
+  justify-content: flex-start !important;
+}}
+button.lg-back-btn p {{
+  display: block !important;
+  width: auto !important;
+  text-align: left !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
 }}
 
 /* 카드 간격 */
@@ -1433,46 +1502,52 @@ ICON_JS = f"""
     const s = parentDoc.createElement('style');
     s.id = 'lg-runtime-styles-v2';
     s.textContent = [
-      'button[data-testid="stBaseButton-secondary"] {{',
-      '  background:#FFFFFF!important;',
-      '  border:1.5px solid #E8E8E8!important;',
-      '  border-radius:14px!important;',
-      '  box-shadow:0 2px 10px rgba(0,0,0,.045)!important;',
-      '  justify-content:flex-start!important;',
-      '  padding:16px 20px!important;',
+      /* ── 선택지 카드 — option 전용 (skip/back 제외) ── */
+      'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn){{',
+      '  background:#FFFFFF!important;border:1.5px solid #E8E8E8!important;',
+      '  border-radius:14px!important;box-shadow:0 2px 10px rgba(0,0,0,.045)!important;',
+      '  justify-content:flex-start!important;padding:16px 20px!important;',
+      '  width:100%!important;align-items:center!important;',
       '  transition:border-color .18s,box-shadow .18s,transform .18s!important;',
       '}}',
-      'button[data-testid="stBaseButton-secondary"]:hover {{',
-      '  border-color:#A50034!important;',
-      '  box-shadow:0 8px 24px rgba(165,0,52,.09)!important;',
-      '  transform:translateY(-2px)!important;',
-      '  background:#FFFFFF!important;',
+      'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn):hover{{',
+      '  border-color:#A50034!important;box-shadow:0 8px 24px rgba(165,0,52,.09)!important;',
+      '  transform:translateY(-2px)!important;background:#FFFFFF!important;',
       '}}',
-      'button[data-testid="stBaseButton-secondary"]>div {{',
+      'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn)>div{{',
       '  width:100%!important;display:flex!important;align-items:center!important;',
       '}}',
-      'button[data-testid="stBaseButton-secondary"] p {{',
+      'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn) p{{',
       '  text-align:left!important;width:100%!important;margin:0!important;',
       '}}',
-      'button[data-testid="stBaseButton-primary"] {{',
+      /* ── 바로 결과 보기 ── */
+      'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;',
+      '  box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;',
+      '  font-weight:500!important;border-radius:8px!important;transform:none!important;',
+      '  padding:6px 18px!important;width:auto!important;min-width:220px!important;',
+      '  justify-content:center!important;animation:none!important;}}',
+      'button.lg-skip-btn:hover{{color:#A50034!important;border-color:#A50034!important;transform:none!important;}}',
+      'button.lg-skip-btn>div{{justify-content:center!important;width:auto!important;}}',
+      'button.lg-skip-btn p{{display:block!important;width:auto!important;text-align:center!important;font-size:.76rem!important;font-weight:500!important;}}',
+      '[data-testid="stButton"]:has(button.lg-skip-btn){{display:flex!important;justify-content:center!important;margin:34px auto 56px auto!important;}}',
+      /* ── 뒤로가기 ── */
+      'button.lg-back-btn{{background:transparent!important;border:none!important;',
+      '  box-shadow:none!important;color:#AAA!important;font-size:.82rem!important;',
+      '  font-weight:500!important;padding:4px 0!important;transform:none!important;',
+      '  animation:none!important;width:auto!important;}}',
+      'button.lg-back-btn:hover{{color:#555!important;border:none!important;box-shadow:none!important;transform:none!important;}}',
+      'button.lg-back-btn>div{{width:auto!important;justify-content:flex-start!important;}}',
+      'button.lg-back-btn p{{display:block!important;width:auto!important;text-align:left!important;font-size:.82rem!important;font-weight:500!important;}}',
+      /* ── Primary ── */
+      'button[data-testid="stBaseButton-primary"]{{',
       '  background:#A50034!important;border:none!important;',
       '  border-radius:10px!important;color:#fff!important;',
       '  font-weight:700!important;letter-spacing:.01em!important;',
       '}}',
-      'button[data-testid="stBaseButton-primary"]:hover {{',
+      'button[data-testid="stBaseButton-primary"]:hover{{',
       '  background:#8A0029!important;transform:translateY(-1px)!important;',
       '  box-shadow:0 6px 18px rgba(165,0,52,.22)!important;',
       '}}',
-      'button.lg-back-btn {{',
-      '  background:transparent!important;border:none!important;',
-      '  box-shadow:none!important;color:#AAA!important;',
-      '  font-size:.82rem!important;transform:none!important;',
-      '}}',
-      'button.lg-back-btn:hover{{color:#555!important;}}',
-      'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;font-weight:500!important;border-radius:8px!important;transform:none!important;padding:6px 18px!important;width:auto!important;justify-content:center!important;}}',
-      'button.lg-skip-btn:hover{{color:#A50034!important;border-color:#A50034!important;}}',
-      'button.lg-skip-btn>div{{justify-content:center!important;width:auto!important;}}',
-      'button.lg-skip-btn p{{display:block!important;width:auto!important;text-align:center!important;justify-content:center!important;font-size:.76rem!important;font-weight:500!important;}}',
       'button.lg-persona-btn{{height:340px!important;min-height:286px!important;border-radius:10px!important;padding:22px 20px!important;align-items:flex-start!important;box-shadow:none!important;}}',
       'button.lg-persona-btn:hover{{box-shadow:0 10px 26px rgba(0,0,0,.07)!important;}}',
       'button.lg-persona-btn>div{{align-items:flex-start!important;}}',
@@ -1528,6 +1603,9 @@ ICON_JS = f"""
         const hasIcon = rawIKey !== undefined;
         const iKey = rawIKey || 'default';
         const isPersona = chips.length > 0;
+
+        /* 일반 카드 버튼 클래스 표시 */
+        btn.classList.add('lg-option-btn');
 
         /* 인라인 스타일 직접 설정 (Emotion CSS를 확실히 오버라이드) */
         btn.style.justifyContent = 'flex-start';
