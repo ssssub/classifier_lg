@@ -380,6 +380,21 @@ button.lg-persona-btn p {{
   word-break: keep-all;
 }}
 
+/* ── 바로 결과 보기 버튼 — 중앙 정렬 오버라이드 ── */
+button.lg-skip-btn {{
+  justify-content: center !important;
+}}
+button.lg-skip-btn > div {{
+  justify-content: center !important;
+  width: auto !important;
+}}
+button.lg-skip-btn p {{
+  display: block !important;
+  width: auto !important;
+  text-align: center !important;
+  justify-content: center !important;
+}}
+
 /* ── 뒤로가기 버튼 오버라이드 (JS가 .lg-back-btn 클래스 추가) ── */
 button.lg-back-btn {{
   background: transparent !important;
@@ -1454,9 +1469,10 @@ ICON_JS = f"""
       '  font-size:.82rem!important;transform:none!important;',
       '}}',
       'button.lg-back-btn:hover{{color:#555!important;}}',
-      'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;font-weight:500!important;border-radius:8px!important;transform:none!important;padding:6px 18px!important;width:auto!important;}}',
+      'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;font-weight:500!important;border-radius:8px!important;transform:none!important;padding:6px 18px!important;width:auto!important;justify-content:center!important;}}',
       'button.lg-skip-btn:hover{{color:#A50034!important;border-color:#A50034!important;}}',
-      'button.lg-skip-btn p{{text-align:center!important;font-size:.76rem!important;font-weight:500!important;}}',
+      'button.lg-skip-btn>div{{justify-content:center!important;width:auto!important;}}',
+      'button.lg-skip-btn p{{display:block!important;width:auto!important;text-align:center!important;justify-content:center!important;font-size:.76rem!important;font-weight:500!important;}}',
       'button.lg-persona-btn{{height:340px!important;min-height:286px!important;border-radius:10px!important;padding:22px 20px!important;align-items:flex-start!important;box-shadow:none!important;}}',
       'button.lg-persona-btn:hover{{box-shadow:0 10px 26px rgba(0,0,0,.07)!important;}}',
       'button.lg-persona-btn>div{{align-items:flex-start!important;}}',
