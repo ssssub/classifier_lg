@@ -1487,8 +1487,10 @@ ICON_JS = f"""
         if (rawText.includes('바로 결과')) {{
           btn.classList.add('lg-skip-btn');
           btn.style.width = 'auto';
-          btn.style.display = 'block';
-          btn.style.margin = '0 auto';
+          const stBtnWrap = btn.closest('[data-testid="stButton"]');
+          if (stBtnWrap) {{
+            stBtnWrap.style.cssText += 'display:flex!important;justify-content:center!important;margin:0 auto!important;';
+          }}
           return;
         }}
 
