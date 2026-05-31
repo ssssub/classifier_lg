@@ -1506,11 +1506,13 @@ ICON_JS = f"""
         const chips = descParts.length > 1
           ? descParts.slice(1).join('||').split('|').map(v => v.trim()).filter(Boolean)
           : [];
-        const iKey  = LABEL_ICONS[title] || 'default';
+        const rawIKey = LABEL_ICONS[title];
+        const hasIcon = rawIKey !== undefined;
+        const iKey = rawIKey || 'default';
         const isPersona = chips.length > 0;
 
         /* 인라인 스타일 직접 설정 (Emotion CSS를 확실히 오버라이드) */
-        btn.style.justifyContent = 'flex-start';
+        btn.style.justifyContent = (!isPersona && !hasIcon) ? 'center' : 'flex-start';
         btn.style.padding = isPersona ? '22px 20px' : '16px 20px';
         if (isPersona) {{
           btn.classList.add('lg-persona-btn');
@@ -1535,13 +1537,13 @@ ICON_JS = f"""
             + '<span class="lg-persona-desc">' + escapeHtml(desc) + '</span>'
             + '<span class="lg-persona-chips">' + chipHtml + '</span>'
             + '</span>';
-        }} else {{
-          p.style.cssText = 'display:flex!important;align-items:center!important;'
+        }} else if (hasIcon) {{
+          p.style.cssText = 'display:flex!important;align-items:flex-start!important;'
             + 'width:100%!important;margin:0!important;gap:14px!important;';
           p.innerHTML =
             '<span style="display:flex;align-items:center;justify-content:center;'
             + 'width:40px;height:40px;min-width:40px;border-radius:10px;'
-            + 'background:#F5F5F7;color:#555555;flex-shrink:0;" class="lg-icon-box">'
+            + 'background:#F5F5F7;color:#555555;flex-shrink:0;margin-top:1px;" class="lg-icon-box">'
             + makeSvg(iKey) + '</span>'
             + '<span style="flex:1;min-width:0;text-align:left;">'
             + '<span style="display:block;font-size:0.93rem;font-weight:700;'
@@ -1551,7 +1553,17 @@ ICON_JS = f"""
                   + 'color:#999;margin-top:3px;line-height:1.3;">' + escapeHtml(desc) + '</span>'
                 : '')
             + '</span>'
-            + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;">›</span>';
+            + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;align-self:center;">›</span>';
+        }} else {{
+          p.style.cssText = 'display:block!important;width:100%!important;'
+            + 'margin:0!important;text-align:center!important;';
+          p.innerHTML =
+            '<span style="display:block;font-size:0.93rem;font-weight:700;'
+            + 'color:#111;line-height:1.3;text-align:center;">' + escapeHtml(title) + '</span>'
+            + (desc
+                ? '<span style="display:block;font-size:0.78rem;font-weight:400;'
+                  + 'color:#999;margin-top:3px;line-height:1.3;text-align:center;">' + escapeHtml(desc) + '</span>'
+                : '');
         }}
         btn.dataset.lgDone = '1';
         _paused = false;

@@ -235,9 +235,9 @@ REFRIGERATOR_CONFIG = CategoryConfig(
             q_id="space",
             text="설치 공간의 <strong>폭</strong>은 어느 정도예요?",
             options=[
-                OptionConfig("slim",   "슬림  (60cm 이하)", "좁은 공간에도 꼭 맞게",   "slim"),
-                OptionConfig("normal", "일반  (60~90cm)",   "표준 주방 공간에 맞게",   "normal"),
-                OptionConfig("roomy",  "넉넉  (90cm 이상)", "공간 여유가 있어요",      "wide"),
+                OptionConfig("slim",   "슬림 (60cm 이하)", "좁은 공간에도 꼭 맞게",   "slim"),
+                OptionConfig("normal", "일반 (60~90cm)",   "표준 주방 공간에 맞게",   "normal"),
+                OptionConfig("roomy",  "넉넉 (90cm 이상)", "공간 여유가 있어요",      "wide"),
             ],
         ),
     },
