@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     ts                    TEXT NOT NULL,
 
     -- Q&A 답변 (입력 피처)
+    lifestyle             TEXT,
     install               TEXT,
     household             TEXT,
     cooking               TEXT,
@@ -53,6 +54,7 @@ CREATE TABLE IF NOT EXISTS sessions (
 
 # 기존 DB 마이그레이션 — 새 컬럼이 없으면 추가
 _MIGRATE_COLS = {
+    "lifestyle":            "TEXT",
     "click_count":          "INTEGER DEFAULT 0",
     "dwell_sec":            "REAL",
     "completed":            "INTEGER DEFAULT 0",
@@ -63,12 +65,13 @@ _MIGRATE_COLS = {
 _COL_LABELS = {
     "session_id":           "세션 ID",
     "ts":                   "시각",
-    "install":              "Q1 설치형태",
-    "household":            "Q2 인원",
-    "cooking":              "Q2 요리",
-    "door_style":           "Q2-1 도어방식",
-    "space":                "Q3 설치공간",
-    "wanted_features":      "Q4 추가기능",
+    "lifestyle":            "Q1 라이프스타일",
+    "install":              "Q2 설치형태",
+    "household":            "Q3 인원",
+    "cooking":              "Q3 요리",
+    "door_style":           "Q3-1 도어방식",
+    "space":                "Q4 설치공간",
+    "wanted_features":      "Q5 추가기능",
     "q_count":              "답변 질문 수",
     "force_result":         "바로결과 사용",
     "click_count":          "총 클릭 수",
@@ -103,7 +106,7 @@ def _conn() -> sqlite3.Connection:
 
 # ── 세션 시작 (Q1 첫 답변 시 호출) ──────────────────────────────────
 def log_session_start(session_id: str) -> None:
-    """Q1(install) 답변 시점에 행을 생성 — 이탈 추적 기준점."""
+    """Q1(lifestyle) 답변 시점에 행을 생성 — 이탈 추적 기준점."""
     with _conn() as c:
         c.execute(
             "INSERT OR IGNORE INTO sessions (session_id, ts, completed, click_count)"
@@ -134,17 +137,18 @@ def log_session_result(
         c.execute(
             """INSERT OR REPLACE INTO sessions
                (session_id, ts,
-                install, household, cooking, door_style, space, wanted_features,
+                lifestyle, install, household, cooking, door_style, space, wanted_features,
                 q_count, force_result, click_count, dwell_sec, completed,
                 cand_initial, cand_after_q2, cand_final,
                 top1_code, top1_fit_pct,
                 filter_efficiency, discrimination_ratio, bits_resolved)
                VALUES (?,
                 (SELECT COALESCE(ts, ?) FROM sessions WHERE session_id=?),
-                ?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?)""",
+                ?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?)""",
             (
                 session_id,
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S"), session_id,
+                ans.get("lifestyle"),
                 ans.get("install"),
                 ans.get("household"),
                 ans.get("cooking"),

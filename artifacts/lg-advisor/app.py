@@ -3,8 +3,10 @@
 """
 import json
 import os
+import re
 import time
 import uuid
+from html import escape
 import streamlit as st
 import streamlit.components.v1 as components
 from data_loader import load_products, SOFT_FEATURES
@@ -22,14 +24,37 @@ except Exception:
 
 # 색상명 → 배경색 hex 매핑 (시각적 스와치용)
 _COLOR_HEX: dict[str, str] = {
-    "화이트":        "#F5F5F5",
-    "슈퍼 화이트":   "#FAFAFA",
-    "크림 화이트":   "#FDF8EF",
-    "퓨어":          "#E8E8E8",
-    "샤인":          "#D4C8B0",
-    "다크 그라파이트": "#3C3C3C",
+    "샤이니 유니버스": "#5D5E5B",
+    "난방향 스테인": "#87888C",
+    "클레이 핑크": "#A18D8C",
+    "실버": "#B7B7B7",
+    "베이지": "#DAD1CA",
+    "토프": "#C4BCB9",
+    "에센스 화이트": "#FFFFFF",
+    "네이비": "#4C4F5E",
+    "오브제 컬렉션": "#C2C2C2",
+    "오브제컬렉션": "#F4F6F8",
+    "그린": "#2A3C2E",
+    "아몬드": "#CCB9B2",
+    "클레이 브라운": "#B3A598",
+    "크림 스카이": "#E6EAED",
+    "크림 그레이": "#A0A0A0",
+    "크림 화이트": "#FFFFFF",
+    "프라임 실버": "#ADAEB0",
+    "핑크": "#CBB0AF",
+    "클레이 민트": "#749296",
+    "크림 피치": "#E6AC97",
+    "크림 라벤더": "#C6BED0",
+    "크림 레몬": "#DFD199",
+    "맨해튼 미드나잇": "#424448",
+    "샤인": "#A1A0A5",
+    "몽블랑 네이처": "#ABADB1",
+    "네이처 베이지": "#F1FDF7",
+    "화이트": "#EDEFF1",
+    "퓨어": "#BCBEC0",
+    "다크 그라파이트": "#949496",
+    "슈퍼 화이트": "#E5E7EB",
     "그라파이트":    "#5A5A5A",
-    "베이지":        "#D4B896",
     "크림":          "#EFE8D8",
     "네이처 그린":   "#7C9E7E",
     "오브제 블루":   "#8DA5BD",
@@ -626,6 +651,7 @@ div[data-testid="stCheckbox"] label span {{
   border-radius: 50%;
   border: 1px solid rgba(0,0,0,0.12);
   flex-shrink: 0;
+  overflow: hidden;
 }}
 .cs-info-row {{
   display: flex;
@@ -727,6 +753,431 @@ div[data-testid="stCheckbox"] label span {{
   font-size: 0.9rem;
   font-weight: 600;
   color: #166534;
+}}
+
+/* ── LG 결과 화면 리디자인 ── */
+.lg-result-wrap {{
+  --lg-red: #A50034;
+  --lg-red-soft: #FFF5F7;
+  --lg-red-border: #F4C0D1;
+  --text-primary: #2C2C2A;
+  --text-secondary: #5F5E5A;
+  --text-tertiary: #888780;
+  --border: #E5E5E5;
+  --border-soft: #F0F0F0;
+  --bg-soft: #FAFAFA;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+}}
+.lg-result-kicker {{
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--lg-red);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.22rem;
+}}
+.lg-result-title {{
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin: 0;
+}}
+.lg-result-subtitle {{
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0 0.75rem;
+  line-height: 1.35;
+}}
+.lg-result-card {{
+  background: #fff;
+  border-radius: 12px;
+  border: 2px solid var(--lg-red);
+  padding: 0.92rem;
+  margin: 0;
+  position: relative;
+  animation: lgFadeUp 0.25s ease both;
+}}
+.lg-best-badge {{
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--lg-red);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 10px;
+  letter-spacing: 0.04em;
+}}
+.lg-product-header {{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 2px 0 10px;
+}}
+.lg-product-code {{
+  font-size: 0.64rem;
+  color: var(--text-tertiary);
+  margin: 0 0 2px;
+}}
+.lg-product-code-inline {{
+  display: inline-block;
+  margin-left: 0.45rem;
+  color: var(--text-tertiary);
+  font-size: 0.64rem !important;
+  line-height: 1.2 !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+  vertical-align: baseline;
+}}
+.lg-product-name {{
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+  line-height: 1.24;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}}
+.lg-product-spec {{
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}}
+.lg-fit-score {{
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2.5px solid var(--lg-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--lg-red-soft);
+  flex-shrink: 0;
+}}
+.lg-fit-num {{
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: var(--lg-red);
+  line-height: 1;
+}}
+.lg-fit-label {{
+  font-size: 0.52rem;
+  color: var(--lg-red);
+  margin-top: 1px;
+}}
+.lg-ai-box {{
+  background: linear-gradient(135deg, var(--lg-red-soft) 0%, var(--bg-soft) 100%);
+  border-radius: 10px;
+  padding: 9px 10px;
+  margin-bottom: 8px;
+  border: 0.5px solid var(--lg-red-border);
+}}
+.lg-ai-label-wrap {{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}}
+.lg-ai-dot {{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--lg-red);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 0.62rem;
+}}
+.lg-ai-label {{
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--lg-red);
+  letter-spacing: 0.04em;
+}}
+.lg-ai-text {{
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: var(--text-primary);
+  margin: 0;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}}
+.lg-ai-text strong {{
+  color: var(--lg-red);
+  font-weight: 700;
+}}
+.lg-section {{
+  background: var(--bg-soft);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}}
+.lg-section-label {{
+  font-size: 0.6rem;
+  color: var(--text-tertiary);
+  margin: 0 0 6px;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+}}
+.lg-tag-wrap {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}}
+.lg-tag {{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.63rem;
+  padding: 3px 7px;
+  background: #fff;
+  border: 0.5px solid #D4D4D4;
+  border-radius: 12px;
+  color: var(--text-primary);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}}
+.lg-tag::before {{
+  content: "✓";
+  color: #639922;
+  font-weight: 800;
+}}
+.lg-tag-highlight {{
+  background: var(--lg-red-soft);
+  border-color: var(--lg-red-border);
+  color: var(--lg-red);
+  font-weight: 700;
+}}
+.lg-tag-highlight::before {{
+  content: "✦";
+  color: var(--lg-red);
+}}
+.lg-review-head {{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 8px;
+}}
+.lg-rating {{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}}
+.lg-rating-num {{
+  font-size: 0.68rem;
+  font-weight: 700;
+}}
+.lg-rating-stars {{
+  color: #F0997B;
+  font-size: 0.58rem;
+  letter-spacing: -1px;
+}}
+.lg-rating-count {{
+  font-size: 0.58rem;
+  color: var(--text-tertiary);
+}}
+.lg-bar-list {{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 6px;
+}}
+.lg-bar-row {{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}}
+.lg-bar-label {{
+  font-size: 0.6rem;
+  width: 58px;
+  color: var(--text-secondary);
+}}
+.lg-bar-track {{
+  flex: 1;
+  height: 3px;
+  background: #F1EFE8;
+  border-radius: 2px;
+  overflow: hidden;
+}}
+.lg-bar-fill {{
+  height: 100%;
+  background: #639922;
+}}
+.lg-bar-fill.amber {{
+  background: #BA7517;
+}}
+.lg-bar-num {{
+  font-size: 0.56rem;
+  color: var(--text-secondary);
+  width: 22px;
+  text-align: right;
+}}
+.lg-keywords {{
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}}
+.lg-keyword {{
+  font-size: 0.56rem;
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: #EAF3DE;
+  color: #3B6D11;
+}}
+.lg-color-section {{
+  margin-bottom: 8px;
+}}
+.lg-result-wrap .cs-section {{
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}}
+.lg-result-wrap .cs-row-label {{
+  color: var(--text-tertiary);
+  font-size: 0.6rem;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}}
+.lg-result-wrap .cs-chip {{
+  border-radius: 16px;
+  background: #fff;
+  color: var(--text-primary);
+  font-size: 0.63rem;
+  padding: 4px 9px 4px 7px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}}
+.lg-result-wrap .cs-chip.active {{
+  border: 2px solid var(--lg-red);
+  background: var(--lg-red-soft);
+  color: var(--lg-red);
+}}
+.lg-price-row {{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 0.5px solid var(--border);
+}}
+.lg-price-label {{
+  font-size: 0.56rem;
+  color: var(--text-tertiary);
+  margin: 0 0 2px;
+}}
+.lg-price-num {{
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text-primary);
+}}
+.lg-price-suffix {{
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}}
+.lg-link-btn {{
+  padding: 6px 9px;
+  border: 0.5px solid #D4D4D4;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 0.62rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}}
+.lg-link-btn.primary {{
+  border: 0;
+  background: var(--lg-red);
+  color: #fff;
+  font-weight: 700;
+}}
+.lg-carousel {{
+  position: relative;
+}}
+.lg-carousel-viewport {{
+  overflow: hidden;
+  border-radius: 12px;
+}}
+.lg-carousel-track {{
+  display: flex;
+  transition: transform 240ms ease;
+}}
+.lg-carousel-slide {{
+  flex: 0 0 100%;
+  min-width: 0;
+}}
+.lg-carousel-nav {{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 7px;
+  gap: 8px;
+}}
+.lg-arrow {{
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--lg-red);
+  display: grid;
+  place-items: center;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  user-select: none;
+  padding: 0;
+}}
+.lg-arrow.disabled {{
+  opacity: 0.28;
+  cursor: default;
+}}
+.lg-slide-count {{
+  flex: 1;
+  text-align: center;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}}
+.lg-dots {{
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 6px;
+}}
+.lg-dot {{
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #E0E0E0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}}
+.lg-dot.active {{
+  background: var(--lg-red);
+}}
+.lg-footer-actions {{
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
 }}
 
 /* ── 애니메이션 ── */
@@ -881,6 +1332,9 @@ ICON_JS = f"""
 
 def render_header():
     crumb_data: list[tuple[str, str]] = []   # (q_id, display_label)
+    lifestyle_label = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"))
+    if lifestyle_label:
+        crumb_data.append(("lifestyle", lifestyle_label))
     if ans.get("install"):
         crumb_data.append(("install", ans["install"]))
     hh = dict(E.HOUSEHOLD_OPTS).get(ans.get("household"))
@@ -961,8 +1415,8 @@ def compute_fit_score(p: dict, ans: dict, applied_tier) -> float:
         vol = max(0.0, 1.0 - diff * 0.22)
         parts.append((vol, 0.40))
 
-    # ② 원하는 기능 매칭 (35%)
-    wanted = set(ans.get("wanted_features", []))
+    # ② 라이프스타일/원하는 기능 매칭 (35%)
+    wanted = set(ans.get("wanted_features", [])) | E.lifestyle_feature_set(ans)
     if wanted:
         hit = wanted & p.get("features", set())
         parts.append((len(hit) / len(wanted), 0.35))
@@ -1022,13 +1476,13 @@ def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
             rows.append({"label": "예산", "score": b_score,
                          "bullet": bullet if b_score >= 75 else ""})
 
-    # 기능 — 원하는 기능 충족 비율
-    wanted = set(ans.get("wanted_features", []))
+    # 기능 — 라이프스타일/원하는 기능 충족 비율
+    wanted = set(ans.get("wanted_features", [])) | E.lifestyle_feature_set(ans)
     if wanted:
         hit = wanted & p.get("features", set())
         f_score = round(len(hit) / len(wanted) * 100)
         if f_score == 100:
-            bullet = "원하는 기능을 모두 갖췄어요"
+            bullet = "라이프스타일에 맞는 기능을 모두 갖췄어요"
         elif hit:
             labels = [SOFT_FEATURES[k][0].split(" (")[0] for k in list(hit)[:2]]
             bullet = ", ".join(labels) + " 등을 갖췄어요"
@@ -1147,9 +1601,7 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         chip_items = ""
         for idx, v in enumerate(variants):
             cname     = v.get("color", "")
-            hex_bg    = _COLOR_HEX.get(cname, "#DDDDDD")
-            is_light  = hex_bg.upper() in ("#F5F5F5","#FAFAFA","#FDF8EF","#E8E8E8","#FFFFFF","#FFF")
-            dot_border = "rgba(0,0,0,0.18)" if is_light else "rgba(0,0,0,0.08)"
+            swatch_style = _color_swatch_style(cname)
             active_cls = "active" if idx == 0 else ""
             v_code      = v.get("code")     or ""
             v_mat       = v.get("material") or ""
@@ -1161,8 +1613,9 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
                 f' data-rank="{rank}"'
                 f' data-code="{v_code}"'
                 f' data-price="{v_price_fmt}"'
-                f' data-mat="{v_mat}">'
-                f'<span class="cs-dot" style="background:{hex_bg};border:1px solid {dot_border};"></span>'
+                f' data-mat="{v_mat}"'
+                f' data-url="{_lge_product_url(v_code)}">'
+                f'<span class="cs-dot" style="{swatch_style}"></span>'
                 f'{cname}</button>'
             )
 
@@ -1182,7 +1635,7 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
     elif sku and len(variants) == 1:
         # 색상 1종 → 스와치 없이 정보만 표시
         single_color = variants[0].get("color", "")
-        hex_bg = _COLOR_HEX.get(single_color, "#DDDDDD")
+        swatch_style = _color_swatch_style(single_color)
         mat_display = (
             f'<span class="cs-info-sep">·</span>'
             f'<span class="cs-info-label">재질</span>'
@@ -1192,7 +1645,7 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
             '<div class="cs-section">'
             '<div class="cs-chips" style="margin-bottom:10px;">'
             f'<span class="cs-chip active" style="cursor:default;">'
-            f'<span class="cs-dot" style="background:{hex_bg};border:1px solid rgba(0,0,0,0.12);"></span>'
+            f'<span class="cs-dot" style="{swatch_style}"></span>'
             f'{single_color}</span></div>'
             '<div class="cs-info-row">'
             '<span class="cs-info-label">모델 코드</span>'
@@ -1258,6 +1711,356 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
     """, unsafe_allow_html=True)
 
 
+def render_lg_result_page(scored: list[tuple[float, int, dict]], ans: dict, applied_tier, cand_count: int, db_total: int) -> None:
+    """Render the final result with the LG result-screen visual system."""
+    lifestyle = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"), "고객")
+    q_count = len(st.session_state.get("history", []))
+    total = len(scored)
+    carousel_id = "lgc-" + "".join(ch for ch in st.session_state.session_id if ch.isalnum())[:10]
+    slides = "".join(
+        f'<section class="lg-carousel-slide">{_lg_result_card_html(fit, rank, p, ans, applied_tier, total)}</section>'
+        for fit, rank, p in scored
+    )
+    nav = _lg_carousel_nav(total, carousel_id)
+    dots = "".join(
+        f'<button class="lg-dot{" active" if idx == 0 else ""}" type="button" data-carousel="{carousel_id}" data-index="{idx}" aria-label="{idx + 1}번 추천 보기"></button>'
+        for idx in range(total)
+    )
+
+    html = "".join(
+        [
+            '<div class="lg-result-wrap">',
+            '<div style="margin-bottom:1rem;">',
+            '<div class="lg-result-kicker">LG Electronics</div>',
+            f'<h2 class="lg-result-title">{_html(lifestyle)}님께 추천드려요</h2>',
+            f'<p class="lg-result-subtitle">답변하신 {q_count}가지 조건을 바탕으로 {db_total}개 모델 중 후보 {cand_count}개를 정리했어요.</p>',
+            "</div>",
+            f'<div class="lg-carousel" id="{carousel_id}" data-index="0" data-total="{total}">',
+            '<div class="lg-carousel-viewport"><div class="lg-carousel-track">',
+            slides,
+            "</div></div>",
+            nav,
+            f'<div class="lg-dots">{dots}</div>',
+            "</div>",
+            "</div>",
+        ]
+    )
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def _lg_result_card_html(fit: float, rank: int, p: dict, ans: dict, applied_tier, total: int) -> str:
+    sku_html, init_code, init_mat, init_price = _lg_sku_html(p, rank)
+    reasons = _lg_reason_tags(p, ans, applied_tier)
+    checks = _lg_check_bars(p, ans, applied_tier)
+    ai_text = _lg_ai_text(p, ans, applied_tier, reasons)
+    feature_chips = _lg_feature_tags(p, ans)
+    price_html = _lg_price_html(init_price or p.get("price_min"))
+    product_url = _lge_product_url(init_code)
+    pct = round(fit * 100)
+    badge = "BEST MATCH" if rank == 1 else f"TOP {rank} / {total}"
+    return "".join(
+        [
+            '<div class="lg-result-card">',
+            f'<div class="lg-best-badge">{badge}</div>',
+            '<div class="lg-product-header">',
+            '<div style="flex:1;min-width:0;">',
+            f'<h3 class="lg-product-name">{_html(p.get("name") or "LG 냉장고")}<span class="lg-product-code-inline" id="card-code-{rank}">{_html(init_code)}</span></h3>',
+            f'<p class="lg-product-spec">{_html(_lg_spec_line(p, init_mat))}</p>',
+            "</div>",
+            '<div class="lg-fit-score">',
+            f'<span class="lg-fit-num">{pct}</span>',
+            '<span class="lg-fit-label">적합도</span>',
+            "</div>",
+            "</div>",
+            '<div class="lg-ai-box">',
+            '<div class="lg-ai-label-wrap">',
+            '<div class="lg-ai-dot">✦</div>',
+            '<span class="lg-ai-label">LG 매니저 AI</span>',
+            "</div>",
+            f'<p class="lg-ai-text">{ai_text}</p>',
+            "</div>",
+            '<div class="lg-section">',
+            '<p class="lg-section-label">왜 이 모델을 추천하나요?</p>',
+            f'<div class="lg-tag-wrap">{reasons}{feature_chips}</div>',
+            "</div>",
+            '<div class="lg-section">',
+            '<div class="lg-review-head">',
+            '<p class="lg-section-label" style="margin:0;">구매 전 체크 요약</p>',
+            '<div class="lg-rating">',
+            f'<span class="lg-rating-num">{_lg_fit_label(pct)}</span>',
+            '<span class="lg-rating-stars">★★★★★</span>',
+            '<span class="lg-rating-count">조건 기반</span>',
+            "</div>",
+            "</div>",
+            f'<div class="lg-bar-list">{checks}</div>',
+            f'<div class="lg-keywords">{_lg_keyword_chips(p, ans)}</div>',
+            "</div>",
+            f'<div class="lg-color-section">{sku_html}</div>',
+            '<div class="lg-price-row">',
+            "<div>",
+            '<p class="lg-price-label">최저가</p>',
+            f'<p class="lg-price-num"><span id="card-price-{rank}">{price_html}</span><span class="lg-price-suffix">~</span></p>',
+            "</div>",
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">',
+            '<span class="lg-link-btn">자세히</span>',
+            f'<a class="lg-link-btn primary" id="card-link-{rank}" href="{_html(product_url)}" target="_blank" rel="noopener noreferrer">LG.com에서 보기 →</a>',
+            "</div>",
+            "</div>",
+            "</div>",
+        ]
+    )
+
+
+def _lg_carousel_nav(total: int, carousel_id: str) -> str:
+    return (
+        '<div class="lg-carousel-nav">'
+        f'<button class="lg-arrow disabled" type="button" data-carousel="{carousel_id}" data-dir="-1" aria-label="이전 추천 보기" disabled>‹</button>'
+        f'<div class="lg-slide-count">추천 <span class="lg-current">1</span> / {total}</div>'
+        f'<button class="lg-arrow" type="button" data-carousel="{carousel_id}" data-dir="1" aria-label="다음 추천 보기">›</button>'
+        '</div>'
+    )
+
+
+def _html(value) -> str:
+    return escape(str(value or ""))
+
+
+def _lg_spec_line(p: dict, material: str | None = None) -> str:
+    parts = [
+        f"{p.get('total_l')}L" if p.get("total_l") else None,
+        p.get("install"),
+        p.get("doors"),
+        f"{p.get('energy')}등급" if p.get("energy") else None,
+        material or p.get("material"),
+    ]
+    return " · ".join(str(part) for part in parts if part and str(part) != "-")
+
+
+def _lg_price_html(value) -> str:
+    try:
+        if value:
+            return f"{int(value):,}원"
+    except Exception:
+        pass
+    return "가격 미정"
+
+
+def _lge_product_url(code: str | None) -> str:
+    safe_code = re.sub(r"[^0-9A-Za-z_-]", "", str(code or "").strip()).lower()
+    return f"https://www.lge.co.kr/refrigerators/{safe_code}" if safe_code else "https://www.lge.co.kr/refrigerators"
+
+
+def _color_name_parts(color_name: str) -> list[str]:
+    parts = [part.strip() for part in re.split(r"\s*/\s*", str(color_name or "")) if part.strip()]
+    return parts[:2] if parts else [str(color_name or "").strip()]
+
+
+def _lookup_color_hex(color_name: str) -> str:
+    name = re.sub(r"\s+", " ", str(color_name or "").strip())
+    if not name:
+        return "#DDDDDD"
+    if name in _COLOR_HEX:
+        return _COLOR_HEX[name]
+    for key in sorted(_COLOR_HEX, key=len, reverse=True):
+        if key and key in name:
+            return _COLOR_HEX[key]
+    return "#DDDDDD"
+
+
+def _is_light_hex(hex_color: str) -> bool:
+    hex_value = str(hex_color or "").lstrip("#")
+    if len(hex_value) != 6:
+        return False
+    try:
+        r = int(hex_value[0:2], 16)
+        g = int(hex_value[2:4], 16)
+        b = int(hex_value[4:6], 16)
+    except ValueError:
+        return False
+    return (r * 299 + g * 587 + b * 114) / 1000 >= 225
+
+
+def _color_swatch_style(color_name: str) -> str:
+    parts = _color_name_parts(color_name)
+    top = _lookup_color_hex(parts[0])
+    bottom = _lookup_color_hex(parts[1]) if len(parts) > 1 else top
+    border = "rgba(0,0,0,0.18)" if _is_light_hex(top) or _is_light_hex(bottom) else "rgba(0,0,0,0.08)"
+    if len(parts) > 1:
+        background = f"linear-gradient(to bottom, {top} 0 50%, {bottom} 50% 100%)"
+    else:
+        background = top
+    return f"background:{background};border:1px solid {border};"
+
+
+def _lg_fit_label(pct: int) -> str:
+    if pct >= 90:
+        return "매우 적합"
+    if pct >= 75:
+        return "적합"
+    return "비교 추천"
+
+
+def _lg_feature_name(key: str) -> str:
+    return SOFT_FEATURES.get(key, (key, []))[0].split(" (")[0]
+
+
+def _lg_feature_tags(p: dict, ans: dict) -> str:
+    lifestyle_hits = E.lifestyle_feature_set(ans) & p.get("features", set())
+    if not lifestyle_hits:
+        return ""
+    return "".join(
+        f'<span class="lg-tag lg-tag-highlight">{_html(_lg_feature_name(key))}</span>'
+        for key in sorted(lifestyle_hits)
+    )
+
+
+def _lg_reason_tags(p: dict, ans: dict, applied_tier) -> str:
+    rows = []
+    install = p.get("install")
+    if install:
+        rows.append(f"{install} 설치")
+    if applied_tier:
+        rows.append(f"{E.TIER_LABEL.get(applied_tier, '')} 용량")
+    elif p.get("total_l"):
+        rows.append(f"총 {p.get('total_l')}L 용량")
+    if p.get("energy"):
+        rows.append(f"에너지 {p.get('energy')}등급")
+    if p.get("doors"):
+        rows.append(str(p.get("doors")))
+    return "".join(f'<span class="lg-tag">{_html(text)}</span>' for text in rows if text)
+
+
+def _lg_ai_text(p: dict, ans: dict, applied_tier, reason_tags: str) -> str:
+    lifestyle = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"), "고객")
+    hit_features = sorted(E.lifestyle_feature_set(ans) & p.get("features", set()))
+    feature_text = ", ".join(f"<strong>{_html(_lg_feature_name(key))}</strong>" for key in hit_features[:3])
+    if not feature_text:
+        feature_text = "<strong>선택 조건</strong>"
+    capacity = f"{p.get('total_l')}L" if p.get("total_l") else "현재 후보군"
+    energy = f"에너지 {p.get('energy')}등급" if p.get("energy") else "에너지 정보 확인 필요"
+    tier_text = f"{E.TIER_LABEL.get(applied_tier)} 기준에 맞춰" if applied_tier else "선택한 조건을 기준으로"
+    return (
+        f"{_html(lifestyle)} 성향과 답변을 함께 보면 이 모델이 가장 안정적인 선택이에요. "
+        f"{feature_text} 조건을 중심으로 잘 맞고, {_html(tier_text)} {_html(capacity)} 용량과 "
+        f"<strong>{_html(energy)}</strong>을 함께 고려해 추천했어요."
+    )
+
+
+def _lg_check_bars(p: dict, ans: dict, applied_tier) -> str:
+    breakdown = compute_breakdown(p, ans, applied_tier)
+    if not breakdown:
+        return ""
+    rows = []
+    for row in breakdown[:4]:
+        score = int(row["score"])
+        cls = "lg-bar-fill" if score >= 75 else "lg-bar-fill amber"
+        value = round(score / 20, 1)
+        rows.append(
+            f'<div class="lg-bar-row">'
+            f'<span class="lg-bar-label">{_html(row["label"])}</span>'
+            f'<div class="lg-bar-track"><div class="{cls}" style="width:{score}%;"></div></div>'
+            f'<span class="lg-bar-num">{value}</span>'
+            f'</div>'
+        )
+    return "".join(rows)
+
+
+def _lg_keyword_chips(p: dict, ans: dict) -> str:
+    chips = []
+    for key in sorted(p.get("features", set()))[:3]:
+        chips.append(f"+ {_lg_feature_name(key)}")
+    if p.get("energy") == 1:
+        chips.append("+ 에너지 1등급")
+    if not chips:
+        chips.append("+ 기본 조건 충족")
+    return "".join(f'<span class="lg-keyword">{_html(chip)}</span>' for chip in chips[:4])
+
+
+def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
+    rep_code = p.get("code", "")
+    sku = _SKU_INDEX.get(rep_code)
+    variants = sku["variants"] if sku else []
+    init_v = variants[0] if variants else {}
+    init_code = init_v.get("code") or rep_code
+    init_mat = init_v.get("material") or p.get("material", "")
+    init_price = init_v.get("price") or p.get("price_min")
+
+    if variants:
+        chip_items = ""
+        for idx, v in enumerate(variants):
+            cname = v.get("color", "")
+            swatch_style = _color_swatch_style(cname)
+            active_cls = "active" if idx == 0 else ""
+            v_price = int(v.get("price") or 0)
+            v_price_fmt = f"{v_price:,}원" if v_price else ""
+            chip_items += (
+                f'<button class="cs-chip {active_cls}"'
+                f' data-rank="{rank}"'
+                f' data-code="{_html(v.get("code") or "")}"'
+                f' data-price="{_html(v_price_fmt)}"'
+                f' data-mat="{_html(v.get("material") or "")}"'
+                f' data-url="{_html(_lge_product_url(v.get("code") or ""))}">'
+                f'<span class="cs-dot" style="{swatch_style}"></span>'
+                f'{_html(cname)}</button>'
+            )
+        html = (
+            '<div class="cs-section">'
+            '<div class="cs-row-label">색상 선택</div>'
+            f'<div class="cs-chips">{chip_items}</div>'
+            '<div class="cs-info-row">'
+            '<span class="cs-info-label">도어 재질</span>'
+            f'<span class="cs-info-val" id="card-mat-{rank}">{_html(init_mat)}</span>'
+            '</div>'
+            '</div>'
+        )
+        return html, init_code, init_mat, int(init_price) if init_price else None
+
+    colors = p.get("colors") or []
+    if colors:
+        chips = "".join(
+            f'<span class="cs-chip {"active" if idx == 0 else ""}" style="cursor:default;">'
+            f'<span class="cs-dot" style="{_color_swatch_style(color)}"></span>{_html(color)}</span>'
+            for idx, color in enumerate(colors)
+        )
+        html = (
+            '<div class="cs-section">'
+            '<div class="cs-row-label">색상 선택</div>'
+            f'<div class="cs-chips">{chips}</div>'
+            '</div>'
+        )
+        return html, init_code, init_mat, int(init_price) if init_price else None
+
+    return "", init_code, init_mat, int(init_price) if init_price else None
+
+
+def _other_candidate_rows(scored: list[tuple[float, int, dict]]) -> str:
+    if not scored:
+        return ""
+    rows = ""
+    for fit, rank, p in scored:
+        price = _lg_price_html(p.get("price_min"))
+        rows += (
+            '<div class="lg-candidate-row">'
+            '<div style="min-width:0;">'
+            f'<p class="lg-product-code">{_html(p.get("code") or "")}</p>'
+            f'<p style="font-size:0.86rem;margin:1px 0;color:var(--text-primary);font-weight:700;line-height:1.35;">{_html(p.get("name") or "LG 냉장고")}</p>'
+            f'<p style="font-size:0.7rem;color:var(--text-secondary);margin:0;">'
+            f'{_html(str(p.get("total_l") or "—"))}L · 에너지 {_html(str(p.get("energy") or "—"))}등급 · {_html(price)}</p>'
+            '</div>'
+            f'<div class="lg-candidate-score">{round(fit * 100)}%</div>'
+            '</div>'
+        )
+    return (
+        '<details class="lg-other-candidates">'
+        '<summary class="lg-candidates-summary">'
+        f'<span>다른 추천 후보 보기 <span style="color:var(--text-tertiary);font-size:0.68rem;">{len(scored)}개</span></span>'
+        '<span style="color:var(--text-tertiary);font-size:0.68rem;">▾</span>'
+        '</summary>'
+        f'<div class="lg-candidate-list">{rows}</div>'
+        '</details>'
+    )
+
+
 # ════════════════════════════════════════════════════════════════════
 # 앱 렌더링
 # ════════════════════════════════════════════════════════════════════
@@ -1282,12 +2085,15 @@ else:
     q = E.next_question(PRODUCTS, ans)
 
 # ── Q1 첫 답변 시 세션 시작 기록 (이탈 추적 기준점) ──
-if "install" in ans and not st.session_state._session_start_logged:
+if "lifestyle" in ans and not st.session_state._session_start_logged:
     DB.log_session_start(st.session_state.session_id)
     st.session_state._session_start_logged = True
 
 # ── 질문 흐름 ──
-if q == "install":
+if q == "lifestyle":
+    option_buttons("lifestyle")
+
+elif q == "install":
     option_buttons("install")
 
 elif q == "household":
@@ -1337,14 +2143,28 @@ elif q == "result":
           조건에 딱 맞는 제품을 찾지 못했어요. 처음부터 다시 시도해 보세요.
         </div>""", unsafe_allow_html=True)
     else:
-        # Top 5만 표시
-        top5 = ranked[:5]
-
-        # 적합도 계산 (UI 표시 전용 — 필터링/랭킹 로직 불변)
-        scored = [
-            (compute_fit_score(p, ans, tier), rank_i + 1, p)
-            for rank_i, (_, p, _) in enumerate(top5)
+        # 후보 전체에 가중치 적합도를 계산한 뒤, 점수가 가장 높은 5개만 표시합니다.
+        scored_all = [
+            (compute_fit_score(p, ans, tier), engine_rank + 1, p)
+            for engine_rank, (_, p, _) in enumerate(ranked)
+            if p and p.get("name")
         ]
+        scored_all.sort(
+            key=lambda item: (
+                -item[0],
+                item[2].get("energy") if item[2].get("energy") else 9,
+                item[2].get("price_min") if item[2].get("price_min") else 10**12,
+                item[1],
+            )
+        )
+        scored = [(fit, rank + 1, p) for rank, (fit, _, p) in enumerate(scored_all[:5])]
+        if not scored:
+            st.markdown("""
+            <div class="q-bubble" style="color:#888;">
+              추천 결과로 표시할 제품 정보가 부족해요. 조건을 조금 바꿔 다시 시도해 보세요.
+            </div>""", unsafe_allow_html=True)
+            ranked = []
+            st.stop()
 
         # ── DB 로그 (결과 화면 최초 진입 시 1회만) ──────────────────────
         if not st.session_state._db_logged:
@@ -1376,119 +2196,7 @@ elif q == "result":
         q_count = len(st.session_state.get("history", []))
         db_total = len(PRODUCTS)
         cand_count = len(cand)
-        st.markdown(f"""
-        <div style="margin-bottom:0.5rem;">
-          <div style="font-size:0.72rem;font-weight:800;letter-spacing:0.12em;
-                      color:#A50034;text-transform:uppercase;margin-bottom:10px;">
-            맞춤 추천 결과
-          </div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-box">
-            <div class="stat-num">{q_count}</div>
-            <div class="stat-label">답한 질문</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num highlight">{cand_count}</div>
-            <div class="stat-label">후보 제품</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num">{db_total}</div>
-            <div class="stat-label">전체 DB</div>
-          </div>
-        </div>
-        <div style="font-size:1.08rem;font-weight:700;color:#111;margin-bottom:1.2rem;">
-          상위 {len(scored)}개 제품을 추천드려요
-        </div>
-        """, unsafe_allow_html=True)
-
-        # 1위 카드 + 추천 이유
-        fit1, _, top_p = scored[0]
-        show_result_card(top_p, rank=1, fit=fit1, ans=ans, applied_tier=tier)
-
-        reasons = E.reasons_for(top_p, ans, tier)
-        if reasons:
-            reason_items = "".join(
-                f'<li style="margin-bottom:5px;">{r}</li>' for r in reasons
-            )
-            st.markdown(f"""
-            <div style="margin:-4px 0 16px;padding:14px 20px;background:#F9F9FB;
-                        border-radius:0 0 12px 12px;border:1px solid #F0F0F0;border-top:none;">
-              <div style="font-size:0.74rem;font-weight:700;color:#777;
-                          letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">
-                추천 이유
-              </div>
-              <ul style="margin:0;padding-left:18px;font-size:0.83rem;color:#555;line-height:1.65;">
-                {reason_items}
-              </ul>
-            </div>
-            """, unsafe_allow_html=True)
-
-        # 2~5위 카드 — 렌더링 가능한 카드만 표시
-        _shown_others = 0
-        for fit_s, rank_s, p_s in scored[1:]:
-            if not p_s or not p_s.get("name"):
-                continue
-            try:
-                if _shown_others == 0:
-                    st.markdown("""
-                    <div style="font-size:0.74rem;font-weight:700;color:#999;
-                                letter-spacing:0.06em;text-transform:uppercase;
-                                margin:20px 0 10px;">
-                      다른 후보도 살펴보세요
-                    </div>
-                    """, unsafe_allow_html=True)
-                show_result_card(p_s, rank=rank_s, fit=fit_s, ans=ans, applied_tier=tier)
-                _shown_others += 1
-            except Exception:
-                pass  # 렌더링 실패한 카드는 조용히 건너뜀
-
-        # Top 5 한눈에 비교표 — 후보가 2개 이상일 때만 표시
-        if len(scored) > 1:
-            st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-            with st.expander("📊 Top 5 한눈에 비교표"):
-                def _feat_labels(p):
-                    feats = p.get("features", set())
-                    labels = [SOFT_FEATURES[k][0].split(" (")[0] for k in sorted(feats)
-                              if k in SOFT_FEATURES]
-                    return ", ".join(labels) if labels else "—"
-
-                rows_html = ""
-                for fit_c, rank_c, p_c in scored:
-                    try:
-                        price_c = (
-                            f"{p_c['price_min']:,}원" if p_c.get("price_min") else "미정"
-                        )
-                        row_cls = "top-row" if rank_c == 1 else ""
-                        rows_html += f"""
-                        <tr class="{row_cls}">
-                          <td><span class="cmp-rank">#{rank_c}</span></td>
-                          <td><span class="cmp-name">{p_c['name']}</span></td>
-                          <td><span class="cmp-fit">{round(fit_c * 100)}%</span></td>
-                          <td>{price_c}</td>
-                          <td>{p_c.get('total_l') or '—'}L</td>
-                          <td>{p_c.get('doors') or '—'}</td>
-                          <td>{p_c.get('energy') or '—'}등급</td>
-                          <td><span class="cmp-feat">{_feat_labels(p_c)}</span></td>
-                        </tr>"""
-                    except Exception:
-                        pass
-
-                if rows_html:
-                    st.markdown(f"""
-                    <div style="overflow-x:auto;">
-                    <table class="cmp-table">
-                      <thead>
-                        <tr>
-                          <th>순위</th><th>제품명</th><th>적합도</th>
-                          <th>최저가</th><th>용량</th><th>도어</th>
-                          <th>에너지</th><th>주요기능</th>
-                        </tr>
-                      </thead>
-                      <tbody>{rows_html}</tbody>
-                    </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+        render_lg_result_page(scored, ans, tier, cand_count, db_total)
 
     # ── 탐색 만족도 팝업 ──────────────────────────────────────────────
     if ranked:
@@ -1544,7 +2252,7 @@ SWATCH_JS = """
   var doc = window.parent.document;
   /* 부모 document 의 <head> 에 스크립트를 직접 주입 (ICON_JS 의 스타일 주입과 동일 패턴).
      주입된 스크립트는 부모 문서에 영구적으로 살아있어 Streamlit 리렌더 후에도 동작. */
-  if (doc.getElementById('lg-swatch-handler')) return;
+  if (doc.getElementById('lg-interaction-handler-v3')) return;
 
   var code = [
     '(function(){',
@@ -1556,13 +2264,52 @@ SWATCH_JS = """
     '        var ce=document.getElementById("card-code-"+r);',
     '        var pe=document.getElementById("card-price-"+r);',
     '        var me=document.getElementById("card-mat-"+r);',
+    '        var le=document.getElementById("card-link-"+r);',
     '        if(ce) ce.textContent=c.dataset.code||"";',
     '        if(pe) pe.textContent=c.dataset.price||"";',
     '        if(me) me.textContent=c.dataset.mat||"";',
+    '        if(le && c.dataset.url) le.href=c.dataset.url;',
     '        var row=c.closest(".cs-chips");',
     '        if(row) row.querySelectorAll(".cs-chip").forEach(function(x){x.classList.remove("active");});',
     '        c.classList.add("active");',
     '      });',
+    '    });',
+    '    document.querySelectorAll(".lg-carousel:not([data-lg-bound])").forEach(function(root){',
+    '      root.setAttribute("data-lg-bound","1");',
+    '      function setIndex(next){',
+    '        var total=parseInt(root.dataset.total||"1",10);',
+    '        var idx=Math.max(0,Math.min(total-1,next));',
+    '        root.dataset.index=String(idx);',
+    '        var track=root.querySelector(".lg-carousel-track");',
+    '        if(track) track.style.transform="translateX("+(-idx*100)+"%)";',
+    '        var cur=root.querySelector(".lg-current");',
+    '        if(cur) cur.textContent=String(idx+1);',
+    '        root.querySelectorAll(".lg-dot").forEach(function(dot,i){ dot.classList.toggle("active",i===idx); });',
+    '        root.querySelectorAll(".lg-arrow[data-dir]").forEach(function(btn){',
+    '          var dir=parseInt(btn.dataset.dir||"0",10);',
+    '          var disabled=(dir<0 && idx===0) || (dir>0 && idx===total-1);',
+    '          btn.disabled=disabled;',
+    '          btn.classList.toggle("disabled",disabled);',
+    '        });',
+    '      }',
+    '      root.querySelectorAll(".lg-arrow[data-dir]").forEach(function(btn){',
+    '        btn.addEventListener("click",function(e){',
+    '          e.preventDefault();',
+    '          e.stopPropagation();',
+    '          if(btn.disabled) return;',
+    '          var idx=parseInt(root.dataset.index||"0",10);',
+    '          var dir=parseInt(btn.dataset.dir||"0",10);',
+    '          setIndex(idx+dir);',
+    '        });',
+    '      });',
+    '      root.querySelectorAll(".lg-dot[data-index]").forEach(function(dot){',
+    '        dot.addEventListener("click",function(e){',
+    '          e.preventDefault();',
+    '          e.stopPropagation();',
+    '          setIndex(parseInt(dot.dataset.index||"0",10));',
+    '        });',
+    '      });',
+    '      setIndex(parseInt(root.dataset.index||"0",10));',
     '    });',
     '  }',
     '  bind();',
@@ -1572,7 +2319,7 @@ SWATCH_JS = """
   ].join('\\n');
 
   var s = doc.createElement('script');
-  s.id = 'lg-swatch-handler';
+  s.id = 'lg-interaction-handler-v3';
   s.textContent = code;
   doc.head.appendChild(s);
 })();

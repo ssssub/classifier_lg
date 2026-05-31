@@ -38,6 +38,34 @@ ICONS: Dict[str, str] = {
         '<rect x="14" y="3" width="8" height="18" rx="1.5"/>'
         '<path d="M10 12h4"/>'
     ),
+    "freshness": (
+        '<path d="M7 20c-1.7-3.9-.9-7.2 2.3-9.8 2.6-2.1 5.7-2.5 8.7-1.9.5 3.8-.4 6.9-2.8 9.1-2.3 2.1-5.1 2.5-8.2 2.6z"/>'
+        '<path d="M7.5 19.5c2.4-4.1 5.4-6.5 9-7.2"/>'
+        '<path d="M6.2 10.8C4.1 9.8 3.2 7.7 3 5c2.6.1 4.8 1 5.8 3.2"/>'
+    ),
+    "hygiene": (
+        '<path d="M12 22s8-3.8 8-10V5l-8-3-8 3v7c0 6.2 8 10 8 10z"/>'
+        '<path d="M9 12l2 2 4-5"/>'
+    ),
+    "saving": (
+        '<path d="M12 3c3.8 2.6 6 5.5 6 8.5A6 6 0 0 1 6 11.5C6 8.5 8.2 5.6 12 3z"/>'
+        '<path d="M10 12h4"/><path d="M12 9v6"/>'
+    ),
+    "storage": (
+        '<path d="M3 7l9-4 9 4-9 4-9-4z"/>'
+        '<path d="M3 12l9 4 9-4"/>'
+        '<path d="M3 17l9 4 9-4"/>'
+    ),
+    "smart_home": (
+        '<rect x="8" y="3" width="8" height="18" rx="2"/>'
+        '<circle cx="12" cy="17" r="1"/>'
+        '<path d="M5 8a9 9 0 0 1 14 0"/><path d="M7.8 10.5a5.5 5.5 0 0 1 8.4 0"/>'
+    ),
+    "interior": (
+        '<path d="M4 21V9l8-6 8 6v12"/>'
+        '<path d="M9 21v-7h6v7"/>'
+        '<path d="M4 11h16"/>'
+    ),
     "freestanding": (
         '<rect x="4" y="2" width="16" height="20" rx="2"/>'
         '<line x1="8" y1="7" x2="13" y2="7"/>'
@@ -124,6 +152,48 @@ REFRIGERATOR_CONFIG = CategoryConfig(
     name="냉장고",
     subtitle="몇 가지만 답하면, 딱 맞는 제품을 찾아드려요.",
     questions={
+        "lifestyle": QuestionConfig(
+            q_id="lifestyle",
+            text="<strong>당신은 어떤 사람인가요?</strong><br><span class=\"accent\">내 라이프 스타일</span>에 가장 가까운 것을 골라주세요.",
+            options=[
+                OptionConfig(
+                    "freshness_keeper",
+                    "신선집착형",
+                    "장을 보면 식재료를 완벽하게 보관하는 사람 · AI가 온도 자동 조절 · 재료별 맞춤 보관 · 24시간 균일 냉기",
+                    "freshness",
+                ),
+                OptionConfig(
+                    "hygiene_master",
+                    "깔끔관리형",
+                    "냉장고 안까지 늘 깨끗하게 관리하는 사람 · UV로 세균 제거 · 냄새 자동 탈취 · 향균 필터 내장",
+                    "hygiene",
+                ),
+                OptionConfig(
+                    "saving_expert",
+                    "효율중시형",
+                    "전기세까지 스마트하게 아끼고 사는 사람 · 전기요금 절반으로 · 저소음 운전 · AI 절전 모드",
+                    "saving",
+                ),
+                OptionConfig(
+                    "storage_optimizer",
+                    "생활편의형",
+                    "냉장고 공간을 알차게 활용할 줄 아는 사람 · 공간 두 배 활용 · 문 안 열고 확인 · 정수기 기능 내장",
+                    "storage",
+                ),
+                OptionConfig(
+                    "tech_early_adopter",
+                    "스마트생활형",
+                    "집 안 모든 것을 스마트하게 연결하는 사람 · 음성으로 조작 · AI가 알아서 관리 · 앱 연동 제어",
+                    "smart_home",
+                ),
+                OptionConfig(
+                    "interior_stylist",
+                    "인테리어감성형",
+                    "주방 분위기까지 직접 디자인하는 사람 · 컬러 맞춤 선택 · 프리미엄 소재 · 공간 인테리어 가전",
+                    "interior",
+                ),
+            ],
+        ),
         "install": QuestionConfig(
             q_id="install",
             text="냉장고를 <strong>어떻게 설치</strong>하실 계획이세요?",

@@ -34,6 +34,28 @@ INSTALL_OPTS = [
     ("프리스탠딩", "프리스탠딩 — 자유롭게 어디든", "원하는 자리에 자유롭게 설치"),
 ]
 
+LIFESTYLE_LABELS = {
+    "freshness_keeper": "신선 집착러",
+    "hygiene_master": "위생 마니아",
+    "saving_expert": "절약 고수",
+    "storage_optimizer": "수납 덕후",
+    "tech_early_adopter": "테크 얼리어답터",
+    "interior_stylist": "인테리어 감성러",
+}
+
+LIFESTYLE_FEATURES = {
+    "freshness_keeper": {"door_cooling", "fresh_room", "ai"},
+    "hygiene_master": {"uv_filter"},
+    "saving_expert": {"energy_top", "ai"},
+    "storage_optimizer": {"knock_on", "magic_space"},
+    "tech_early_adopter": {"voice", "ai"},
+    "interior_stylist": set(),
+}
+
+
+def lifestyle_feature_set(ans):
+    return set(LIFESTYLE_FEATURES.get(ans.get("lifestyle"), set()))
+
 
 def _by_install(products, install):
     return [p for p in products if p["install"] == install]
@@ -106,7 +128,7 @@ def available_soft_features(candidates):
 
 
 def score_and_rank(candidates, ans):
-    wanted = set(ans.get("wanted_features", []))
+    wanted = set(ans.get("wanted_features", [])) | lifestyle_feature_set(ans)
     ranked = []
     for p in candidates:
         hit = wanted & p["features"]
@@ -121,7 +143,11 @@ def score_and_rank(candidates, ans):
 
 
 def next_question(products, ans):
-    # Q1: 설치형태 (전체 공통)
+    # Q1: 라이프스타일 (전체 공통)
+    if "lifestyle" not in ans:
+        return "lifestyle"
+
+    # Q2: 설치형태 (전체 공통)
     if "install" not in ans:
         return "install"
 
@@ -153,6 +179,12 @@ def next_question(products, ans):
 
 def reasons_for(product, ans, applied_tier):
     out = []
+    lifestyle = ans.get("lifestyle")
+    lifestyle_label = LIFESTYLE_LABELS.get(lifestyle)
+    lifestyle_hits = lifestyle_feature_set(ans) & product["features"]
+    if lifestyle_label and lifestyle_hits:
+        labels = [SOFT_FEATURES[k][0].split(" (")[0] for k in sorted(lifestyle_hits)]
+        out.append(f"{lifestyle_label} 성향에 맞는 " + ", ".join(labels) + " 기능을 갖췄어요.")
     inst = {"빌트인": "빌트인 설치", "Fit & Max": "Fit & Max(가구장 맞춤) 설치",
             "프리스탠딩": "프리스탠딩 설치"}.get(product["install"], product["install"])
     out.append(f"원하신 {inst} 타입이에요.")
