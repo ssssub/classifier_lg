@@ -98,6 +98,8 @@ if "_rated" not in st.session_state:
     st.session_state._rated = False
 if "_survey_submitted" not in st.session_state:
     st.session_state._survey_submitted = False
+if "_survey_open" not in st.session_state:
+    st.session_state._survey_open = False
 
 ans = st.session_state.answers
 
@@ -113,6 +115,7 @@ def reset():
     st.session_state._session_start_logged = False
     st.session_state._rated = False
     st.session_state._survey_submitted = False
+    st.session_state._survey_open = False
 
 
 def go_back():
@@ -1521,39 +1524,36 @@ div[data-testid="stCheckbox"] label span {{
   to   {{ opacity: 1; transform: translateY(0); }}
 }}
 
-/* ── 설문 배너 ── */
-.lg-survey-banner {{
+/* ── 설문 배너 (2열 반응형) ── */
+.lg-survey-banner-wrap {{
   background: #FFFFFF;
   border: 1.5px solid #E8E8E8;
   border-radius: 14px;
-  padding: 18px 22px;
-  margin-bottom: 18px;
+  padding: 16px 22px;
+  margin-bottom: 14px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   animation: lgFadeUp 0.25s ease both;
 }}
-.lg-survey-banner-icon {{
-  font-size: 1rem;
-  margin-bottom: 4px;
-  display: block;
-}}
 .lg-survey-banner-title {{
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #111;
-  margin-bottom: 4px;
+  margin: 0 0 3px;
+  word-break: keep-all;
 }}
 .lg-survey-banner-desc {{
-  font-size: 0.78rem;
+  font-size: 0.77rem;
   color: #888;
   line-height: 1.55;
-  margin-bottom: 0;
+  margin: 0;
+  word-break: keep-all;
 }}
 .lg-survey-completed {{
   background: #F5FFF5;
   border: 1.5px solid #C3E6CB;
   border-radius: 14px;
-  padding: 14px 22px;
-  margin-bottom: 18px;
+  padding: 13px 22px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1561,37 +1561,82 @@ div[data-testid="stCheckbox"] label span {{
   font-weight: 600;
   color: #2E7D32;
 }}
+/* 배너 내 Streamlit 컬럼 패딩 제거 */
+.lg-survey-banner-wrap + div [data-testid="stHorizontalBlock"] {{
+  gap: 12px !important;
+}}
+
+/* ── 설문 배너 버튼 — 우측 중앙 정렬 ── */
+div[data-testid="stHorizontalBlock"]:has(.lg-survey-banner-wrap) {{
+  align-items: center !important;
+}}
 
 /* ── 설문 모달 내부 ── */
-div[data-testid="stDialog"] [data-testid="stVerticalBlock"] {{
-  gap: 0.1rem !important;
-}}
 .sv-section-title {{
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
   color: #A50034;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  margin: 1.1rem 0 0.5rem;
-  padding-bottom: 4px;
+  margin: 14px 0 8px;
+  padding-bottom: 5px;
   border-bottom: 1.5px solid #F0F0F0;
 }}
+.sv-q-block {{
+  margin-bottom: 14px;
+}}
 .sv-q-label {{
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: #1A1A1A;
-  line-height: 1.45;
-  margin-bottom: 4px;
+  line-height: 1.5;
+  margin: 0 0 8px;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  display: block;
 }}
-div[data-testid="stDialog"] div[data-testid="stRadio"] label {{
-  font-size: 0.82rem !important;
-  color: #444 !important;
+/* 리커트 원형 버튼 */
+div[data-testid="stDialog"] [data-testid="stPills"] {{
+  gap: 6px !important;
+}}
+div[data-testid="stDialog"] [data-testid="stPills"] button {{
+  min-width: 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  transition: transform 150ms, border-color 150ms, background 150ms !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}}
+div[data-testid="stDialog"] [data-testid="stPills"] button:not([aria-pressed="true"]) {{
+  border: 2px solid #D0D0D0 !important;
+  background: #fff !important;
+  color: #555 !important;
+}}
+div[data-testid="stDialog"] [data-testid="stPills"] button:not([aria-pressed="true"]):hover {{
+  border-color: #A50034 !important;
+  color: #A50034 !important;
+  transform: scale(1.07) !important;
+}}
+div[data-testid="stDialog"] [data-testid="stPills"] button[aria-pressed="true"] {{
+  background: #A50034 !important;
+  border-color: #A50034 !important;
+  color: #fff !important;
+}}
+/* 텍스트 영역 */
+div[data-testid="stDialog"] div[data-testid="stTextArea"] {{
+  margin-top: 0 !important;
 }}
 div[data-testid="stDialog"] div[data-testid="stTextArea"] textarea {{
   border: 1.5px solid #E8E8E8 !important;
   border-radius: 10px !important;
   font-size: 0.84rem !important;
   padding: 10px 14px !important;
+  resize: vertical !important;
 }}
 div[data-testid="stDialog"] div[data-testid="stTextArea"] textarea:focus {{
   border-color: #A50034 !important;
@@ -1962,87 +2007,107 @@ def show_skip_btn():
             st.rerun()
 
 
-_LIKERT_OPTIONS = [
-    "1 — 전혀 그렇지 않다",
-    "2 — 그렇지 않은 편이다",
-    "3 — 보통이다",
-    "4 — 그런 편이다",
-    "5 — 매우 그렇다",
-]
+_LIKERT_NUMS = ["1", "2", "3", "4", "5"]
+
+
+def _sv_q(key: str, text: str) -> str | None:
+    """설문 문항 1개 렌더링 — 질문 텍스트 + pills 숫자 선택."""
+    st.markdown(f'<div class="sv-q-block"><span class="sv-q-label">{text}</span></div>', unsafe_allow_html=True)
+    val = st.pills(
+        key,
+        _LIKERT_NUMS,
+        selection_mode="single",
+        default=None,
+        label_visibility="collapsed",
+        key=f"sv_{key}",
+    )
+    return val
 
 
 @st.dialog("서비스 이용 경험 설문", width="large")
 def open_survey_dialog():
     st.markdown(
-        "<p style='font-size:0.84rem;color:#666;line-height:1.6;margin-bottom:0.8rem;'>"
-        "추천 결과를 확인하신 후 서비스 이용 경험에 대한 간단한 설문에 참여해 주세요.<br>"
+        "<p style='font-size:0.83rem;color:#666;line-height:1.6;margin:0 0 6px;'>"
+        "추천 결과를 확인하신 후 서비스 이용 경험에 대한 간단한 설문에 참여해 주세요. "
         "응답은 익명으로 처리되며 약 1분 정도 소요됩니다."
+        "</p>"
+        "<p style='font-size:0.74rem;color:#aaa;margin:0 0 4px;'>"
+        "1 = 전혀 그렇지 않다 &nbsp;·&nbsp; 5 = 매우 그렇다"
         "</p>",
         unsafe_allow_html=True,
     )
 
     st.markdown('<div class="sv-section-title">탐색 경험</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sv-q-label">Q1. 원하는 냉장고를 쉽게 찾을 수 있었다.</div>', unsafe_allow_html=True)
-    q1 = st.radio("Q1", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q1")
-
-    st.markdown('<div class="sv-q-label">Q2. 어떤 제품을 선택해야 할지 탐색 과정이 명확했다.</div>', unsafe_allow_html=True)
-    q2 = st.radio("Q2", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q2")
-
-    st.markdown('<div class="sv-q-label">Q3. 제품을 탐색하는 과정이 복잡하지 않았다.</div>', unsafe_allow_html=True)
-    q3 = st.radio("Q3", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q3")
+    q1 = _sv_q("q1", "Q1. 원하는 냉장고를 쉽게 찾을 수 있었다.")
+    q2 = _sv_q("q2", "Q2. 어떤 제품을 선택해야 할지 탐색 과정이 명확했다.")
+    q3 = _sv_q("q3", "Q3. 제품을 탐색하는 과정이 복잡하지 않았다.")
 
     st.markdown('<div class="sv-section-title">의사결정 지원</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sv-q-label">Q4. 제품 간 차이점을 이해하기 쉬웠다.</div>', unsafe_allow_html=True)
-    q4 = st.radio("Q4", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q4")
-
-    st.markdown('<div class="sv-q-label">Q5. 제품 선택에 필요한 정보를 충분히 제공받았다.</div>', unsafe_allow_html=True)
-    q5 = st.radio("Q5", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q5")
-
-    st.markdown('<div class="sv-q-label">Q6. 이 서비스는 제품 선택에 도움이 되었다.</div>', unsafe_allow_html=True)
-    q6 = st.radio("Q6", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q6")
+    q4 = _sv_q("q4", "Q4. 제품 간 차이점을 이해하기 쉬웠다.")
+    q5 = _sv_q("q5", "Q5. 제품 선택에 필요한 정보를 충분히 제공받았다.")
+    q6 = _sv_q("q6", "Q6. 이 서비스는 제품 선택에 도움이 되었다.")
 
     st.markdown('<div class="sv-section-title">선택 확신도</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sv-q-label">Q7. 최종 선택한 제품이 나의 요구에 적합하다고 생각한다.</div>', unsafe_allow_html=True)
-    q7 = st.radio("Q7", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q7")
-
-    st.markdown('<div class="sv-q-label">Q8. 실제 구매 상황에서도 이 제품을 선택할 의향이 있다.</div>', unsafe_allow_html=True)
-    q8 = st.radio("Q8", _LIKERT_OPTIONS, index=None, label_visibility="collapsed", horizontal=True, key="sv_q8")
+    q7 = _sv_q("q7", "Q7. 최종 선택한 제품이 나의 요구에 적합하다고 생각한다.")
+    q8 = _sv_q("q8", "Q8. 실제 구매 상황에서도 이 제품을 선택할 의향이 있다.")
 
     st.markdown('<div class="sv-section-title">주관식</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sv-q-label">Q9. 서비스 이용 중 가장 도움이 되었던 기능이나 정보는 무엇이었습니까?</div>', unsafe_allow_html=True)
-    q9 = st.text_area("Q9", placeholder="자유롭게 작성해 주세요.", label_visibility="collapsed", key="sv_q9", height=90)
 
-    st.markdown('<div class="sv-q-label">Q10. 개선이 필요하다고 생각한 부분이 있다면 자유롭게 작성해 주세요.</div>', unsafe_allow_html=True)
-    q10 = st.text_area("Q10", placeholder="자유롭게 작성해 주세요.", label_visibility="collapsed", key="sv_q10", height=90)
+    st.markdown(
+        '<div class="sv-q-block">'
+        '<span class="sv-q-label">Q9. 서비스 이용 중 가장 도움이 되었던 기능이나 정보는 무엇이었습니까?</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+    q9 = st.text_area(
+        "Q9 입력", placeholder="자유롭게 작성해 주세요.",
+        label_visibility="collapsed", key="sv_q9_ta", height=88,
+    )
 
-    likert_answers = [q1, q2, q3, q4, q5, q6, q7, q8]
-    all_answered = all(v is not None for v in likert_answers)
+    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+    st.markdown(
+        '<div class="sv-q-block">'
+        '<span class="sv-q-label">Q10. 개선이 필요하다고 생각한 부분이 있다면 자유롭게 작성해 주세요.</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+    q10 = st.text_area(
+        "Q10 입력", placeholder="자유롭게 작성해 주세요.",
+        label_visibility="collapsed", key="sv_q10_ta", height=88,
+    )
+
+    likert_vals = [q1, q2, q3, q4, q5, q6, q7, q8]
+    all_answered = all(v is not None for v in likert_vals)
 
     if not all_answered:
         st.caption("📌 Q1~Q8의 모든 문항에 응답하면 제출 버튼이 활성화됩니다.")
 
-    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
-    if st.button("제출하기", type="primary", use_container_width=True, disabled=not all_answered, key="sv_submit"):
-        def _parse(v):
-            return int(v.split(" — ")[0]) if v else None
-
+    if st.button("제출하기", type="primary", use_container_width=True,
+                 disabled=not all_answered, key="sv_submit"):
         DB.log_survey_response(
             session_id=st.session_state.session_id,
             responses={
-                "q1": _parse(q1), "q2": _parse(q2), "q3": _parse(q3),
-                "q4": _parse(q4), "q5": _parse(q5), "q6": _parse(q6),
-                "q7": _parse(q7), "q8": _parse(q8),
+                "q1": int(q1) if q1 else None,
+                "q2": int(q2) if q2 else None,
+                "q3": int(q3) if q3 else None,
+                "q4": int(q4) if q4 else None,
+                "q5": int(q5) if q5 else None,
+                "q6": int(q6) if q6 else None,
+                "q7": int(q7) if q7 else None,
+                "q8": int(q8) if q8 else None,
                 "q9": q9.strip() if q9 else None,
                 "q10": q10.strip() if q10 else None,
             },
         )
         st.session_state._survey_submitted = True
+        st.session_state._survey_open = False
         st.rerun()
 
 
 def render_survey_banner():
-    """결과 페이지 상단 설문 배너."""
+    """결과 페이지 상단 설문 배너 — 2열 레이아웃."""
     if st.session_state._survey_submitted:
         st.markdown(
             '<div class="lg-survey-completed">'
@@ -2053,18 +2118,24 @@ def render_survey_banner():
         )
         return
 
-    st.markdown(
-        '<div class="lg-survey-banner">'
-        '<span class="lg-survey-banner-icon">📝</span>'
-        '<div class="lg-survey-banner-title">서비스 이용 경험 설문</div>'
-        '<p class="lg-survey-banner-desc">'
-        '추천 결과를 확인하신 후 간단한 설문에 참여해 주세요.<br>'
-        '응답은 연구 목적으로만 사용되며 약 1분 정도 소요됩니다.'
-        '</p>'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-    if st.button("설문 참여하기", key="survey_open_btn", type="primary", use_container_width=False):
+    left_col, right_col = st.columns([3, 1])
+    with left_col:
+        st.markdown(
+            '<div class="lg-survey-banner-wrap">'
+            '<div class="lg-survey-banner-title">📝 서비스 이용 경험 설문</div>'
+            '<p class="lg-survey-banner-desc">'
+            '추천 결과를 확인하신 후 간단한 설문에 참여해 주세요. '
+            '응답은 연구 목적으로만 사용되며 약 1분 소요됩니다.'
+            '</p>'
+            '</div>',
+            unsafe_allow_html=True,
+        )
+    with right_col:
+        st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
+        if st.button("설문 참여하기", key="survey_open_btn", type="primary", use_container_width=True):
+            st.session_state._survey_open = True
+
+    if st.session_state._survey_open:
         open_survey_dialog()
 
 
@@ -3036,6 +3107,9 @@ elif q == "result":
             )
             st.session_state._db_logged = True
 
+        # ── 설문 배너 (정렬 기준 위) ──────────────────────────────────────
+        render_survey_banner()
+
         # ── 정렬 기준 선택 드롭다운 ──────────────────────────────────────
         sort_col, _ = st.columns([1, 2])
         with sort_col:
@@ -3059,7 +3133,6 @@ elif q == "result":
         q_count = len(st.session_state.get("history", []))
         db_total = len(PRODUCTS)
         cand_count = len(cand)
-        render_survey_banner()
         render_lg_result_page(scored_display, ans, tier, cand_count, db_total)
         render_top5_compare(scored_display)
 
