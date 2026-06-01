@@ -44,15 +44,16 @@ ADMIN_CSS = """
 .section-title { font-size: 0.72rem; font-weight: 800; color: #AAA;
                  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
 
-/* ── 탐색 효율 지표 설명 expander 텍스트 겹침 방지 ── */
-[data-testid="stExpander"] {
-  overflow: visible !important;
-}
+/* ── 탐색 효율 지표 설명 expander 내용 영역 ── */
 [data-testid="stExpanderDetails"] {
   overflow: visible !important;
   padding: 20px 16px 28px !important;
 }
-[data-testid="stExpanderDetails"] * {
+[data-testid="stExpanderDetails"] p,
+[data-testid="stExpanderDetails"] td,
+[data-testid="stExpanderDetails"] th,
+[data-testid="stExpanderDetails"] li,
+[data-testid="stExpanderDetails"] div.stMarkdown {
   word-break: keep-all !important;
   overflow-wrap: break-word !important;
 }
