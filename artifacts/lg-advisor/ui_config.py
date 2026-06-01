@@ -216,9 +216,10 @@ REFRIGERATOR_CONFIG = CategoryConfig(
             q_id="cooking",
             text="<strong>요리는 얼마나 자주</strong> 하세요?",
             options=[
-                OptionConfig("none",      "요리를 거의 안 해요", "배달·간편식 위주로",    "no-cooking"),
-                OptionConfig("sometimes", "요리를 가끔 해요",   "가끔 직접 요리해요",    "sometimes-cooking"),
-                OptionConfig("often",     "요리를 자주 해요",   "식재료를 꽤 많이 둬요", "often-cooking"),
+                OptionConfig("none",      "요리를 거의 안 해요", "배달·간편식 위주로",       "no-cooking"),
+                OptionConfig("sometimes", "요리를 가끔 해요",   "가끔 직접 요리해요",       "sometimes-cooking"),
+                OptionConfig("often",     "요리를 자주 해요",   "식재료를 꽤 많이 둬요",    "often-cooking"),
+                OptionConfig("love",      "요리를 즐겨요",      "신선 재료를 가득 보관해요", "love-cooking"),
             ],
         ),
         "door_style": QuestionConfig(

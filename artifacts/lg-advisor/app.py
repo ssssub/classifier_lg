@@ -3156,19 +3156,19 @@ elif q == "result":
 # ── 하단 네비게이션 (이전 / 처음부터 / 결과 보기) — 단일 행 ──
 if q != "result" and ans:
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-    nb, nr, ns = st.columns([1, 1, 2])
+    nb, ns, nr = st.columns([1, 2, 1])
     with nb:
         if st.button("← 이전", key="go_back", use_container_width=True):
             go_back()
             st.rerun()
-    with nr:
-        if st.button("← 처음부터", key="restart_top", use_container_width=True):
-            reset()
-            st.rerun()
     with ns:
-        if st.button("지금 바로 결과 보기", key="skip_to_result", use_container_width=True):
+        if st.button("지금 바로 결과 보기", type="primary", key="skip_to_result", use_container_width=True):
             st.session_state.click_count += 1
             st.session_state.force_result = True
+            st.rerun()
+    with nr:
+        if st.button("처음부터 →", key="restart_top", use_container_width=True):
+            reset()
             st.rerun()
 
 # ── 색상 스와치 JS (components.html → iframe → window.parent.document 접근) ──
