@@ -2851,8 +2851,11 @@ def _product_specs_for_compare(p: dict, fit: float) -> dict[str, str]:
         "냉장 용량": f"{p.get('fridge_l')}L" if p.get("fridge_l") is not None else "-",
         "냉동 용량": f"{p.get('freezer_l')}L" if p.get("freezer_l") is not None else "-",
         "에너지 등급": f"{p.get('energy')}등급" if p.get("energy") else "-",
-        "폭": f"{p.get('width')}mm" if p.get("width") else "-",
-        "제품 크기": _join_values(p.get("size_raw")),
+        "제품 크기 (너비×높이×깊이)": (
+            f"{p.get('width')}×{p.get('dim_h')}×{p.get('dim_d')} mm"
+            if p.get("width") and p.get("dim_h") and p.get("dim_d")
+            else _join_values(p.get("size_raw")) or "-"
+        ),
         "도어 재질 옵션": _join_values(p.get("materials")),
         "색상": _join_values(p.get("colors")),
         "AI 여부": "O" if p.get("is_ai") else "X",
@@ -3001,7 +3004,7 @@ elif q == "space":
     with st.container(border=True):
         col_w, col_h, col_d = st.columns(3, gap="small")
         with col_w:
-            w_str = st.text_input("폭", placeholder="폭 (cm)", key="space_w",
+            w_str = st.text_input("너비", placeholder="너비 (cm)", key="space_w",
                                   label_visibility="collapsed")
         with col_h:
             h_str = st.text_input("높이", placeholder="높이 (cm)", key="space_h",
@@ -3010,7 +3013,7 @@ elif q == "space":
             d_str = st.text_input("깊이", placeholder="깊이 (cm)", key="space_d",
                                   label_visibility="collapsed")
 
-        bad_fields = [lbl for lbl, s in [("폭", w_str), ("높이", h_str), ("깊이", d_str)]
+        bad_fields = [lbl for lbl, s in [("너비", w_str), ("높이", h_str), ("깊이", d_str)]
                       if s and s.strip() and _parse_cm(s) is None]
         if bad_fields:
             st.error(f"{', '.join(bad_fields)} 값을 숫자(cm)로 입력해주세요.")
@@ -3153,20 +3156,24 @@ elif q == "result":
 # ── 하단 네비게이션 (이전 / 처음부터 / 결과 보기) — 단일 행 ──
 if q != "result" and ans:
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-    nav_back, nav_restart, nav_gap, nav_skip = st.columns([1, 1, 2, 2])
-    with nav_back:
-        if st.button("← 이전", key="go_back", use_container_width=True):
-            go_back()
-            st.rerun()
-    with nav_restart:
-        if st.button("처음부터", key="restart_top", use_container_width=True):
-            reset()
-            st.rerun()
-    with nav_skip:
-        if st.button("지금 바로 결과 보기", key="skip_to_result", use_container_width=True):
-            st.session_state.click_count += 1
-            st.session_state.force_result = True
-            st.rerun()
+    nav_left, nav_right = st.columns([2, 3])
+    with nav_left:
+        nl1, nl2 = st.columns(2)
+        with nl1:
+            if st.button("← 이전", key="go_back", use_container_width=True):
+                go_back()
+                st.rerun()
+        with nl2:
+            if st.button("← 처음부터", key="restart_top", use_container_width=True):
+                reset()
+                st.rerun()
+    with nav_right:
+        _, skip_col = st.columns([1, 2])
+        with skip_col:
+            if st.button("지금 바로 결과 보기", key="skip_to_result", use_container_width=True):
+                st.session_state.click_count += 1
+                st.session_state.force_result = True
+                st.rerun()
 
 # ── 색상 스와치 JS (components.html → iframe → window.parent.document 접근) ──
 # React는 onclick="string" 을 거부하므로, data-* 속성에 값을 담고
