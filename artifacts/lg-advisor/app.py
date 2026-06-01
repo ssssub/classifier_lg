@@ -365,10 +365,28 @@ button.lg-skip-btn p {{
   font-size: 0.76rem !important;
   font-weight: 500 !important;
 }}
-[data-testid="stButton"]:has(button.lg-skip-btn) {{
-  display: flex !important;
-  justify-content: center !important;
-  margin: 34px auto 56px auto !important;
+/* ── 흰 컨테이너 박스 (설치공간 문항) ── */
+div[data-testid="stVerticalBlockBorderWrapper"] {{
+  border: 1.5px solid #E8E8E8 !important;
+  border-radius: 16px !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.045) !important;
+  padding: 8px 4px !important;
+  margin-bottom: 0 !important;
+}}
+
+/* ── 하단 내비게이션 ── */
+.lg-bottom-nav {{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 24px;
+}}
+.lg-bottom-nav-right {{
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }}
 
 /* ── 뒤로가기 버튼 (.lg-back-btn) ── */
@@ -1558,7 +1576,7 @@ ICON_JS = f"""
       'button.lg-skip-btn:hover{{color:#A50034!important;border-color:#A50034!important;transform:none!important;}}',
       'button.lg-skip-btn>div{{justify-content:center!important;width:auto!important;}}',
       'button.lg-skip-btn p{{display:block!important;width:auto!important;text-align:center!important;font-size:.76rem!important;font-weight:500!important;}}',
-      '[data-testid="stButton"]:has(button.lg-skip-btn){{display:flex!important;justify-content:center!important;margin:34px auto 56px auto!important;}}',
+      '[data-testid="stButton"]:has(button.lg-skip-btn){{display:flex!important;justify-content:center!important;}}',
       /* ── 뒤로가기 ── */
       'button.lg-back-btn{{background:transparent!important;border:none!important;',
       '  box-shadow:none!important;color:#AAA!important;font-size:.82rem!important;',
@@ -1607,10 +1625,6 @@ ICON_JS = f"""
         if (rawText.includes('바로 결과') || rawText.includes('모름') || rawText.includes('건너뛰기')) {{
           btn.classList.add('lg-skip-btn');
           btn.style.width = 'auto';
-          const stBtnWrap = btn.closest('[data-testid="stButton"]');
-          if (stBtnWrap) {{
-            stBtnWrap.style.cssText += 'display:flex!important;justify-content:center!important;margin:0 auto!important;';
-          }}
           return;
         }}
 
@@ -2678,32 +2692,18 @@ elif q == "install":
 
 elif q == "household":
     option_buttons("household")
-    show_skip_btn()
 
 elif q == "cooking":
     option_buttons("cooking")
-    show_skip_btn()
 
 elif q == "door_style":
     option_buttons("door_style")
-    show_skip_btn()
 
 elif q == "space":
     q_bubble(
         '<strong>설치 공간 크기를 알고 있나요?</strong>'
         '<span class="hint-block">폭·높이·깊이를 입력하면 들어가지 않는 제품을 제외해요</span>'
     )
-
-    col_w, col_h, col_d = st.columns(3, gap="small")
-    with col_w:
-        w_str = st.text_input("폭", placeholder="폭 mm", key="space_w",
-                              label_visibility="collapsed")
-    with col_h:
-        h_str = st.text_input("높이", placeholder="높이 mm", key="space_h",
-                              label_visibility="collapsed")
-    with col_d:
-        d_str = st.text_input("깊이", placeholder="깊이 mm", key="space_d",
-                              label_visibility="collapsed")
 
     def _parse_mm(s):
         if not s or not s.strip():
@@ -2714,44 +2714,51 @@ elif q == "space":
         except (ValueError, TypeError):
             return None
 
-    bad_fields = [lbl for lbl, s in [("폭", w_str), ("높이", h_str), ("깊이", d_str)]
-                  if s and s.strip() and _parse_mm(s) is None]
-    if bad_fields:
-        st.error(f"{', '.join(bad_fields)} 값을 숫자(mm)로 입력해주세요.")
+    def _save_space(skip=False):
+        _hist = st.session_state.history
+        if "space" in _hist:
+            idx = _hist.index("space")
+            for k in _hist[idx + 1:]:
+                st.session_state.answers.pop(k, None)
+            st.session_state.history = _hist[:idx + 1]
+        else:
+            _hist.append("space")
+        ans["space"] = "skip" if skip else {
+            "w": _parse_mm(st.session_state.get("space_w", "")),
+            "h": _parse_mm(st.session_state.get("space_h", "")),
+            "d": _parse_mm(st.session_state.get("space_d", "")),
+        }
 
-    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-    if st.button("이 크기로 확인", type="primary", use_container_width=True, key="space_confirm"):
-        st.session_state.click_count += 1
-        if not bad_fields:
-            dims = {"w": _parse_mm(w_str), "h": _parse_mm(h_str), "d": _parse_mm(d_str)}
-            _hist = st.session_state.history
-            if "space" in _hist:
-                idx = _hist.index("space")
-                for k in _hist[idx + 1:]:
-                    st.session_state.answers.pop(k, None)
-                st.session_state.history = _hist[:idx + 1]
-            else:
-                _hist.append("space")
-            ans["space"] = dims
-            st.rerun()
+    with st.container(border=True):
+        col_w, col_h, col_d = st.columns(3, gap="small")
+        with col_w:
+            w_str = st.text_input("폭", placeholder="폭 mm", key="space_w",
+                                  label_visibility="collapsed")
+        with col_h:
+            h_str = st.text_input("높이", placeholder="높이 mm", key="space_h",
+                                  label_visibility="collapsed")
+        with col_d:
+            d_str = st.text_input("깊이", placeholder="깊이 mm", key="space_d",
+                                  label_visibility="collapsed")
 
-    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
-    _, mid_skip, _ = st.columns([3, 4, 3])
-    with mid_skip:
-        if st.button("모름 / 건너뛰기", key="space_skip", use_container_width=False):
-            st.session_state.click_count += 1
-            _hist = st.session_state.history
-            if "space" in _hist:
-                idx = _hist.index("space")
-                for k in _hist[idx + 1:]:
-                    st.session_state.answers.pop(k, None)
-                st.session_state.history = _hist[:idx + 1]
-            else:
-                _hist.append("space")
-            ans["space"] = "skip"
-            st.rerun()
+        bad_fields = [lbl for lbl, s in [("폭", w_str), ("높이", h_str), ("깊이", d_str)]
+                      if s and s.strip() and _parse_mm(s) is None]
+        if bad_fields:
+            st.error(f"{', '.join(bad_fields)} 값을 숫자(mm)로 입력해주세요.")
 
-    show_skip_btn()
+        st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+        btn_next_col, btn_skip_col = st.columns(2, gap="small")
+        with btn_next_col:
+            if st.button("다음 →", type="primary", use_container_width=True, key="space_confirm"):
+                st.session_state.click_count += 1
+                if not bad_fields:
+                    _save_space(skip=False)
+                    st.rerun()
+        with btn_skip_col:
+            if st.button("모름 / 건너뛰기", use_container_width=True, key="space_skip"):
+                st.session_state.click_count += 1
+                _save_space(skip=True)
+                st.rerun()
 
 elif q == "features":
     cand, _ = E.filter_candidates(PRODUCTS, ans)
@@ -2769,7 +2776,6 @@ elif q == "features":
             h.append("features")
         ans["wanted_features"] = chosen
         st.rerun()
-    show_skip_btn()
 
 # ── 결과 ──
 elif q == "result":
@@ -2845,18 +2851,25 @@ elif q == "result":
         reset()
         st.rerun()
 
-# ── 하단 네비게이션 (이전 / 처음부터) ──
+# ── 하단 네비게이션 (이전 / 결과 보기 / 처음부터) — 단일 행 ──
 if q != "result" and ans:
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
-    col_prev, col_reset = st.columns(2)
-    with col_prev:
+    st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+    nav_l, nav_r = st.columns([1, 2])
+    with nav_l:
         if st.button("← 이전", key="go_back", use_container_width=True):
             go_back()
             st.rerun()
-    with col_reset:
-        if st.button("← 처음부터", key="restart_top", use_container_width=True):
-            reset()
-            st.rerun()
+    with nav_r:
+        nav_r1, nav_r2 = st.columns([3, 2])
+        with nav_r1:
+            if st.button("지금 바로 결과 보기 →", key="skip_to_result", use_container_width=True):
+                st.session_state.click_count += 1
+                st.session_state.force_result = True
+                st.rerun()
+        with nav_r2:
+            if st.button("← 처음부터", key="restart_top", use_container_width=True):
+                reset()
+                st.rerun()
 
 # ── 색상 스와치 JS (components.html → iframe → window.parent.document 접근) ──
 # React는 onclick="string" 을 거부하므로, data-* 속성에 값을 담고

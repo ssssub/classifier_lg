@@ -153,7 +153,9 @@ def log_session_result(
                 ans.get("household"),
                 ans.get("cooking"),
                 ans.get("door_style"),
-                ans.get("space"),
+                (json.dumps(ans["space"], ensure_ascii=False)
+                 if isinstance(ans.get("space"), dict)
+                 else ans.get("space")),
                 json.dumps(ans.get("wanted_features", []), ensure_ascii=False),
                 q_count,
                 int(bool(force_result)),
