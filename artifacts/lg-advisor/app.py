@@ -3156,7 +3156,7 @@ elif q == "result":
 # ── 하단 네비게이션 (이전 / 처음부터 / 결과 보기) — 단일 행 ──
 if q != "result" and ans:
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-    nb, ns, nr = st.columns([1, 1, 1])
+    nb, ns, _, nr = st.columns([1, 3, 1, 1])
     with nb:
         if st.button("← 이전", key="go_back", use_container_width=True):
             go_back()
