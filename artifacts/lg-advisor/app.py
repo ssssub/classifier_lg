@@ -374,17 +374,6 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
   padding: 8px 4px !important;
   margin-bottom: 0 !important;
 }}
-/* 흰 컨테이너 안의 primary 버튼 — 우측 정렬 + 콤팩트 */
-div[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stButton"]:has(button[data-testid="stBaseButton-primary"]) {{
-  display: flex !important;
-  justify-content: flex-end !important;
-}}
-div[data-testid="stVerticalBlockBorderWrapper"] button[data-testid="stBaseButton-primary"] {{
-  width: auto !important;
-  min-width: 0 !important;
-  padding-left: 28px !important;
-  padding-right: 28px !important;
-}}
 
 /* ── 하단 내비게이션 ── */
 .lg-bottom-nav {{
@@ -2758,18 +2747,18 @@ elif q == "space":
             st.error(f"{', '.join(bad_fields)} 값을 숫자(mm)로 입력해주세요.")
 
         st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-        btn_skip_col, btn_next_col = st.columns(2, gap="small")
+        btn_next_col, btn_skip_col = st.columns(2, gap="small")
+        with btn_next_col:
+            if st.button("다음 →", type="primary", use_container_width=True, key="space_confirm"):
+                st.session_state.click_count += 1
+                if not bad_fields:
+                    _save_space(skip=False)
+                    st.rerun()
         with btn_skip_col:
             if st.button("모름 / 건너뛰기", use_container_width=True, key="space_skip"):
                 st.session_state.click_count += 1
                 _save_space(skip=True)
                 st.rerun()
-        with btn_next_col:
-            if st.button("다음 →", type="primary", use_container_width=False, key="space_confirm"):
-                st.session_state.click_count += 1
-                if not bad_fields:
-                    _save_space(skip=False)
-                    st.rerun()
 
 elif q == "features":
     cand, _ = E.filter_candidates(PRODUCTS, ans)
@@ -2824,9 +2813,10 @@ elif q == "result":
             ranked = []
             st.stop()
 
-        # ── DB 로그 (결과 화면 최초 진입 시 1회만) — 원본 scored 기준 ──
+        # ── DB 로그 (결과 화면 최초 진입 시 1회만) ──────────────────────
         if not st.session_state._db_logged:
             q_count_log = len(st.session_state.get("history", []))
+            # 후보 감소 흐름 계산
             _cand_init, _ = E.filter_candidates(
                 PRODUCTS, {"install": ans.get("install")} if ans.get("install") else {}
             )
@@ -2849,31 +2839,12 @@ elif q == "result":
             )
             st.session_state._db_logged = True
 
-        # ── 정렬 기준 선택 드롭다운 ──────────────────────────────────────
-        sort_col, _ = st.columns([1, 2])
-        with sort_col:
-            sort_opt = st.selectbox(
-                "정렬 기준",
-                ["추천 순", "가격 낮은 순"],
-                key="result_sort",
-            )
-
-        # 선택된 정렬 기준으로 표시용 리스트 재정렬 (Top 5 후보 자체는 변경 없음)
-        if sort_opt == "가격 낮은 순":
-            scored_display = sorted(
-                scored,
-                key=lambda item: (item[2].get("price_min") or 10**12),
-            )
-            scored_display = [(fit, i + 1, p) for i, (fit, _, p) in enumerate(scored_display)]
-        else:
-            scored_display = scored
-
         # 통계 박스
         q_count = len(st.session_state.get("history", []))
         db_total = len(PRODUCTS)
         cand_count = len(cand)
-        render_lg_result_page(scored_display, ans, tier, cand_count, db_total)
-        render_top5_compare(scored_display)
+        render_lg_result_page(scored, ans, tier, cand_count, db_total)
+        render_top5_compare(scored)
 
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
     if st.button("처음부터 다시 상담", type="primary", use_container_width=True):
