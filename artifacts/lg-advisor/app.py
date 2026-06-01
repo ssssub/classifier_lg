@@ -3034,7 +3034,7 @@ elif q == "space":
 
         st.markdown(
             "<p style='text-align:center;color:#C0392B;font-size:0.82rem;margin-top:10px;'>"
-            "모르시면 비워두고 입력 완료를 눌러도 됩니다.</p>",
+            "모르시면 비워두고 입력 완료 버튼을 눌러주세요.</p>",
             unsafe_allow_html=True,
         )
 
@@ -3150,25 +3150,23 @@ elif q == "result":
         reset()
         st.rerun()
 
-# ── 하단 네비게이션 (이전 / 결과 보기 / 처음부터) — 단일 행 ──
+# ── 하단 네비게이션 (이전 / 처음부터 / 결과 보기) — 단일 행 ──
 if q != "result" and ans:
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-    nav_l, nav_r = st.columns([1, 2])
-    with nav_l:
+    nav_back, nav_restart, nav_gap, nav_skip = st.columns([1, 1, 2, 2])
+    with nav_back:
         if st.button("← 이전", key="go_back", use_container_width=True):
             go_back()
             st.rerun()
-    with nav_r:
-        nav_r1, nav_r2 = st.columns([3, 2])
-        with nav_r1:
-            if st.button("지금 바로 결과 보기 →", key="skip_to_result", use_container_width=True):
-                st.session_state.click_count += 1
-                st.session_state.force_result = True
-                st.rerun()
-        with nav_r2:
-            if st.button("← 처음부터", key="restart_top", use_container_width=True):
-                reset()
-                st.rerun()
+    with nav_restart:
+        if st.button("처음부터", key="restart_top", use_container_width=True):
+            reset()
+            st.rerun()
+    with nav_skip:
+        if st.button("지금 바로 결과 보기", key="skip_to_result", use_container_width=True):
+            st.session_state.click_count += 1
+            st.session_state.force_result = True
+            st.rerun()
 
 # ── 색상 스와치 JS (components.html → iframe → window.parent.document 접근) ──
 # React는 onclick="string" 을 거부하므로, data-* 속성에 값을 담고
