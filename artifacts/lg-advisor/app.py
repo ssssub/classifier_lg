@@ -2183,7 +2183,10 @@ def open_survey_dialog():
     q7 = _sv_q("q7", "Q7. 최종 선택한 제품이 나의 요구에 적합하다고 생각한다.")
     q8 = _sv_q("q8", "Q8. 실제 구매 상황에서도 이 제품을 선택할 의향이 있다.")
 
-    st.markdown('<div class="sv-section-title">개인 정보 <span style="color:#A50034;font-size:.75rem;">(필수)</span></div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="sv-section-title">개인 정보 <span style="color:#A50034;font-size:.75rem;">(필수)</span></div>',
+        unsafe_allow_html=True,
+    )
     st.markdown(
         '<div class="sv-q-block">'
         '<span class="sv-q-label">Q9. 나이 및 성별을 입력해주세요. <span style="color:#A50034;">*</span></span>'
@@ -2192,12 +2195,15 @@ def open_survey_dialog():
     )
     q9 = st.text_input(
         "Q9 입력",
-        placeholder="예) 30대 여성",
+        placeholder="예) 26세,여성",
         label_visibility="collapsed",
         key="sv_q9_ti",
     )
 
-    st.markdown('<div class="sv-section-title" style="margin-top:10px;">주관식 <span style="color:#999;font-size:.75rem;">(선택)</span></div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="sv-section-title" style="margin-top:10px;">주관식 <span style="color:#999;font-size:.75rem;">(선택)</span></div>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown(
         '<div class="sv-q-block">'
@@ -2247,7 +2253,7 @@ def open_survey_dialog():
     all_answered = all(v is not None for v in likert_vals) and q9_filled
 
     if not all(v is not None for v in likert_vals):
-        st.caption("📌 Q1~Q8의 모든 문항에 응답해 주세요.")
+        st.caption("📌 Q1~Q의 모든 문항에 응답해 주세요.")
     elif not q9_filled:
         st.caption("📌 Q9(나이 및 성별)을 입력해 주세요.")
 
@@ -2271,7 +2277,7 @@ def open_survey_dialog():
                 "q6": int(q6) if q6 else None,
                 "q7": int(q7) if q7 else None,
                 "q8": int(q8) if q8 else None,
-                "q9":  q9.strip()  if q9  else None,
+                "q9": q9.strip() if q9 else None,
                 "q10": q10.strip() if q10 else None,
                 "q11": q11.strip() if q11 else None,
                 "q12": q12.strip() if q12 else None,
