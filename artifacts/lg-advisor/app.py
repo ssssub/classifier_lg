@@ -2133,10 +2133,7 @@ def render_survey_banner():
     with right_col:
         st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
         if st.button("설문 참여하기", key="survey_open_btn", type="primary", use_container_width=True):
-            st.session_state._survey_open = True
-
-    if st.session_state._survey_open:
-        open_survey_dialog()
+            open_survey_dialog()
 
 
 def compute_fit_score(p: dict, ans: dict, applied_tier) -> float:
