@@ -6,8 +6,27 @@ import sqlite3
 import uuid
 from datetime import datetime
 
+
 _DB_DIR  = os.path.join(os.path.dirname(__file__), "data")
 _DB_PATH = os.path.join(_DB_DIR, "sessions.db")
+
+_CREATE_SURVEY_SQL = """
+CREATE TABLE IF NOT EXISTS survey_responses (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id        TEXT,
+    ts                TEXT NOT NULL,
+    q1                INTEGER,
+    q2                INTEGER,
+    q3                INTEGER,
+    q4                INTEGER,
+    q5                INTEGER,
+    q6                INTEGER,
+    q7                INTEGER,
+    q8                INTEGER,
+    q9                TEXT,
+    q10               TEXT
+)
+"""
 
 _CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS sessions (
@@ -94,6 +113,7 @@ def _conn() -> sqlite3.Connection:
     os.makedirs(_DB_DIR, exist_ok=True)
     c = sqlite3.connect(_DB_PATH)
     c.row_factory = sqlite3.Row
+    c.execute(_CREATE_SURVEY_SQL)
     c.execute(_CREATE_SQL)
     # 마이그레이션: 신규 컬럼 추가
     existing = {row[1] for row in c.execute("PRAGMA table_info(sessions)").fetchall()}
@@ -169,6 +189,31 @@ def log_session_result(
                 round(fe, 4),
                 round(dr, 4),
                 round(br, 4),
+            ),
+        )
+
+
+# ── 설문 응답 저장 ───────────────────────────────────────────────────
+def log_survey_response(session_id: str, responses: dict) -> None:
+    """Q1~Q10 설문 응답을 survey_responses 테이블에 저장."""
+    with _conn() as c:
+        c.execute(
+            """INSERT INTO survey_responses
+               (session_id, ts, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                session_id,
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                responses.get("q1"),
+                responses.get("q2"),
+                responses.get("q3"),
+                responses.get("q4"),
+                responses.get("q5"),
+                responses.get("q6"),
+                responses.get("q7"),
+                responses.get("q8"),
+                responses.get("q9") or None,
+                responses.get("q10") or None,
             ),
         )
 
