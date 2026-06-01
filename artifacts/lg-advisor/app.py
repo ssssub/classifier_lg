@@ -3156,24 +3156,20 @@ elif q == "result":
 # ── 하단 네비게이션 (이전 / 처음부터 / 결과 보기) — 단일 행 ──
 if q != "result" and ans:
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-    nav_left, nav_right = st.columns([2, 3])
-    with nav_left:
-        nl1, nl2 = st.columns(2)
-        with nl1:
-            if st.button("← 이전", key="go_back", use_container_width=True):
-                go_back()
-                st.rerun()
-        with nl2:
-            if st.button("← 처음부터", key="restart_top", use_container_width=True):
-                reset()
-                st.rerun()
-    with nav_right:
-        _, skip_col = st.columns([1, 2])
-        with skip_col:
-            if st.button("지금 바로 결과 보기", key="skip_to_result", use_container_width=True):
-                st.session_state.click_count += 1
-                st.session_state.force_result = True
-                st.rerun()
+    nb, nr, ns = st.columns([1, 1, 2])
+    with nb:
+        if st.button("← 이전", key="go_back", use_container_width=True):
+            go_back()
+            st.rerun()
+    with nr:
+        if st.button("← 처음부터", key="restart_top", use_container_width=True):
+            reset()
+            st.rerun()
+    with ns:
+        if st.button("지금 바로 결과 보기", key="skip_to_result", use_container_width=True):
+            st.session_state.click_count += 1
+            st.session_state.force_result = True
+            st.rerun()
 
 # ── 색상 스와치 JS (components.html → iframe → window.parent.document 접근) ──
 # React는 onclick="string" 을 거부하므로, data-* 속성에 값을 담고
