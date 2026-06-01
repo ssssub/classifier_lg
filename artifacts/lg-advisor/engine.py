@@ -93,10 +93,20 @@ def filter_candidates(products, ans):
         elif ds == "4도어_ai":
             c = [p for p in c if p["doors"] == "4도어" and p["is_ai"]]
 
-    if ans.get("space") == "slim":
-        slim = [p for p in c if p["width"] and p["width"] <= 600]
-        if slim:
-            c = slim
+    space = ans.get("space")
+    if isinstance(space, dict):
+        sw = space.get("w")
+        sh = space.get("h")
+        sd = space.get("d")
+        if sw or sh or sd:
+            filtered = [
+                p for p in c
+                if (sw is None or p.get("width") is None or p["width"] <= sw)
+                and (sh is None or p.get("dim_h") is None or p["dim_h"] <= sh)
+                and (sd is None or p.get("dim_d") is None or p["dim_d"] <= sd)
+            ]
+            if filtered:
+                c = filtered
     return c, applied_tier
 
 

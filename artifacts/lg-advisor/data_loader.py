@@ -33,6 +33,18 @@ def _width(dim):
     return int(nums[0].replace(",", "")) if nums else None
 
 
+def _dimensions(dim):
+    """(W, H, D) 파싱 — '912 x 1790 x 715' 또는 '912x1790x715' 형식."""
+    if dim is None or str(dim).strip() in ("", "nan", "-"):
+        return None, None, None
+    nums = [int(n.replace(",", "")) for n in re.findall(r"[\d,]+", str(dim))]
+    return (
+        nums[0] if len(nums) > 0 else None,
+        nums[1] if len(nums) > 1 else None,
+        nums[2] if len(nums) > 2 else None,
+    )
+
+
 def _split(val):
     if val is None or str(val).strip() in ("X", "", "nan"):
         return []
@@ -76,6 +88,8 @@ def _make_product(code, name, price_min, price_max, install, doors, total_l,
         "freezer_l": _to_int(freezer_l),
         "energy": energy_val,
         "width": _width(width),
+        "dim_h": _dimensions(size_raw)[1],
+        "dim_d": _dimensions(size_raw)[2],
         "size_raw": str(size_raw).strip() if size_raw else "-",
         "material": str(material).strip() if material else "-",
         "materials": mat_list,
@@ -186,6 +200,8 @@ def load_products(path=None):
                 "freezer_l": _to_int(r.get("냉동 용량")),
                 "energy": energy,
                 "width": _width(r.get("제품 크기 (WxHxD)")),
+                "dim_h": _dimensions(r.get("제품 크기 (WxHxD)"))[1],
+                "dim_d": _dimensions(r.get("제품 크기 (WxHxD)"))[2],
                 "size_raw": str(r.get("제품 크기 (WxHxD)", "-")).strip(),
                 "material": str(r.get("도어 재질", "-")).strip(),
                 "materials": raw_mats,

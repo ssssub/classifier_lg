@@ -269,6 +269,35 @@ GLOBAL_CSS = f"""
   line-height: 1.45;
   margin-top: 4px;
 }}
+.q-bubble .hint-block {{
+  display: block;
+  color: #9A9A9A;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 6px;
+}}
+
+/* ── 설치공간 입력창 ── */
+div[data-testid="stTextInput"] input {{
+  border: 1.5px solid #E8E8E8 !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  font-size: 0.93rem !important;
+  color: #1A1A1A !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  transition: border-color 0.18s !important;
+}}
+div[data-testid="stTextInput"] input:focus {{
+  border-color: #A50034 !important;
+  box-shadow: 0 0 0 3px rgba(165,0,52,0.08) !important;
+  outline: none !important;
+}}
+div[data-testid="stTextInput"] input::placeholder {{
+  color: #BBBBBB !important;
+  font-size: 0.88rem !important;
+}}
 
 /* ── 선택지 카드 버튼 (.lg-option-btn) ── */
 button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn) {{
@@ -1574,8 +1603,8 @@ ICON_JS = f"""
           btn.classList.add('lg-back-btn');
           return;
         }}
-        /* 바로 결과 보기 — 보조 버튼 스타일, 아이콘 처리 제외 */
-        if (rawText.includes('바로 결과')) {{
+        /* 바로 결과 보기 / 모름·건너뛰기 — 보조 버튼 스타일, 아이콘 처리 제외 */
+        if (rawText.includes('바로 결과') || rawText.includes('모름') || rawText.includes('건너뛰기')) {{
           btn.classList.add('lg-skip-btn');
           btn.style.width = 'auto';
           const stBtnWrap = btn.closest('[data-testid="stButton"]');
@@ -1687,6 +1716,21 @@ def render_header():
     if ans.get("door_style"):
         ds_map = {"양문형": "양문형", "4도어_no_ai": "4도어", "4도어_ai": "4도어 AI"}
         crumb_data.append(("door_style", ds_map.get(ans["door_style"], "")))
+
+    space_ans = ans.get("space")
+    if space_ans:
+        if space_ans == "skip":
+            crumb_data.append(("space", "설치공간 건너뜀"))
+        elif isinstance(space_ans, dict):
+            parts = []
+            if space_ans.get("w"):
+                parts.append(f"폭 {space_ans['w']}mm")
+            if space_ans.get("h"):
+                parts.append(f"높이 {space_ans['h']}mm")
+            if space_ans.get("d"):
+                parts.append(f"깊이 {space_ans['d']}mm")
+            if parts:
+                crumb_data.append(("space", " · ".join(parts)))
 
     crumbs_html = ""
     if crumb_data:
@@ -2645,7 +2689,68 @@ elif q == "door_style":
     show_skip_btn()
 
 elif q == "space":
-    option_buttons("space")
+    q_bubble(
+        '<strong>설치 공간 크기를 알고 있나요?</strong>'
+        '<span class="hint-block">폭·높이·깊이를 입력하면 들어가지 않는 제품을 제외해요</span>'
+    )
+
+    col_w, col_h, col_d = st.columns(3, gap="small")
+    with col_w:
+        w_str = st.text_input("폭", placeholder="폭 mm", key="space_w",
+                              label_visibility="collapsed")
+    with col_h:
+        h_str = st.text_input("높이", placeholder="높이 mm", key="space_h",
+                              label_visibility="collapsed")
+    with col_d:
+        d_str = st.text_input("깊이", placeholder="깊이 mm", key="space_d",
+                              label_visibility="collapsed")
+
+    def _parse_mm(s):
+        if not s or not s.strip():
+            return None
+        try:
+            val = int(float(s.strip().replace(",", "")))
+            return val if val > 0 else None
+        except (ValueError, TypeError):
+            return None
+
+    bad_fields = [lbl for lbl, s in [("폭", w_str), ("높이", h_str), ("깊이", d_str)]
+                  if s and s.strip() and _parse_mm(s) is None]
+    if bad_fields:
+        st.error(f"{', '.join(bad_fields)} 값을 숫자(mm)로 입력해주세요.")
+
+    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    if st.button("이 크기로 확인", type="primary", use_container_width=True, key="space_confirm"):
+        st.session_state.click_count += 1
+        if not bad_fields:
+            dims = {"w": _parse_mm(w_str), "h": _parse_mm(h_str), "d": _parse_mm(d_str)}
+            _hist = st.session_state.history
+            if "space" in _hist:
+                idx = _hist.index("space")
+                for k in _hist[idx + 1:]:
+                    st.session_state.answers.pop(k, None)
+                st.session_state.history = _hist[:idx + 1]
+            else:
+                _hist.append("space")
+            ans["space"] = dims
+            st.rerun()
+
+    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+    _, mid_skip, _ = st.columns([3, 4, 3])
+    with mid_skip:
+        if st.button("모름 / 건너뛰기", key="space_skip", use_container_width=False):
+            st.session_state.click_count += 1
+            _hist = st.session_state.history
+            if "space" in _hist:
+                idx = _hist.index("space")
+                for k in _hist[idx + 1:]:
+                    st.session_state.answers.pop(k, None)
+                st.session_state.history = _hist[:idx + 1]
+            else:
+                _hist.append("space")
+            ans["space"] = "skip"
+            st.rerun()
+
     show_skip_btn()
 
 elif q == "features":
