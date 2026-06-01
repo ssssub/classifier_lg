@@ -398,7 +398,7 @@ if sv_rows:
     open_cols = ["ts", "session_id", "q9", "q10", "q11", "q12"]
     open_cols = [c for c in open_cols if c in sv_df_open.columns]
     sv_open = sv_df_open[open_cols].copy()
-    col_labels = ["시각", "세션 ID", "Q9 도움된 기능", "Q10 개선 의견", "Q11 나이/성별", "Q12 전화번호"]
+    col_labels = ["시각", "세션 ID", "Q9 나이/성별", "Q10 도움된 기능", "Q11 개선 의견", "Q12 전화번호"]
     sv_open.columns = col_labels[:len(open_cols)]
     # 주관식 미응답 행 (q9~q12 모두 None) 제외
     has_text = sv_open.iloc[:, 2:].apply(

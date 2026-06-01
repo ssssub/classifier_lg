@@ -2183,26 +2183,25 @@ def open_survey_dialog():
     q7 = _sv_q("q7", "Q7. 최종 선택한 제품이 나의 요구에 적합하다고 생각한다.")
     q8 = _sv_q("q8", "Q8. 실제 구매 상황에서도 이 제품을 선택할 의향이 있다.")
 
-    st.markdown('<div class="sv-section-title">주관식</div>', unsafe_allow_html=True)
-
+    st.markdown('<div class="sv-section-title">개인 정보 <span style="color:#A50034;font-size:.75rem;">(필수)</span></div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q9. 서비스 이용 중 가장 도움이 되었던 기능이나 정보는 무엇이었습니까?</span>'
+        '<span class="sv-q-label">Q9. 나이 및 성별을 입력해주세요. <span style="color:#A50034;">*</span></span>'
         "</div>",
         unsafe_allow_html=True,
     )
-    q9 = st.text_area(
+    q9 = st.text_input(
         "Q9 입력",
-        placeholder="자유롭게 작성해 주세요.",
+        placeholder="예) 30대 여성",
         label_visibility="collapsed",
-        key="sv_q9_ta",
-        height=88,
+        key="sv_q9_ti",
     )
 
-    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+    st.markdown('<div class="sv-section-title" style="margin-top:10px;">주관식 <span style="color:#999;font-size:.75rem;">(선택)</span></div>', unsafe_allow_html=True)
+
     st.markdown(
         '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q10. 개선이 필요하다고 생각한 부분이 있다면 자유롭게 작성해 주세요. </span>'
+        '<span class="sv-q-label">Q10. 서비스 이용 중 가장 도움이 되었던 기능이나 정보는 무엇이었습니까?</span>'
         "</div>",
         unsafe_allow_html=True,
     )
@@ -2214,19 +2213,19 @@ def open_survey_dialog():
         height=88,
     )
 
-    st.markdown('<div class="sv-section-title">개인 정보 (선택)</div>', unsafe_allow_html=True)
-
+    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
     st.markdown(
         '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q11. 나이 및 성별을 입력해주세요.</span>'
+        '<span class="sv-q-label">Q11. 개선이 필요하다고 생각한 부분이 있다면 자유롭게 작성해 주세요.</span>'
         "</div>",
         unsafe_allow_html=True,
     )
-    q11 = st.text_input(
+    q11 = st.text_area(
         "Q11 입력",
-        placeholder="예) 30대 여성",
+        placeholder="자유롭게 작성해 주세요.",
         label_visibility="collapsed",
-        key="sv_q11_ti",
+        key="sv_q11_ta",
+        height=88,
     )
 
     st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
@@ -2244,10 +2243,13 @@ def open_survey_dialog():
     )
 
     likert_vals = [q1, q2, q3, q4, q5, q6, q7, q8]
-    all_answered = all(v is not None for v in likert_vals)
+    q9_filled = bool(q9 and q9.strip())
+    all_answered = all(v is not None for v in likert_vals) and q9_filled
 
-    if not all_answered:
-        st.caption("📌 Q1~Q8의 모든 문항에 응답하면 제출 버튼이 활성화됩니다.")
+    if not all(v is not None for v in likert_vals):
+        st.caption("📌 Q1~Q8의 모든 문항에 응답해 주세요.")
+    elif not q9_filled:
+        st.caption("📌 Q9(나이 및 성별)을 입력해 주세요.")
 
     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
@@ -2269,7 +2271,7 @@ def open_survey_dialog():
                 "q6": int(q6) if q6 else None,
                 "q7": int(q7) if q7 else None,
                 "q8": int(q8) if q8 else None,
-                "q9": q9.strip() if q9 else None,
+                "q9":  q9.strip()  if q9  else None,
                 "q10": q10.strip() if q10 else None,
                 "q11": q11.strip() if q11 else None,
                 "q12": q12.strip() if q12 else None,
@@ -2298,7 +2300,7 @@ def render_survey_banner():
             '<div class="lg-survey-banner-wrap">'
             '<div class="lg-survey-banner-title">📝 서비스 이용 경험 설문</div>'
             '<p class="lg-survey-banner-desc">'
-            "추천 결과를 확인하신 후 간단한 설문에 참여해 주세요. <br> 추첨을 통해 배달의 민족 기프티콘을 드립니다.<br>"
+            "추천 결과를 확인하신 후 간단한 설문에 참여해 주세요. <br> 추첨을 통해 3분께 배달의 민족 기프티콘 10000원권을 드립니다.<br>"
             "응답은 연구 목적으로만 사용되며 약 1분 소요됩니다."
             "</p>"
             "</div>",
