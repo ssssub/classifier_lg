@@ -1933,14 +1933,7 @@ def render_progress(q: str):
     if ans.get("install") != "빌트인":
         steps.append("space")
 
-    include_features = q == "features" or "wanted_features" in ans
-    if not include_features and ("space" in ans or ans.get("install") == "빌트인"):
-        cand_now, _ = E.filter_candidates(PRODUCTS, ans)
-        include_features = len(cand_now) > 1 and bool(E.available_soft_features(cand_now))
-    elif not ans.get("install"):
-        include_features = True
-    if include_features:
-        steps.append("features")
+    steps.append("features")
 
     if q not in steps:
         steps.append(q)
