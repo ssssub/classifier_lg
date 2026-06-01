@@ -1762,7 +1762,7 @@ ICON_JS = f"""
         const rawText = (btn.textContent || '').trim();
 
         /* 뒤로가기/이전/처음부터 텍스트 링크 스타일 */
-        if (rawText.startsWith('←') || rawText.startsWith('↩')) {{
+        if (rawText.startsWith('←') || rawText.startsWith('↩') || rawText === '처음부터') {{
           btn.classList.add('lg-back-btn');
           return;
         }}
