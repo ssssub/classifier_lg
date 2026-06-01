@@ -177,7 +177,7 @@ REFRIGERATOR_CONFIG = CategoryConfig(
                 OptionConfig(
                     "storage_optimizer",
                     "생활편의형",
-                    "냉장고 공간을 알차게 활용할 줄 아는 사람||공간 두 배 활용|문 안 열고 확인|정수기 기능 내장",
+                    "냉장고 기능을 알차게 활용할 줄 아는 사람||공간 두 배 활용|노크해서 내부 확인|정수기 기능 내장",
                     "storage",
                 ),
                 OptionConfig(

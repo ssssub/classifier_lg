@@ -1664,8 +1664,11 @@ ICON_JS = f"""
   }};
   const PERSONA_EMOJI = {{
     freshness: '🍃',
+    hygiene: '✨',
     saving: '⚡',
+    storage: '🛒',
     smart_home: '🤖',
+    interior: '🎨',
   }};
 
   function escapeHtml(value) {{
