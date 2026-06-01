@@ -1784,9 +1784,15 @@ ICON_JS = f"""
       '}}',
       /* ── 추가 기능 선택됨 ── */
       'button.lg-feat-selected{{',
-      '  border-color:#A50034!important;background:#FFF5F8!important;',
+      '  border:2.5px solid #A50034!important;',
+      '  background:#FFF5F8!important;',
+      '  box-shadow:0 0 0 3px rgba(165,0,52,.10)!important;',
       '}}',
-      'button.lg-feat-selected .lg-card-arrow{{color:#A50034!important;}}',
+      'button.lg-feat-selected .lg-card-title{{color:#A50034!important;font-weight:700!important;}}',
+      'button.lg-feat-selected .lg-card-arrow{{',
+      '  color:#A50034!important;font-size:1.15rem!important;',
+      '  font-weight:700!important;',
+      '}}',
       /* ── 바로 결과 보기 ── */
       'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;',
       '  box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;',
@@ -1932,7 +1938,7 @@ ICON_JS = f"""
             + '<span class="lg-card-title">' + escapeHtml(lookupTitle) + '</span>'
             + (desc ? '<span class="lg-card-desc">' + escapeHtml(desc) + '</span>' : '')
             + '</span>'
-            + '<span class="lg-card-arrow">›</span>';
+            + '<span class="lg-card-arrow">' + (isFeatureSel ? '✓' : '›') + '</span>';
         }}
         btn.dataset.lgDone = '1';
         /* 선택 상태를 항상 명시적으로 동기화 (toggle은 add/remove 모두 처리) */
