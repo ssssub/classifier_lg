@@ -183,12 +183,12 @@ REFRIGERATOR_CONFIG = CategoryConfig(
                 OptionConfig(
                     "tech_early_adopter",
                     "스마트생활형",
-                    "집 안 모든 것을 스마트하게 연결하는 사람||음성으로 조작|AI가 알아서 관리| 앱 연동 제어",
+                    "집 안 모든 것을 스마트하게 연결하는 사람||AI가 알아서 관리|앱 연동 제어|스마트 홈 연동",
                     "smart_home",
                 ),
                 OptionConfig(
                     "interior_stylist",
-                    "인테리어감성형",
+                    "인테리어 감성형",
                     "주방 분위기까지 직접 디자인하는 사람||컬러 맞춤 선택|프리미엄 소재|공간 인테리어 가전",
                     "interior",
                 ),

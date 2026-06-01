@@ -66,9 +66,7 @@ rows    = db.fetch_all()
 summary = db.fetch_summary()
 
 # ── KPI 박스 ─────────────────────────────────────────────────────────
-sat_rate_display = f"{summary['sat_rate']}%" if summary['sat_rate'] is not None else "—"
-sat_rate_color   = "red" if (summary['sat_rate'] or 0) >= 50 else "gray"
-bounce_color     = "red" if summary["bounce_rate"] > 40 else "gray"
+bounce_color = "red" if summary["bounce_rate"] > 40 else "gray"
 
 st.markdown(f"""
 <div class="kpi-grid">
@@ -120,28 +118,22 @@ st.markdown(f"""
     <div class="kpi-help">log₂초기 − log₂최종</div>
   </div>
 
-  <div class="kpi accent">
-    <div class="kpi-num {sat_rate_color}">{sat_rate_display}</div>
-    <div class="kpi-label">추천 만족율</div>
-    <div class="kpi-help">😊 {summary['sat_ok']} · 😞 {summary['sat_ng']} (총 {summary['sat_count']}건)</div>
-  </div>
-
 </div>
 """, unsafe_allow_html=True)
 
 # ── 지표 설명 ─────────────────────────────────────────────────────────
 with st.expander("📐 탐색 효율 지표 설명"):
-    st.markdown("""
-| 지표 | 계산식 | 해석 |
-|------|--------|------|
-| **이탈률** | 결과 미도달 세션 / 전체 세션 | 낮을수록 좋음 |
-| **총 클릭 수** | 선택지 버튼 클릭 횟수 합계 | 탐색 노력 지표 |
-| **체류 시간** | Q1 ~ 결과 화면 도달까지(초) | 탐색 비용 지표 |
-| **필터 효율** | (초기 후보 − 최종 후보) / 초기 | 1에 가까울수록 효과적 |
-| **판별 비율** | 최종 / 초기 | 낮을수록 구별력 높음 |
-| **해소 비트** | log₂(초기) − log₂(최종) | 정보이론적 불확실성 감소량 |
-| **탐색 만족도** | 별점 1~5 평균 | 사용자 주관적 만족 |
-""")
+    st.markdown(
+        "| 지표 | 계산식 | 해석 |\n"
+        "|------|--------|------|\n"
+        "| **이탈률** | 결과 미도달 세션 / 전체 세션 | 낮을수록 좋음 |\n"
+        "| **평균 클릭 수** | 선택지 버튼 클릭 횟수 / 완료 세션 | 탐색 노력 지표 |\n"
+        "| **평균 체류 시간** | 라이프스타일 선택 ~ 결과 도달까지(초) | 탐색 비용 지표 |\n"
+        "| **평균 답변 질문** | 실제 답변한 질문 수 평균 | 낮을수록 빠른 수렴 |\n"
+        "| **평균 1위 적합도** | 최상위 추천 모델 적합도 평균(%) | 높을수록 정확한 추천 |\n"
+        "| **필터 효율** | (초기 후보 − 최종 후보) / 초기 후보 | 1에 가까울수록 효과적 |\n"
+        "| **해소 비트** | log₂(초기 후보) − log₂(최종 후보) | 정보이론적 불확실성 감소량 |\n"
+    )
 
 # ── 액션 버튼 ─────────────────────────────────────────────────────────
 st.markdown("<div class='section-title'>데이터 관리</div>", unsafe_allow_html=True)
@@ -200,10 +192,9 @@ else:
     show_cols = [
         "ts", "completed", "install", "household", "cooking", "door_style", "space",
         "wanted_features", "q_count", "click_count", "dwell_sec", "force_result",
-        "cand_initial", "cand_after_q2", "cand_final",
+        "cand_initial", "cand_final",
         "top1_code", "top1_fit_pct",
         "filter_efficiency", "discrimination_ratio", "bits_resolved",
-        "satisfaction_score", "satisfaction_comment",
     ]
     # 존재하는 컬럼만 선택 (마이그레이션 전 레코드 대응)
     show_cols = [c for c in show_cols if c in df.columns]
@@ -227,9 +218,6 @@ else:
     if "1위 적합도(%)" in df_view.columns:
         df_view["1위 적합도(%)"] = df_view["1위 적합도(%)"].map(
             lambda x: f"{x:.1f}%" if x is not None else "")
-    if "만족여부" in df_view.columns:
-        df_view["만족여부"] = df_view["만족여부"].map(
-            lambda x: "😊 만족" if x == 1 else ("😞 불만족" if x == 0 else "—"))
 
     st.dataframe(df_view, use_container_width=True, height=500)
     st.caption(f"총 {len(df)}건 (완료 {summary['completed']}건 · 이탈 {summary['total']-summary['completed']}건) · session_id 열 제외 표시 (CSV에는 포함)")

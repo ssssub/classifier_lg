@@ -1662,6 +1662,11 @@ ICON_JS = f"""
     interior: ['#FFE6F1', '#C84A7A'],
     default: ['#F5F5F7', '#555555'],
   }};
+  const PERSONA_EMOJI = {{
+    freshness: '🍃',
+    saving: '⚡',
+    smart_home: '🤖',
+  }};
 
   function escapeHtml(value) {{
     return String(value || '').replace(/[&<>"']/g, function(ch) {{
@@ -1807,8 +1812,8 @@ ICON_JS = f"""
           p.style.cssText = 'display:block!important;width:100%!important;margin:0!important;';
           p.innerHTML =
             '<span class="lg-persona-content">'
-            + '<span class="lg-persona-icon" style="background:' + personaColor[0] + ';color:' + personaColor[1] + ';">'
-            + makeSvg(iKey) + '</span>'
+            + '<span class="lg-persona-icon" style="background:' + personaColor[0] + ';color:' + personaColor[1] + ';font-size:1.55rem;">'
+            + (PERSONA_EMOJI[iKey] || makeSvg(iKey)) + '</span>'
             + '<span class="lg-persona-title">' + escapeHtml(title) + '</span>'
             + '<span class="lg-persona-desc">' + escapeHtml(desc) + '</span>'
             + '<span class="lg-persona-chips">' + chipHtml + '</span>'
@@ -1922,13 +1927,14 @@ def render_progress(q: str):
             cand_now, _ = E.filter_candidates(PRODUCTS, ans)
             if E.needs_door_style(cand_now, ans):
                 steps.append("door_style")
-    steps.append("space")
+    if ans.get("install") != "빌트인":
+        steps.append("space")
 
     include_features = q == "features" or "wanted_features" in ans
-    if not include_features and "space" in ans:
+    if not include_features and ("space" in ans or ans.get("install") == "빌트인"):
         cand_now, _ = E.filter_candidates(PRODUCTS, ans)
         include_features = len(cand_now) > 1 and bool(E.available_soft_features(cand_now))
-    elif not ans.get("install") or "space" not in ans:
+    elif not ans.get("install"):
         include_features = True
     if include_features:
         steps.append("features")

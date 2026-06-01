@@ -40,7 +40,7 @@ LIFESTYLE_LABELS = {
     "saving_expert": "효율중시형",
     "storage_optimizer": "생활편의형",
     "tech_early_adopter": "스마트생활형",
-    "interior_stylist": "인테리어감성형",
+    "interior_stylist": "인테리어 감성형",
 }
 
 LIFESTYLE_FEATURES = {
@@ -174,8 +174,8 @@ def next_question(products, ans):
         if "door_style" not in ans and needs_door_style(cand, ans):
             return "door_style"
 
-    # Q3: 설치공간 크기 (전체 공통 — 무조건 표시)
-    if "space" not in ans:
+    # Q3: 설치공간 크기 (빌트인 제외)
+    if "space" not in ans and ans.get("install") != "빌트인":
         return "space"
 
     # Q4: 추가기능 (전체 공통 — space 포함 최신 후보 기반 채점)
