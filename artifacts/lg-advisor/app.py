@@ -1851,17 +1851,31 @@ ICON_JS = f"""
           return;
         }}
 
-        /* 이미 처리된 카드: 선택 상태(lg-feat-selected)만 갱신 후 종료 */
+        /* 이미 처리된 카드 */
         if (btn.dataset.lgDone === '1') {{
-          const _rp = btn.querySelector('p');
-          const _rt = (_rp ? _rp.textContent || '' : '').trim();
-          btn.classList.toggle('lg-feat-selected', _rt.startsWith('✓ '));
-          return;
+          if (btn.querySelector('.lg-card-title, .lg-persona-title')) {{
+            /* 카드 구조 유효: 이미 올바른 상태이므로 건너뜀 */
+            return;
+          }}
+          /* React가 p.innerHTML을 초기화함 → 완전 재처리 */
+          delete btn.dataset.lgDone;
+          btn.classList.remove('lg-feat-selected');
+          btn.classList.remove('lg-option-btn');
+          btn.classList.remove('lg-persona-btn');
+          btn.style.removeProperty('padding');
+          btn.style.removeProperty('justify-content');
+          btn.style.removeProperty('height');
+          btn.style.removeProperty('min-height');
+          btn.style.removeProperty('align-items');
         }}
 
         const p = btn.querySelector('p');
         if (!p) return;
 
+        /* p에 카드 구조가 이미 있으면 건너뜀 (idempotent guard) */
+        if (p.querySelector('.lg-card-title, .lg-persona-title')) return;
+
+        /* React가 p를 초기화한 직후에는 p.textContent = 원본 Streamlit 버튼 레이블 */
         const title = (p.textContent || '').trim();
         if (!title) return;
         const isFeatureSel = title.startsWith('✓ ');
@@ -1877,10 +1891,10 @@ ICON_JS = f"""
         const iKey = rawIKey || 'default';
         const isPersona = chips.length > 0;
 
-        /* 일반 카드 버튼 클래스 표시 */
+        /* 일반 카드 버튼 클래스 */
         btn.classList.add('lg-option-btn');
 
-        /* 인라인 스타일 직접 설정 (Emotion CSS를 확실히 오버라이드) */
+        /* 인라인 스타일 (Emotion CSS 오버라이드) */
         btn.style.justifyContent = 'flex-start';
         btn.style.padding = isPersona ? '22px 20px' : '16px 20px';
         if (isPersona) {{
@@ -1921,7 +1935,8 @@ ICON_JS = f"""
             + '<span class="lg-card-arrow">›</span>';
         }}
         btn.dataset.lgDone = '1';
-        if (isFeatureSel) btn.classList.add('lg-feat-selected');
+        /* 선택 상태를 항상 명시적으로 동기화 (toggle은 add/remove 모두 처리) */
+        btn.classList.toggle('lg-feat-selected', isFeatureSel);
         _paused = false;
       }});
 
