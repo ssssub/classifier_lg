@@ -1851,8 +1851,13 @@ ICON_JS = f"""
           return;
         }}
 
-        /* 이미 처리된 카드 건너뜀 */
-        if (btn.dataset.lgDone === '1') return;
+        /* 이미 처리된 카드: 선택 상태(lg-feat-selected)만 갱신 후 종료 */
+        if (btn.dataset.lgDone === '1') {{
+          const _rp = btn.querySelector('p');
+          const _rt = (_rp ? _rp.textContent || '' : '').trim();
+          btn.classList.toggle('lg-feat-selected', _rt.startsWith('✓ '));
+          return;
+        }}
 
         const p = btn.querySelector('p');
         if (!p) return;

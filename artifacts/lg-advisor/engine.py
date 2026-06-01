@@ -174,16 +174,17 @@ def next_question(products, ans):
         if "door_style" not in ans and needs_door_style(cand, ans):
             return "door_style"
 
-    # Q3: 설치공간 크기 (빌트인 제외)
-    if "space" not in ans and ans.get("install") != "빌트인":
-        return "space"
-
-    # Q4: 추가기능 (전체 공통 — space 포함 최신 후보 기반 채점)
+    # Q3: 추가기능 (전체 공통)
     cand, _ = filter_candidates(products, ans)
     if len(cand) <= 1:
         return "result"
     if "wanted_features" not in ans and available_soft_features(cand):
         return "features"
+
+    # Q4: 설치공간 크기 (빌트인 제외)
+    if "space" not in ans and ans.get("install") != "빌트인":
+        return "space"
+
     return "result"
 
 
