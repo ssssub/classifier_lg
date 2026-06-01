@@ -277,3 +277,32 @@ def fetch_summary() -> dict:
 
 def col_labels() -> dict:
     return _COL_LABELS
+
+
+# ── 설문 응답 조회 ────────────────────────────────────────────────────
+def fetch_survey_responses() -> list[dict]:
+    """survey_responses 테이블 전체 조회 (최신 순)."""
+    with _conn() as c:
+        rows = c.execute(
+            "SELECT * FROM survey_responses ORDER BY ts DESC"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def fetch_survey_summary() -> dict:
+    """설문 응답 요약 — 총 건수 + Q1~Q8 문항별 평균."""
+    with _conn() as c:
+        total = c.execute("SELECT COUNT(*) FROM survey_responses").fetchone()[0]
+        avgs  = {}
+        for i in range(1, 9):
+            val = c.execute(
+                f"SELECT AVG(q{i}) FROM survey_responses WHERE q{i} IS NOT NULL"
+            ).fetchone()[0]
+            avgs[f"q{i}"] = round(val, 2) if val is not None else None
+    return {"total": total, "avgs": avgs}
+
+
+def delete_survey_responses() -> None:
+    """설문 응답 전체 삭제."""
+    with _conn() as c:
+        c.execute("DELETE FROM survey_responses")
