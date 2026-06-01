@@ -1,6 +1,7 @@
 """LG 가전 상담 — 범용 프리미엄 UI.
 카테고리·질문·선택지는 모두 ui_config.py에서 주입받습니다.
 """
+
 import json
 import os
 import re
@@ -54,16 +55,16 @@ _COLOR_HEX: dict[str, str] = {
     "퓨어": "#BCBEC0",
     "다크 그라파이트": "#949496",
     "슈퍼 화이트": "#E5E7EB",
-    "그라파이트":    "#5A5A5A",
-    "크림":          "#EFE8D8",
-    "네이처 그린":   "#7C9E7E",
-    "오브제 블루":   "#8DA5BD",
-    "오브제 그린":   "#8FA67E",
-    "오브제 핑크":   "#D4A5A0",
-    "오브제 크림":   "#EFE8D8",
-    "블랙":          "#1C1C1C",
-    "미스트 블루":   "#A8BFD4",
-    "미스트 그린":   "#A8C4A4",
+    "그라파이트": "#5A5A5A",
+    "크림": "#EFE8D8",
+    "네이처 그린": "#7C9E7E",
+    "오브제 블루": "#8DA5BD",
+    "오브제 그린": "#8FA67E",
+    "오브제 핑크": "#D4A5A0",
+    "오브제 크림": "#EFE8D8",
+    "블랙": "#1C1C1C",
+    "미스트 블루": "#A8BFD4",
+    "미스트 그린": "#A8C4A4",
     "미스트 베이지": "#D8C8B4",
 }
 
@@ -140,14 +141,14 @@ def jump_to(q_id: str):
 
 # ── 추가 기능 카드 정의 (label, icon_key, desc) ────────────────────────
 FEAT_CONFIG: dict[str, tuple[str, str, str]] = {
-    "door_cooling": ("도어쿨링+",        "feat-door-cool", "문쪽까지 균일하게 냉기 순환"),
-    "uv_filter":    ("UV청정탈취필터",   "feat-uv",        "냄새·세균을 UV로 케어"),
-    "knock_on":     ("노크온",           "feat-knock",     "두드리면 냉장고 속이 보여요"),
-    "magic_space":  ("매직스페이스",     "feat-magic",     "자주 쓰는 식품 빠르게 꺼내기"),
-    "ai":           ("AI 기능",          "feat-ai",        "자동 절전·신선 케어"),
-    "voice":        ("음성인식",         "feat-voice",     "음성으로 간편하게 조작"),
-    "fresh_room":   ("신선맞춤실",       "feat-fresh",     "식품별 맞춤 보관 온도"),
-    "energy_top":   ("1등급 에너지효율", "feat-energy",    "최상위 에너지 효율 등급"),
+    "door_cooling": ("도어쿨링+", "feat-door-cool", "문쪽까지 균일하게 냉기 순환"),
+    "uv_filter": ("UV청정탈취필터", "feat-uv", "냄새·세균을 UV로 케어"),
+    "knock_on": ("노크온", "feat-knock", "두드리면 냉장고 속이 보여요"),
+    "magic_space": ("매직스페이스", "feat-magic", "자주 쓰는 식품 빠르게 꺼내기"),
+    "ai": ("AI 기능", "feat-ai", "자동 절전·신선 케어"),
+    "voice": ("음성인식", "feat-voice", "음성으로 간편하게 조작"),
+    "fresh_room": ("신선맞춤실", "feat-fresh", "식품별 맞춤 보관 온도"),
+    "energy_top": ("1등급 에너지효율", "feat-energy", "최상위 에너지 효율 등급"),
 }
 
 # ── 라벨 → 아이콘/설명 매핑 (JS에 주입) ───────────────────────────────
@@ -1961,8 +1962,9 @@ ICON_JS = f"""
 
 # ── 헬퍼 함수 ────────────────────────────────────────────────────────
 
+
 def render_header():
-    crumb_data: list[tuple[str, str]] = []   # (q_id, display_label)
+    crumb_data: list[tuple[str, str]] = []  # (q_id, display_label)
     lifestyle_label = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"))
     if lifestyle_label:
         crumb_data.append(("lifestyle", lifestyle_label))
@@ -1995,19 +1997,26 @@ def render_header():
 
     crumbs_html = ""
     if crumb_data:
-        crumbs_html = '<div class="lg-crumbs">' + "".join(
-            f'<span class="lg-crumb" data-qid="{qid}">{lbl}</span>'
-            for qid, lbl in crumb_data
-        ) + '</div>'
+        crumbs_html = (
+            '<div class="lg-crumbs">'
+            + "".join(
+                f'<span class="lg-crumb" data-qid="{qid}">{lbl}</span>'
+                for qid, lbl in crumb_data
+            )
+            + "</div>"
+        )
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div class="lg-header">
       <div class="lg-wordmark">LG Electronics</div>
       <div class="lg-title">나에게 맞는 LG {CFG.name} 찾기</div>
       <div class="lg-subtitle">{CFG.subtitle}</div>
     </div>
     {crumbs_html}
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_progress(q: str):
@@ -2026,7 +2035,11 @@ def render_progress(q: str):
     steps = ["lifestyle", "install"]
     if ans.get("install") != "빌트인":
         steps.extend(["household", "cooking"])
-        if q == "door_style" or "door_style" in ans or "door_style" in st.session_state.get("history", []):
+        if (
+            q == "door_style"
+            or "door_style" in ans
+            or "door_style" in st.session_state.get("history", [])
+        ):
             steps.append("door_style")
         elif ans.get("household") and ans.get("cooking"):
             cand_now, _ = E.filter_candidates(PRODUCTS, ans)
@@ -2068,9 +2081,9 @@ def _select_option(q_id: str, opt):
     if q_id in h:
         # 이미 답변한 질문을 다시 선택 → 이후 답변 모두 초기화
         idx = h.index(q_id)
-        for k in h[idx + 1:]:
+        for k in h[idx + 1 :]:
             st.session_state.answers.pop(k, None)
-        st.session_state.history = h[:idx + 1]
+        st.session_state.history = h[: idx + 1]
     else:
         h.append(q_id)
     ans[q_id] = opt.value
@@ -2087,25 +2100,33 @@ def option_buttons(q_id: str):
     if q_id == "lifestyle":
         for row_start in range(0, len(q_cfg.options), 3):
             cols = st.columns(3, gap="medium")
-            for col, opt in zip(cols, q_cfg.options[row_start:row_start + 3]):
+            for col, opt in zip(cols, q_cfg.options[row_start : row_start + 3]):
                 with col:
-                    if st.button(opt.label, key=f"opt_{q_id}_{opt.value}", use_container_width=True):
+                    if st.button(
+                        opt.label,
+                        key=f"opt_{q_id}_{opt.value}",
+                        use_container_width=True,
+                    ):
                         _select_option(q_id, opt)
         return
 
     for opt in q_cfg.options:
-        if st.button(opt.label, key=f"opt_{q_id}_{opt.value}", use_container_width=True):
+        if st.button(
+            opt.label, key=f"opt_{q_id}_{opt.value}", use_container_width=True
+        ):
             _select_option(q_id, opt)
 
 
 def show_skip_btn():
     """현재까지 답한 조건만으로 바로 결과 보기 — 보조 버튼."""
-    if not ans:   # 아직 아무것도 답하지 않은 첫 화면엔 표시 안 함
+    if not ans:  # 아직 아무것도 답하지 않은 첫 화면엔 표시 안 함
         return
     st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
     _, mid, _ = st.columns([3, 4, 3])
     with mid:
-        if st.button("지금 바로 결과 보기 →", key="skip_to_result", use_container_width=False):
+        if st.button(
+            "지금 바로 결과 보기 →", key="skip_to_result", use_container_width=False
+        ):
             st.session_state.click_count += 1
             st.session_state.force_result = True
             st.rerun()
@@ -2116,7 +2137,10 @@ _LIKERT_NUMS = ["1", "2", "3", "4", "5"]
 
 def _sv_q(key: str, text: str) -> str | None:
     """설문 문항 1개 렌더링 — 질문 텍스트 + pills 숫자 선택."""
-    st.markdown(f'<div class="sv-q-block"><span class="sv-q-label">{text}</span></div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="sv-q-block"><span class="sv-q-label">{text}</span></div>',
+        unsafe_allow_html=True,
+    )
     val = st.pills(
         key,
         _LIKERT_NUMS,
@@ -2146,12 +2170,16 @@ def open_survey_dialog():
     q2 = _sv_q("q2", "Q2. 어떤 제품을 선택해야 할지 탐색 과정이 명확했다.")
     q3 = _sv_q("q3", "Q3. 제품을 탐색하는 과정이 복잡하지 않았다.")
 
-    st.markdown('<div class="sv-section-title">의사결정 지원</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="sv-section-title">의사결정 지원</div>', unsafe_allow_html=True
+    )
     q4 = _sv_q("q4", "Q4. 제품 간 차이점을 이해하기 쉬웠다.")
     q5 = _sv_q("q5", "Q5. 제품 선택에 필요한 정보를 충분히 제공받았다.")
     q6 = _sv_q("q6", "Q6. 이 서비스는 제품 선택에 도움이 되었다.")
 
-    st.markdown('<div class="sv-section-title">선택 확신도</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="sv-section-title">선택 확신도</div>', unsafe_allow_html=True
+    )
     q7 = _sv_q("q7", "Q7. 최종 선택한 제품이 나의 요구에 적합하다고 생각한다.")
     q8 = _sv_q("q8", "Q8. 실제 구매 상황에서도 이 제품을 선택할 의향이 있다.")
 
@@ -2160,24 +2188,59 @@ def open_survey_dialog():
     st.markdown(
         '<div class="sv-q-block">'
         '<span class="sv-q-label">Q9. 서비스 이용 중 가장 도움이 되었던 기능이나 정보는 무엇이었습니까?</span>'
-        '</div>',
+        "</div>",
         unsafe_allow_html=True,
     )
     q9 = st.text_area(
-        "Q9 입력", placeholder="자유롭게 작성해 주세요.",
-        label_visibility="collapsed", key="sv_q9_ta", height=88,
+        "Q9 입력",
+        placeholder="자유롭게 작성해 주세요.",
+        label_visibility="collapsed",
+        key="sv_q9_ta",
+        height=88,
     )
 
     st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
     st.markdown(
         '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q10. 개선이 필요하다고 생각한 부분이 있다면 자유롭게 작성해 주세요.</span>'
-        '</div>',
+        '<span class="sv-q-label">Q10. 개선이 필요하다고 생각한 부분이 있다면 자유롭게 작성해 주세요. </span>'
+        "</div>",
         unsafe_allow_html=True,
     )
     q10 = st.text_area(
-        "Q10 입력", placeholder="자유롭게 작성해 주세요.",
-        label_visibility="collapsed", key="sv_q10_ta", height=88,
+        "Q10 입력",
+        placeholder="자유롭게 작성해 주세요.",
+        label_visibility="collapsed",
+        key="sv_q10_ta",
+        height=88,
+    )
+
+    st.markdown('<div class="sv-section-title">개인 정보 (선택)</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="sv-q-block">'
+        '<span class="sv-q-label">Q11. 나이 및 성별을 입력해주세요.</span>'
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    q11 = st.text_input(
+        "Q11 입력",
+        placeholder="예) 30대 여성",
+        label_visibility="collapsed",
+        key="sv_q11_ti",
+    )
+
+    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+    st.markdown(
+        '<div class="sv-q-block">'
+        '<span class="sv-q-label">Q12. 기프티콘 추첨을 원하시면 전화번호를 기입해주세요.</span>'
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    q12 = st.text_input(
+        "Q12 입력",
+        placeholder="예) 010-1234-5678",
+        label_visibility="collapsed",
+        key="sv_q12_ti",
     )
 
     likert_vals = [q1, q2, q3, q4, q5, q6, q7, q8]
@@ -2188,8 +2251,13 @@ def open_survey_dialog():
 
     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
-    if st.button("제출하기", type="primary", use_container_width=True,
-                 disabled=not all_answered, key="sv_submit"):
+    if st.button(
+        "제출하기",
+        type="primary",
+        use_container_width=True,
+        disabled=not all_answered,
+        key="sv_submit",
+    ):
         DB.log_survey_response(
             session_id=st.session_state.session_id,
             responses={
@@ -2203,6 +2271,8 @@ def open_survey_dialog():
                 "q8": int(q8) if q8 else None,
                 "q9": q9.strip() if q9 else None,
                 "q10": q10.strip() if q10 else None,
+                "q11": q11.strip() if q11 else None,
+                "q12": q12.strip() if q12 else None,
             },
         )
         st.session_state._survey_submitted = True
@@ -2216,8 +2286,8 @@ def render_survey_banner():
         st.markdown(
             '<div class="lg-survey-completed">'
             '<span style="font-size:1.1rem;">✅</span>'
-            '<span>설문 참여 완료 — 소중한 의견 감사합니다.</span>'
-            '</div>',
+            "<span>설문 참여 완료 — 소중한 의견 감사합니다.</span>"
+            "</div>",
             unsafe_allow_html=True,
         )
         return
@@ -2228,21 +2298,26 @@ def render_survey_banner():
             '<div class="lg-survey-banner-wrap">'
             '<div class="lg-survey-banner-title">📝 서비스 이용 경험 설문</div>'
             '<p class="lg-survey-banner-desc">'
-            '추천 결과를 확인하신 후 간단한 설문에 참여해 주세요.<br>'
-            '응답은 연구 목적으로만 사용되며 약 1분 소요됩니다.'
-            '</p>'
-            '</div>',
+            "추천 결과를 확인하신 후 간단한 설문에 참여해 주세요. <br> 추첨을 통해 배달의 민족 기프티콘을 드립니다.<br>"
+            "응답은 연구 목적으로만 사용되며 약 1분 소요됩니다."
+            "</p>"
+            "</div>",
             unsafe_allow_html=True,
         )
     with right_col:
         st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
-        if st.button("설문 참여하기", key="survey_open_btn", type="primary", use_container_width=True):
+        if st.button(
+            "설문 참여하기",
+            key="survey_open_btn",
+            type="primary",
+            use_container_width=True,
+        ):
             open_survey_dialog()
 
 
 def compute_fit_score(p: dict, ans: dict, applied_tier) -> float:
     """UI 표시용 종합 적합도 (0.0~1.0). 후보 필터링 로직은 engine.py 그대로."""
-    parts: list[tuple[float, float]] = []   # (score, weight)
+    parts: list[tuple[float, float]] = []  # (score, weight)
 
     # ① 용량 적합도 (40%) — 목표 tier와의 거리
     if applied_tier and p.get("total_l"):
@@ -2279,10 +2354,14 @@ def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
     rows: list[dict] = []
 
     # 설치 — 하드 필터 통과한 후보이므로 항상 100
-    inst_label = {"빌트인": "빌트인", "Fit & Max": "Fit & Max",
-                  "프리스탠딩": "프리스탠딩"}.get(p.get("install", ""), p.get("install", ""))
-    rows.append({"label": "설치", "score": 100,
-                 "bullet": f"{inst_label} 타입에 딱 맞아요"})
+    inst_label = {
+        "빌트인": "빌트인",
+        "Fit & Max": "Fit & Max",
+        "프리스탠딩": "프리스탠딩",
+    }.get(p.get("install", ""), p.get("install", ""))
+    rows.append(
+        {"label": "설치", "score": 100, "bullet": f"{inst_label} 타입에 딱 맞아요"}
+    )
 
     # 용량 — 목표 tier와의 거리(단계당 25점 감점)
     if applied_tier and p.get("total_l"):
@@ -2296,8 +2375,9 @@ def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
             bullet = f"목표 용량({tier_name})과 한 단계 차이나요"
         else:
             bullet = ""
-        rows.append({"label": "용량", "score": score,
-                     "bullet": bullet if score >= 75 else ""})
+        rows.append(
+            {"label": "용량", "score": score, "bullet": bullet if score >= 75 else ""}
+        )
 
     # 예산 — 현재 질문에 없으므로 ans에 budget 키가 있을 때만 표시
     budget = ans.get("budget")
@@ -2309,8 +2389,13 @@ def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
             else:
                 b_score = max(0, round(budget / price * 100))
                 bullet = ""
-            rows.append({"label": "예산", "score": b_score,
-                         "bullet": bullet if b_score >= 75 else ""})
+            rows.append(
+                {
+                    "label": "예산",
+                    "score": b_score,
+                    "bullet": bullet if b_score >= 75 else "",
+                }
+            )
 
     # 기능 — 라이프스타일/원하는 기능 충족 비율
     wanted = set(ans.get("wanted_features", [])) | E.lifestyle_feature_set(ans)
@@ -2324,8 +2409,13 @@ def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
             bullet = ", ".join(labels) + " 등을 갖췄어요"
         else:
             bullet = ""
-        rows.append({"label": "기능", "score": f_score,
-                     "bullet": bullet if f_score >= 75 else ""})
+        rows.append(
+            {
+                "label": "기능",
+                "score": f_score,
+                "bullet": bullet if f_score >= 75 else "",
+            }
+        )
 
     # 에너지 — 1등급 100, 2등급 85, 3등급 70, 4등급 55
     energy = p.get("energy")
@@ -2340,15 +2430,20 @@ def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
             bullet = f"에너지 {energy}등급이에요"
         else:
             bullet = ""
-        rows.append({"label": "에너지", "score": e_score,
-                     "bullet": bullet if e_score >= 75 else ""})
+        rows.append(
+            {
+                "label": "에너지",
+                "score": e_score,
+                "bullet": bullet if e_score >= 75 else "",
+            }
+        )
 
     return rows
 
 
 def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
     """rank: 1-based 순위, fit: 0.0~1.0 적합도."""
-    is_top = (rank == 1)
+    is_top = rank == 1
     card_cls = "res-card top-pick" if is_top else "res-card"
     rank_cls = "res-rank top" if is_top else "res-rank"
     pct = round(fit * 100)
@@ -2364,9 +2459,14 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         badge_html = ""
 
     price_str = (
-        f"{p['price_min']:,}원" if p["price_min"] == p["price_max"]
-        else f"{p['price_min']:,} ~ {p['price_max']:,}원"
-    ) if p.get("price_min") else "가격 미정"
+        (
+            f"{p['price_min']:,}원"
+            if p["price_min"] == p["price_max"]
+            else f"{p['price_min']:,} ~ {p['price_max']:,}원"
+        )
+        if p.get("price_min")
+        else "가격 미정"
+    )
     color_str = ", ".join(p["colors"][:4]) if p.get("colors") else "—"
     chips_html = "".join(
         f'<span class="res-chip">{SOFT_FEATURES[k][0].split(" (")[0]}</span>'
@@ -2382,14 +2482,12 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         bullet_items = "".join(
             f'<div class="bd-bullet-item">'
             f'<div class="bd-bullet-dot"></div>'
-            f'<span>{b}</span></div>'
+            f"<span>{b}</span></div>"
             for b in good_bullets
         )
         bullets_html = (
             '<div class="bd-bullets">'
-            '<div class="bd-bullets-title">잘 맞는 조건</div>'
-            + bullet_items +
-            '</div>'
+            '<div class="bd-bullets-title">잘 맞는 조건</div>' + bullet_items + "</div>"
         )
     else:
         bullets_html = ""
@@ -2398,30 +2496,30 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
     bar_rows_html = ""
     for row in breakdown:
         s = row["score"]
-        fill_cls = "bd-fill" if s >= 75 else ("bd-fill mid" if s >= 50 else "bd-fill low")
+        fill_cls = (
+            "bd-fill" if s >= 75 else ("bd-fill mid" if s >= 50 else "bd-fill low")
+        )
         bar_rows_html += (
             f'<div class="bd-row">'
             f'<span class="bd-label">{row["label"]}</span>'
             f'<div class="bd-track"><div class="{fill_cls}" style="width:{s}%;"></div></div>'
             f'<span class="bd-pct">{s}%</span>'
-            f'</div>'
+            f"</div>"
         )
     bars_html = (
         '<div class="bd-section">'
-        '<div class="bd-section-title">조건별 적합도</div>'
-        + bar_rows_html +
-        '</div>'
+        '<div class="bd-section-title">조건별 적합도</div>' + bar_rows_html + "</div>"
     )
 
     # ── SKU 색상 스와치 섹션 ──────────────────────────────────────────
-    rep_code   = p.get("code", "")
-    sku        = _SKU_INDEX.get(rep_code)
-    variants   = sku["variants"] if sku else []
+    rep_code = p.get("code", "")
+    sku = _SKU_INDEX.get(rep_code)
+    variants = sku["variants"] if sku else []
 
     # 초기 표시값: variants[0] 또는 제품 기본값
-    init_v     = variants[0] if variants else {}
-    init_code  = init_v.get("code")  or rep_code
-    init_mat   = init_v.get("material") or p.get("material", "")
+    init_v = variants[0] if variants else {}
+    init_code = init_v.get("code") or rep_code
+    init_mat = init_v.get("material") or p.get("material", "")
     init_price = init_v.get("price")
     if init_price:
         disp_price = f"{int(init_price):,}원"
@@ -2429,19 +2527,19 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
         disp_price = price_str  # data_loader 계산값 그대로
 
     ccode_id = f"card-code-{rank}"
-    cprc_id  = f"card-price-{rank}"
-    cmat_id  = f"card-mat-{rank}"
+    cprc_id = f"card-price-{rank}"
+    cmat_id = f"card-mat-{rank}"
 
     if sku and len(variants) > 1:
         # 여러 색상 → 클릭형 스와치
         chip_items = ""
         for idx, v in enumerate(variants):
-            cname     = v.get("color", "")
+            cname = v.get("color", "")
             swatch_style = _color_swatch_style(cname)
             active_cls = "active" if idx == 0 else ""
-            v_code      = v.get("code")     or ""
-            v_mat       = v.get("material") or ""
-            v_price     = int(v.get("price") or 0)
+            v_code = v.get("code") or ""
+            v_mat = v.get("material") or ""
+            v_price = int(v.get("price") or 0)
             v_price_fmt = f"{v_price:,}원" if v_price else ""
             # onclick 대신 data-* 속성 → SWATCH_JS가 이벤트 리스너 부착
             chip_items += (
@@ -2452,10 +2550,14 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
                 f' data-mat="{v_mat}"'
                 f' data-url="{_lge_product_url(v_code)}">'
                 f'<span class="cs-dot" style="{swatch_style}"></span>'
-                f'{cname}</button>'
+                f"{cname}</button>"
             )
 
-        mat_display = f'<span class="cs-info-sep">·</span><span class="cs-info-label">재질</span><span class="cs-info-val" id="{cmat_id}">{init_mat}</span>' if init_mat else f'<span id="{cmat_id}"></span>'
+        mat_display = (
+            f'<span class="cs-info-sep">·</span><span class="cs-info-label">재질</span><span class="cs-info-val" id="{cmat_id}">{init_mat}</span>'
+            if init_mat
+            else f'<span id="{cmat_id}"></span>'
+        )
 
         sku_html = (
             '<div class="cs-section">'
@@ -2464,62 +2566,70 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
             '<div class="cs-info-row">'
             '<span class="cs-info-label">모델 코드</span>'
             f'<span class="cs-info-val" id="{ccode_id}">{init_code}</span>'
-            f'{mat_display}'
-            '</div>'
-            '</div>'
+            f"{mat_display}"
+            "</div>"
+            "</div>"
         )
     elif sku and len(variants) == 1:
         # 색상 1종 → 스와치 없이 정보만 표시
         single_color = variants[0].get("color", "")
         swatch_style = _color_swatch_style(single_color)
         mat_display = (
-            f'<span class="cs-info-sep">·</span>'
-            f'<span class="cs-info-label">재질</span>'
-            f'<span class="cs-info-val" id="{cmat_id}">{init_mat}</span>'
-        ) if init_mat else f'<span id="{cmat_id}"></span>'
+            (
+                f'<span class="cs-info-sep">·</span>'
+                f'<span class="cs-info-label">재질</span>'
+                f'<span class="cs-info-val" id="{cmat_id}">{init_mat}</span>'
+            )
+            if init_mat
+            else f'<span id="{cmat_id}"></span>'
+        )
         sku_html = (
             '<div class="cs-section">'
             '<div class="cs-chips" style="margin-bottom:10px;">'
             f'<span class="cs-chip active" style="cursor:default;">'
             f'<span class="cs-dot" style="{swatch_style}"></span>'
-            f'{single_color}</span></div>'
+            f"{single_color}</span></div>"
             '<div class="cs-info-row">'
             '<span class="cs-info-label">모델 코드</span>'
             f'<span class="cs-info-val" id="{ccode_id}">{init_code}</span>'
-            f'{mat_display}'
-            '</div>'
-            '</div>'
+            f"{mat_display}"
+            "</div>"
+            "</div>"
         )
     else:
         # SKU 데이터 없음 → 기존 드롭다운 폴백
         def _opts(vals):
-            return "".join(f'<option>{v}</option>' for v in vals)
+            return "".join(f"<option>{v}</option>" for v in vals)
+
         colors_sel = p.get("colors") or []
-        mats_sel   = p.get("materials") or [p.get("material", "-")]
-        codes_sel  = p.get("model_codes") or [p.get("code", "-")]
-        color_opts = _opts(colors_sel) if colors_sel else '<option>-</option>'
-        mat_opts   = _opts(mats_sel)
-        code_opts  = _opts(codes_sel)
-        linked     = (len(colors_sel) == len(codes_sel) and len(colors_sel) > 0)
-        cid = f"sel-color-{rank}"; kid = f"sel-code-{rank}"; mid_id = f"sel-mat-{rank}"
+        mats_sel = p.get("materials") or [p.get("material", "-")]
+        codes_sel = p.get("model_codes") or [p.get("code", "-")]
+        color_opts = _opts(colors_sel) if colors_sel else "<option>-</option>"
+        mat_opts = _opts(mats_sel)
+        code_opts = _opts(codes_sel)
+        linked = len(colors_sel) == len(codes_sel) and len(colors_sel) > 0
+        cid = f"sel-color-{rank}"
+        kid = f"sel-code-{rank}"
+        mid_id = f"sel-mat-{rank}"
         if linked:
             co = f"var i=this.selectedIndex;document.getElementById('{kid}').selectedIndex=i;"
             ko = f"var i=this.selectedIndex;document.getElementById('{cid}').selectedIndex=i;"
             color_sel_tag = f'<select class="spec-sel" id="{cid}" onchange="{co}">{color_opts}</select>'
-            code_sel_tag  = f'<select class="spec-sel" id="{kid}" onchange="{ko}">{code_opts}</select>'
+            code_sel_tag = f'<select class="spec-sel" id="{kid}" onchange="{ko}">{code_opts}</select>'
         else:
             color_sel_tag = f'<select class="spec-sel" id="{cid}">{color_opts}</select>'
-            code_sel_tag  = f'<select class="spec-sel" id="{kid}">{code_opts}</select>'
+            code_sel_tag = f'<select class="spec-sel" id="{kid}">{code_opts}</select>'
         sku_html = (
             '<div class="spec-sel-section">'
             f'<div class="spec-sel-wrap"><div class="spec-sel-label">색상</div>{color_sel_tag}</div>'
             f'<div class="spec-sel-wrap"><div class="spec-sel-label">도어 재질</div>'
             f'<select class="spec-sel" id="{mid_id}">{mat_opts}</select></div>'
             f'<div class="spec-sel-wrap"><div class="spec-sel-label">모델 코드</div>{code_sel_tag}</div>'
-            '</div>'
+            "</div>"
         )
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div class="{card_cls}">
       <div class="res-fit-row">
         <div>
@@ -2534,25 +2644,35 @@ def show_result_card(p: dict, rank: int, fit: float, ans: dict, applied_tier):
           </div>
         </div>
       </div>
-      <div class="res-name">{p['name']}</div>
-      <div class="res-spec"><span id="{ccode_id}-spec">{init_code}</span> &nbsp;·&nbsp; {p.get('install','—')} &nbsp;·&nbsp;
-        {p.get('doors','—')} &nbsp;·&nbsp; 총 {p.get('total_l') or '—'}L &nbsp;·&nbsp; 에너지 {p.get('energy') or '—'}등급
-        &nbsp;·&nbsp; {p.get('size_raw','—')}</div>
+      <div class="res-name">{p["name"]}</div>
+      <div class="res-spec"><span id="{ccode_id}-spec">{init_code}</span> &nbsp;·&nbsp; {p.get("install", "—")} &nbsp;·&nbsp;
+        {p.get("doors", "—")} &nbsp;·&nbsp; 총 {p.get("total_l") or "—"}L &nbsp;·&nbsp; 에너지 {p.get("energy") or "—"}등급
+        &nbsp;·&nbsp; {p.get("size_raw", "—")}</div>
       <div class="res-price"><span id="{cprc_id}">{disp_price}</span></div>
       <div class="res-chips">{chips_html}</div>
       {sku_html}
       {bullets_html}
       {bars_html}
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
-def render_lg_result_page(scored: list[tuple[float, int, dict]], ans: dict, applied_tier, cand_count: int, db_total: int) -> None:
+def render_lg_result_page(
+    scored: list[tuple[float, int, dict]],
+    ans: dict,
+    applied_tier,
+    cand_count: int,
+    db_total: int,
+) -> None:
     """Render the final result with the LG result-screen visual system."""
     lifestyle = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"), "고객")
     q_count = len(st.session_state.get("history", []))
     total = len(scored)
-    carousel_id = "lgc-" + "".join(ch for ch in st.session_state.session_id if ch.isalnum())[:10]
+    carousel_id = (
+        "lgc-" + "".join(ch for ch in st.session_state.session_id if ch.isalnum())[:10]
+    )
     slides = "".join(
         f'<section class="lg-carousel-slide">{_lg_result_card_html(fit, rank, p, ans, applied_tier, total)}</section>'
         for fit, rank, p in scored
@@ -2584,7 +2704,9 @@ def render_lg_result_page(scored: list[tuple[float, int, dict]], ans: dict, appl
     st.markdown(html, unsafe_allow_html=True)
 
 
-def _lg_result_card_html(fit: float, rank: int, p: dict, ans: dict, applied_tier, total: int) -> str:
+def _lg_result_card_html(
+    fit: float, rank: int, p: dict, ans: dict, applied_tier, total: int
+) -> str:
     sku_html, init_code, init_mat, init_price = _lg_sku_html(p, rank)
     reasons = _lg_reason_tags(p, ans, applied_tier)
     ai_text = _lg_ai_text(p, ans, applied_tier, reasons)
@@ -2635,7 +2757,7 @@ def _lg_carousel_nav(total: int, carousel_id: str) -> str:
         f'<button class="lg-arrow disabled" type="button" data-carousel="{carousel_id}" data-dir="-1" aria-label="이전 추천 보기" disabled>‹</button>'
         f'<div class="lg-slide-count">추천 <span class="lg-current">1</span> / {total}</div>'
         f'<button class="lg-arrow" type="button" data-carousel="{carousel_id}" data-dir="1" aria-label="다음 추천 보기">›</button>'
-        '</div>'
+        "</div>"
     )
 
 
@@ -2665,11 +2787,19 @@ def _lg_price_html(value) -> str:
 
 def _lge_product_url(code: str | None) -> str:
     safe_code = re.sub(r"[^0-9A-Za-z_-]", "", str(code or "").strip()).lower()
-    return f"https://www.lge.co.kr/refrigerators/{safe_code}" if safe_code else "https://www.lge.co.kr/refrigerators"
+    return (
+        f"https://www.lge.co.kr/refrigerators/{safe_code}"
+        if safe_code
+        else "https://www.lge.co.kr/refrigerators"
+    )
 
 
 def _color_name_parts(color_name: str) -> list[str]:
-    parts = [part.strip() for part in re.split(r"\s*/\s*", str(color_name or "")) if part.strip()]
+    parts = [
+        part.strip()
+        for part in re.split(r"\s*/\s*", str(color_name or ""))
+        if part.strip()
+    ]
     return parts[:2] if parts else [str(color_name or "").strip()]
 
 
@@ -2702,7 +2832,11 @@ def _color_swatch_style(color_name: str) -> str:
     parts = _color_name_parts(color_name)
     top = _lookup_color_hex(parts[0])
     bottom = _lookup_color_hex(parts[1]) if len(parts) > 1 else top
-    border = "rgba(0,0,0,0.18)" if _is_light_hex(top) or _is_light_hex(bottom) else "rgba(0,0,0,0.08)"
+    border = (
+        "rgba(0,0,0,0.18)"
+        if _is_light_hex(top) or _is_light_hex(bottom)
+        else "rgba(0,0,0,0.08)"
+    )
     if len(parts) > 1:
         background = f"linear-gradient(to bottom, {top} 0 50%, {bottom} 50% 100%)"
     else:
@@ -2745,18 +2879,28 @@ def _lg_reason_tags(p: dict, ans: dict, applied_tier) -> str:
         rows.append(f"에너지 {p.get('energy')}등급")
     if p.get("doors"):
         rows.append(str(p.get("doors")))
-    return "".join(f'<span class="lg-tag">{_html(text)}</span>' for text in rows if text)
+    return "".join(
+        f'<span class="lg-tag">{_html(text)}</span>' for text in rows if text
+    )
 
 
 def _lg_ai_text(p: dict, ans: dict, applied_tier, reason_tags: str) -> str:
     lifestyle = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"), "고객")
     hit_features = sorted(E.lifestyle_feature_set(ans) & p.get("features", set()))
-    feature_text = ", ".join(f"<strong>{_html(_lg_feature_name(key))}</strong>" for key in hit_features[:3])
+    feature_text = ", ".join(
+        f"<strong>{_html(_lg_feature_name(key))}</strong>" for key in hit_features[:3]
+    )
     if not feature_text:
         feature_text = "<strong>선택 조건</strong>"
     capacity = f"{p.get('total_l')}L" if p.get("total_l") else "현재 후보군"
-    energy = f"에너지 {p.get('energy')}등급" if p.get("energy") else "에너지 정보 확인 필요"
-    tier_text = f"{E.TIER_LABEL.get(applied_tier)} 기준에 맞춰" if applied_tier else "선택한 조건을 기준으로"
+    energy = (
+        f"에너지 {p.get('energy')}등급" if p.get("energy") else "에너지 정보 확인 필요"
+    )
+    tier_text = (
+        f"{E.TIER_LABEL.get(applied_tier)} 기준에 맞춰"
+        if applied_tier
+        else "선택한 조건을 기준으로"
+    )
     return (
         f"{_html(lifestyle)} 성향과 답변을 함께 보면 이 모델이 가장 안정적인 선택이에요. "
         f"{feature_text} 조건을 중심으로 잘 맞고, {_html(tier_text)} {_html(capacity)} 용량과 "
@@ -2778,7 +2922,7 @@ def _lg_check_bars(p: dict, ans: dict, applied_tier) -> str:
             f'<span class="lg-bar-label">{_html(row["label"])}</span>'
             f'<div class="lg-bar-track"><div class="{cls}" style="width:{score}%;"></div></div>'
             f'<span class="lg-bar-num">{value}</span>'
-            f'</div>'
+            f"</div>"
         )
     return "".join(rows)
 
@@ -2791,7 +2935,9 @@ def _lg_keyword_chips(p: dict, ans: dict) -> str:
         chips.append("+ 에너지 1등급")
     if not chips:
         chips.append("+ 기본 조건 충족")
-    return "".join(f'<span class="lg-keyword">{_html(chip)}</span>' for chip in chips[:4])
+    return "".join(
+        f'<span class="lg-keyword">{_html(chip)}</span>' for chip in chips[:4]
+    )
 
 
 def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
@@ -2834,7 +2980,7 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
                 f' data-spec="{_html(v_spec)}"'
                 f' data-url="{_html(_lge_product_url(v_code))}">'
                 f'<span class="cs-dot" style="{swatch_style}"></span>'
-                f'{_html(cname)}</button>'
+                f"{_html(cname)}</button>"
             )
         material_select = ""
         if len(material_options) > 1:
@@ -2848,11 +2994,11 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
                     f' data-mat="{_html(meta["mat"])}"'
                     f' data-spec="{_html(meta["spec"])}"'
                     f' data-url="{_html(meta["url"])}">'
-                    f'{_html(mat)}</option>'
+                    f"{_html(mat)}</option>"
                 )
             material_select = (
                 f'<select class="cs-material-select" data-rank="{rank}" aria-label="도어 재질 선택">'
-                f'{material_option_html}</select>'
+                f"{material_option_html}</select>"
             )
             material_state = f'<span class="cs-info-val" id="card-mat-{rank}" style="display:none;">{_html(init_mat)}</span>'
         else:
@@ -2864,10 +3010,10 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
             f'<div class="cs-chips">{chip_items}</div>'
             '<div class="cs-info-row">'
             '<span class="cs-info-label">도어 재질</span>'
-            f'{material_select}'
-            f'{material_state}'
-            '</div>'
-            '</div>'
+            f"{material_select}"
+            f"{material_state}"
+            "</div>"
+            "</div>"
         )
         return html, init_code, init_mat, int(init_price) if init_price else None
 
@@ -2882,7 +3028,7 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
             '<div class="cs-section">'
             '<div class="cs-row-label">색상 선택</div>'
             f'<div class="cs-chips">{chips}</div>'
-            '</div>'
+            "</div>"
         )
         return html, init_code, init_mat, int(init_price) if init_price else None
 
@@ -2901,19 +3047,19 @@ def _other_candidate_rows(scored: list[tuple[float, int, dict]]) -> str:
             f'<p class="lg-product-code">{_html(p.get("code") or "")}</p>'
             f'<p style="font-size:0.86rem;margin:1px 0;color:var(--text-primary);font-weight:700;line-height:1.35;">{_html(p.get("name") or "LG 냉장고")}</p>'
             f'<p style="font-size:0.7rem;color:var(--text-secondary);margin:0;">'
-            f'{_html(str(p.get("total_l") or "—"))}L · 에너지 {_html(str(p.get("energy") or "—"))}등급 · {_html(price)}</p>'
-            '</div>'
+            f"{_html(str(p.get('total_l') or '—'))}L · 에너지 {_html(str(p.get('energy') or '—'))}등급 · {_html(price)}</p>"
+            "</div>"
             f'<div class="lg-candidate-score">{round(fit * 100)}%</div>'
-            '</div>'
+            "</div>"
         )
     return (
         '<details class="lg-other-candidates">'
         '<summary class="lg-candidates-summary">'
         f'<span>다른 추천 후보 보기 <span style="color:var(--text-tertiary);font-size:0.68rem;">{len(scored)}개</span></span>'
         '<span style="color:var(--text-tertiary);font-size:0.68rem;">▾</span>'
-        '</summary>'
+        "</summary>"
         f'<div class="lg-candidate-list">{rows}</div>'
-        '</details>'
+        "</details>"
     )
 
 
@@ -2930,7 +3076,9 @@ def _join_values(values) -> str:
     if isinstance(values, set):
         values = sorted(values)
     if isinstance(values, (list, tuple)):
-        cleaned = [str(v).strip() for v in values if str(v).strip() and str(v).strip() != "-"]
+        cleaned = [
+            str(v).strip() for v in values if str(v).strip() and str(v).strip() != "-"
+        ]
         return ", ".join(cleaned) if cleaned else "-"
     value = str(values).strip()
     return value if value and value != "None" else "-"
@@ -2951,7 +3099,9 @@ def _product_specs_for_compare(p: dict, fit: float) -> dict[str, str]:
         "도어 개수": _join_values(p.get("doors")),
         "총 용량": f"{p.get('total_l')}L" if p.get("total_l") else "-",
         "냉장 용량": f"{p.get('fridge_l')}L" if p.get("fridge_l") is not None else "-",
-        "냉동 용량": f"{p.get('freezer_l')}L" if p.get("freezer_l") is not None else "-",
+        "냉동 용량": f"{p.get('freezer_l')}L"
+        if p.get("freezer_l") is not None
+        else "-",
         "에너지 등급": f"{p.get('energy')}등급" if p.get("energy") else "-",
         "제품 크기 (너비×높이×깊이)": (
             f"{p.get('width')}×{p.get('dim_h')}×{p.get('dim_d')} mm"
@@ -2982,7 +3132,12 @@ def render_top5_compare(scored: list[tuple[float, int, dict]]) -> None:
     labels = [_compare_label(item) for item in scored]
     left_col, right_col = st.columns(2)
     with left_col:
-        left_idx = st.selectbox("비교 모델 A", range(len(scored)), format_func=lambda i: labels[i], key="compare_left")
+        left_idx = st.selectbox(
+            "비교 모델 A",
+            range(len(scored)),
+            format_func=lambda i: labels[i],
+            key="compare_left",
+        )
     with right_col:
         default_right = 1 if len(scored) > 1 else 0
         right_idx = st.selectbox(
@@ -3002,9 +3157,13 @@ def render_top5_compare(scored: list[tuple[float, int, dict]]) -> None:
     for label in left_specs:
         left_value = left_specs[label]
         right_value = right_specs.get(label, "-")
-        is_diff = label != "제품명" and _compare_norm(left_value) != _compare_norm(right_value)
+        is_diff = label != "제품명" and _compare_norm(left_value) != _compare_norm(
+            right_value
+        )
         diff_cls = ' class="diff-row"' if is_diff else ""
-        label_html = _html(label) + ('<span class="lg-diff-badge">차이</span>' if is_diff else "")
+        label_html = _html(label) + (
+            '<span class="lg-diff-badge">차이</span>' if is_diff else ""
+        )
         rows.append(
             f"<tr{diff_cls}>"
             f"<th>{label_html}</th>"
@@ -3015,13 +3174,13 @@ def render_top5_compare(scored: list[tuple[float, int, dict]]) -> None:
     table_html = (
         '<div class="lg-compare-table-wrap">'
         '<table class="lg-compare-table">'
-        '<thead><tr>'
-        '<th>스펙</th>'
-        f'<th>TOP {left_rank} · {_html(left_product.get("code") or "")}</th>'
-        f'<th>TOP {right_rank} · {_html(right_product.get("code") or "")}</th>'
-        '</tr></thead>'
-        f'<tbody>{"".join(rows)}</tbody>'
-        '</table></div>'
+        "<thead><tr>"
+        "<th>스펙</th>"
+        f"<th>TOP {left_rank} · {_html(left_product.get('code') or '')}</th>"
+        f"<th>TOP {right_rank} · {_html(right_product.get('code') or '')}</th>"
+        "</tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody>"
+        "</table></div>"
     )
     st.markdown(table_html, unsafe_allow_html=True)
 
@@ -3034,7 +3193,8 @@ st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 render_header()
 
 if IS_SAMPLE:
-    st.markdown("""
+    st.markdown(
+        """
     <div style="background:#FFFBF0;border:1.5px solid #FFE082;border-radius:12px;
                 padding:13px 18px;font-size:0.82rem;color:#7A5C00;margin-bottom:1.4rem;
                 line-height:1.6;">
@@ -3042,7 +3202,9 @@ if IS_SAMPLE:
       <code>LG_냉장고_대표상품기준_통합DB.xlsx</code>를
       <code>artifacts/lg-advisor/</code> 폴더에 업로드하면 실제 데이터로 전환됩니다.
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 if st.session_state.force_result:
     q = "result"
@@ -3074,7 +3236,7 @@ elif q == "door_style":
 
 elif q == "space":
     q_bubble(
-        '<strong>설치 공간 크기를 알고 있나요?</strong>'
+        "<strong>설치 공간 크기를 알고 있나요?</strong>"
         '<span class="hint-block">폭·높이·깊이를 입력하면 들어가지 않는 제품을 제외해요</span>'
     )
 
@@ -3092,38 +3254,62 @@ elif q == "space":
         _hist = st.session_state.history
         if "space" in _hist:
             idx = _hist.index("space")
-            for k in _hist[idx + 1:]:
+            for k in _hist[idx + 1 :]:
                 st.session_state.answers.pop(k, None)
-            st.session_state.history = _hist[:idx + 1]
+            st.session_state.history = _hist[: idx + 1]
         else:
             _hist.append("space")
-        ans["space"] = "skip" if skip else {
-            "w": _parse_cm(st.session_state.get("space_w", "")),
-            "h": _parse_cm(st.session_state.get("space_h", "")),
-            "d": _parse_cm(st.session_state.get("space_d", "")),
-        }
+        ans["space"] = (
+            "skip"
+            if skip
+            else {
+                "w": _parse_cm(st.session_state.get("space_w", "")),
+                "h": _parse_cm(st.session_state.get("space_h", "")),
+                "d": _parse_cm(st.session_state.get("space_d", "")),
+            }
+        )
 
     with st.container(border=True):
         col_w, col_h, col_d = st.columns(3, gap="small")
         with col_w:
-            w_str = st.text_input("너비", placeholder="너비 (cm)", key="space_w",
-                                  label_visibility="collapsed")
+            w_str = st.text_input(
+                "너비",
+                placeholder="너비 (cm)",
+                key="space_w",
+                label_visibility="collapsed",
+            )
         with col_h:
-            h_str = st.text_input("높이", placeholder="높이 (cm)", key="space_h",
-                                  label_visibility="collapsed")
+            h_str = st.text_input(
+                "높이",
+                placeholder="높이 (cm)",
+                key="space_h",
+                label_visibility="collapsed",
+            )
         with col_d:
-            d_str = st.text_input("깊이", placeholder="깊이 (cm)", key="space_d",
-                                  label_visibility="collapsed")
+            d_str = st.text_input(
+                "깊이",
+                placeholder="깊이 (cm)",
+                key="space_d",
+                label_visibility="collapsed",
+            )
 
-        bad_fields = [lbl for lbl, s in [("너비", w_str), ("높이", h_str), ("깊이", d_str)]
-                      if s and s.strip() and _parse_cm(s) is None]
+        bad_fields = [
+            lbl
+            for lbl, s in [("너비", w_str), ("높이", h_str), ("깊이", d_str)]
+            if s and s.strip() and _parse_cm(s) is None
+        ]
         if bad_fields:
             st.error(f"{', '.join(bad_fields)} 값을 숫자(cm)로 입력해주세요.")
 
         st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
         _, btn_col, _ = st.columns([1, 2, 1])
         with btn_col:
-            if st.button("입력 완료", type="primary", use_container_width=True, key="space_confirm"):
+            if st.button(
+                "입력 완료",
+                type="primary",
+                use_container_width=True,
+                key="space_confirm",
+            ):
                 st.session_state.click_count += 1
                 if not bad_fields:
                     all_empty = all(
@@ -3146,7 +3332,9 @@ elif q == "space":
 elif q == "features":
     cand, _ = E.filter_candidates(PRODUCTS, ans)
     feats = E.available_soft_features(cand)
-    q_bubble("거의 다 왔어요! <strong>원하시는 기능</strong>을 골라주세요. (없으면 그냥 넘어가도 됩니다)")
+    q_bubble(
+        "거의 다 왔어요! <strong>원하시는 기능</strong>을 골라주세요. (없으면 그냥 넘어가도 됩니다)"
+    )
 
     if "_feat_sel" not in st.session_state:
         st.session_state._feat_sel = set(ans.get("wanted_features", []))
@@ -3179,13 +3367,16 @@ elif q == "result":
     cand, tier = E.filter_candidates(PRODUCTS, ans)
     if "wanted_features" not in ans:
         ans["wanted_features"] = []
-    ranked = E.score_and_rank(cand, ans)   # engine.py 로직 그대로
+    ranked = E.score_and_rank(cand, ans)  # engine.py 로직 그대로
 
     if not ranked:
-        st.markdown("""
+        st.markdown(
+            """
         <div class="q-bubble" style="color:#888;">
           조건에 딱 맞는 제품을 찾지 못했어요. 처음부터 다시 시도해 보세요.
-        </div>""", unsafe_allow_html=True)
+        </div>""",
+            unsafe_allow_html=True,
+        )
     else:
         # 후보 전체에 가중치 적합도를 계산한 뒤, 점수가 가장 높은 5개만 표시합니다.
         scored_all = [
@@ -3203,10 +3394,13 @@ elif q == "result":
         )
         scored = [(fit, rank + 1, p) for rank, (fit, _, p) in enumerate(scored_all[:5])]
         if not scored:
-            st.markdown("""
+            st.markdown(
+                """
             <div class="q-bubble" style="color:#888;">
               추천 결과로 표시할 제품 정보가 부족해요. 조건을 조금 바꿔 다시 시도해 보세요.
-            </div>""", unsafe_allow_html=True)
+            </div>""",
+                unsafe_allow_html=True,
+            )
             ranked = []
             st.stop()
 
@@ -3216,22 +3410,24 @@ elif q == "result":
             _cand_init, _ = E.filter_candidates(
                 PRODUCTS, {"install": ans.get("install")} if ans.get("install") else {}
             )
-            _ans_q2 = {k: ans[k] for k in ("install", "household", "cooking") if k in ans}
+            _ans_q2 = {
+                k: ans[k] for k in ("install", "household", "cooking") if k in ans
+            }
             _cand_q2, _ = E.filter_candidates(PRODUCTS, _ans_q2)
-            _top1_p   = scored[0][2]
+            _top1_p = scored[0][2]
             _top1_fit = round(scored[0][0] * 100, 1)
             DB.log_session_result(
-                session_id    = st.session_state.session_id,
-                ans           = ans,
-                q_count       = q_count_log,
-                force_result  = st.session_state.force_result,
-                click_count   = st.session_state.get("click_count", 0),
-                cand_initial  = len(_cand_init),
-                cand_after_q2 = len(_cand_q2),
-                cand_final    = len(cand),
-                top1_code     = _top1_p.get("code", ""),
-                top1_fit_pct  = _top1_fit,
-                dwell_sec     = time.time() - st.session_state.session_start,
+                session_id=st.session_state.session_id,
+                ans=ans,
+                q_count=q_count_log,
+                force_result=st.session_state.force_result,
+                click_count=st.session_state.get("click_count", 0),
+                cand_initial=len(_cand_init),
+                cand_after_q2=len(_cand_q2),
+                cand_final=len(cand),
+                top1_code=_top1_p.get("code", ""),
+                top1_fit_pct=_top1_fit,
+                dwell_sec=time.time() - st.session_state.session_start,
             )
             st.session_state._db_logged = True
 
@@ -3253,7 +3449,9 @@ elif q == "result":
                 scored,
                 key=lambda item: (item[2].get("price_min") or 10**12),
             )
-            scored_display = [(fit, i + 1, p) for i, (fit, _, p) in enumerate(scored_display)]
+            scored_display = [
+                (fit, i + 1, p) for i, (fit, _, p) in enumerate(scored_display)
+            ]
         else:
             scored_display = scored
 
@@ -3278,7 +3476,12 @@ if q != "result" and ans:
             go_back()
             st.rerun()
     with ns:
-        if st.button("지금 바로 결과 보기", type="primary", key="skip_to_result", use_container_width=True):
+        if st.button(
+            "지금 바로 결과 보기",
+            type="primary",
+            key="skip_to_result",
+            use_container_width=True,
+        ):
             st.session_state.click_count += 1
             st.session_state.force_result = True
             st.rerun()

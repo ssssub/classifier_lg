@@ -392,14 +392,15 @@ else:
     st.dataframe(sv_likert, use_container_width=True, height=320)
 
 # ── 주관식 응답 (Q9, Q10) ─────────────────────────────────────────
-st.markdown("<div class='section-title' style='margin-top:16px;'>주관식 응답 (Q9~Q10)</div>", unsafe_allow_html=True)
+st.markdown("<div class='section-title' style='margin-top:16px;'>주관식·개인정보 응답 (Q9~Q12)</div>", unsafe_allow_html=True)
 if sv_rows:
     sv_df_open = pd.DataFrame(sv_rows)
-    open_cols = ["ts", "session_id", "q9", "q10"]
+    open_cols = ["ts", "session_id", "q9", "q10", "q11", "q12"]
     open_cols = [c for c in open_cols if c in sv_df_open.columns]
     sv_open = sv_df_open[open_cols].copy()
-    sv_open.columns = (["시각", "세션 ID", "Q9 도움된 기능", "Q10 개선 의견"])[:len(open_cols)]
-    # 주관식 미응답 행 (q9, q10 둘 다 None) 제외
+    col_labels = ["시각", "세션 ID", "Q9 도움된 기능", "Q10 개선 의견", "Q11 나이/성별", "Q12 전화번호"]
+    sv_open.columns = col_labels[:len(open_cols)]
+    # 주관식 미응답 행 (q9~q12 모두 None) 제외
     has_text = sv_open.iloc[:, 2:].apply(
         lambda row: row.dropna().astype(str).str.strip().str.len().sum() > 0, axis=1
     )

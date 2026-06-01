@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS survey_responses (
     q7                INTEGER,
     q8                INTEGER,
     q9                TEXT,
-    q10               TEXT
+    q10               TEXT,
+    q11               TEXT,
+    q12               TEXT
 )
 """
 
@@ -115,11 +117,16 @@ def _conn() -> sqlite3.Connection:
     c.row_factory = sqlite3.Row
     c.execute(_CREATE_SURVEY_SQL)
     c.execute(_CREATE_SQL)
-    # 마이그레이션: 신규 컬럼 추가
+    # 마이그레이션: sessions 신규 컬럼 추가
     existing = {row[1] for row in c.execute("PRAGMA table_info(sessions)").fetchall()}
     for col, defn in _MIGRATE_COLS.items():
         if col not in existing:
             c.execute(f"ALTER TABLE sessions ADD COLUMN {col} {defn}")
+    # 마이그레이션: survey_responses 신규 컬럼 추가 (q11, q12)
+    sv_existing = {row[1] for row in c.execute("PRAGMA table_info(survey_responses)").fetchall()}
+    for col in ("q11", "q12"):
+        if col not in sv_existing:
+            c.execute(f"ALTER TABLE survey_responses ADD COLUMN {col} TEXT")
     c.commit()
     return c
 
@@ -195,12 +202,12 @@ def log_session_result(
 
 # ── 설문 응답 저장 ───────────────────────────────────────────────────
 def log_survey_response(session_id: str, responses: dict) -> None:
-    """Q1~Q10 설문 응답을 survey_responses 테이블에 저장."""
+    """Q1~Q12 설문 응답을 survey_responses 테이블에 저장."""
     with _conn() as c:
         c.execute(
             """INSERT INTO survey_responses
-               (session_id, ts, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               (session_id, ts, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 session_id,
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -214,6 +221,8 @@ def log_survey_response(session_id: str, responses: dict) -> None:
                 responses.get("q8"),
                 responses.get("q9") or None,
                 responses.get("q10") or None,
+                responses.get("q11") or None,
+                responses.get("q12") or None,
             ),
         )
 
