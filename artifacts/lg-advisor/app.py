@@ -2130,7 +2130,7 @@ def render_survey_banner():
             '<div class="lg-survey-banner-wrap">'
             '<div class="lg-survey-banner-title">📝 서비스 이용 경험 설문</div>'
             '<p class="lg-survey-banner-desc">'
-            '추천 결과를 확인하신 후 간단한 설문에 참여해 주세요. '
+            '추천 결과를 확인하신 후 간단한 설문에 참여해 주세요.<br>'
             '응답은 연구 목적으로만 사용되며 약 1분 소요됩니다.'
             '</p>'
             '</div>',
