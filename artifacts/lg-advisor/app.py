@@ -116,6 +116,7 @@ def reset():
     st.session_state._rated = False
     st.session_state._survey_submitted = False
     st.session_state._survey_open = False
+    st.session_state._feat_sel = set()
 
 
 def go_back():
@@ -137,6 +138,18 @@ def jump_to(q_id: str):
             st.session_state.answers.pop(k, None)
 
 
+# ── 추가 기능 카드 정의 (label, icon_key, desc) ────────────────────────
+FEAT_CONFIG: dict[str, tuple[str, str, str]] = {
+    "door_cooling": ("도어쿨링+",        "feat-door-cool", "문쪽까지 균일하게 냉기 순환"),
+    "uv_filter":    ("UV청정탈취필터",   "feat-uv",        "냄새·세균을 UV로 케어"),
+    "knock_on":     ("노크온",           "feat-knock",     "두드리면 냉장고 속이 보여요"),
+    "magic_space":  ("매직스페이스",     "feat-magic",     "자주 쓰는 식품 빠르게 꺼내기"),
+    "ai":           ("AI 기능",          "feat-ai",        "자동 절전·신선 케어"),
+    "voice":        ("음성인식",         "feat-voice",     "음성으로 간편하게 조작"),
+    "fresh_room":   ("신선맞춤실",       "feat-fresh",     "식품별 맞춤 보관 온도"),
+    "energy_top":   ("1등급 에너지효율", "feat-energy",    "최상위 에너지 효율 등급"),
+}
+
 # ── 라벨 → 아이콘/설명 매핑 (JS에 주입) ───────────────────────────────
 label_icon: dict[str, str] = {}
 label_desc: dict[str, str] = {}
@@ -144,6 +157,13 @@ for qc in CFG.questions.values():
     for opt in qc.options:
         label_icon[opt.label] = opt.icon_key
         label_desc[opt.label] = opt.desc
+
+# 추가 기능 카드 (선택됨 "✓ " 접두사 포함 모두 등록)
+for _fkey, (_flbl, _fikey, _fdesc) in FEAT_CONFIG.items():
+    label_icon[_flbl] = _fikey
+    label_icon[f"✓ {_flbl}"] = _fikey
+    label_desc[_flbl] = _fdesc
+    label_desc[f"✓ {_flbl}"] = _fdesc
 
 label_icon_json = json.dumps(label_icon, ensure_ascii=False)
 label_desc_json = json.dumps(label_desc, ensure_ascii=False)
@@ -1678,6 +1698,14 @@ ICON_JS = f"""
     'sometimes-cooking': '🍳',
     'often-cooking':     '🥘',
     'love-cooking':      '🥗',
+    'feat-door-cool':    '❄️',
+    'feat-uv':           '🌿',
+    'feat-knock':        '👁️',
+    'feat-magic':        '✨',
+    'feat-ai':           '🤖',
+    'feat-voice':        '🎤',
+    'feat-fresh':        '🌡️',
+    'feat-energy':       '⭐',
   }};
   function makeOptionIcon(key) {{
     if (OPTION_EMOJI[key]) {{
@@ -1754,6 +1782,11 @@ ICON_JS = f"""
       '  color:#D0D0D0!important;font-size:1.1rem!important;flex-shrink:0!important;',
       '  margin-left:auto!important;align-self:center!important;',
       '}}',
+      /* ── 추가 기능 선택됨 ── */
+      'button.lg-feat-selected{{',
+      '  border-color:#A50034!important;background:#FFF5F8!important;',
+      '}}',
+      'button.lg-feat-selected .lg-card-arrow{{color:#A50034!important;}}',
       /* ── 바로 결과 보기 ── */
       'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;',
       '  box-shadow:none!important;color:#AAA!important;font-size:.76rem!important;',
@@ -1826,13 +1859,15 @@ ICON_JS = f"""
 
         const title = (p.textContent || '').trim();
         if (!title) return;
-        const rawDesc = LABEL_DESCS[title] || '';
+        const isFeatureSel = title.startsWith('✓ ');
+        const lookupTitle = isFeatureSel ? title.slice(2) : title;
+        const rawDesc = LABEL_DESCS[lookupTitle] || '';
         const descParts = rawDesc.split('||');
         const desc = descParts[0] || '';
         const chips = descParts.length > 1
           ? descParts.slice(1).join('||').split('|').map(v => v.trim()).filter(Boolean)
           : [];
-        const rawIKey = LABEL_ICONS[title];
+        const rawIKey = LABEL_ICONS[lookupTitle];
         const hasIcon = rawIKey !== undefined;
         const iKey = rawIKey || 'default';
         const isPersona = chips.length > 0;
@@ -1875,12 +1910,13 @@ ICON_JS = f"""
             + (OPTION_EMOJI[iKey] ? '' : ' style="color:#555555;"')
             + '>' + makeOptionIcon(iKey) + '</span>'
             + '<span class="lg-card-text">'
-            + '<span class="lg-card-title">' + escapeHtml(title) + '</span>'
+            + '<span class="lg-card-title">' + escapeHtml(lookupTitle) + '</span>'
             + (desc ? '<span class="lg-card-desc">' + escapeHtml(desc) + '</span>' : '')
             + '</span>'
             + '<span class="lg-card-arrow">›</span>';
         }}
         btn.dataset.lgDone = '1';
+        if (isFeatureSel) btn.classList.add('lg-feat-selected');
         _paused = false;
       }});
 
@@ -1941,7 +1977,7 @@ def render_header():
     st.markdown(f"""
     <div class="lg-header">
       <div class="lg-wordmark">LG Electronics</div>
-      <div class="lg-title">LG {CFG.name} 상담</div>
+      <div class="lg-title">나에게 맞는 LG {CFG.name} 찾기</div>
       <div class="lg-subtitle">{CFG.subtitle}</div>
     </div>
     {crumbs_html}
@@ -3085,17 +3121,31 @@ elif q == "features":
     cand, _ = E.filter_candidates(PRODUCTS, ans)
     feats = E.available_soft_features(cand)
     q_bubble("거의 다 왔어요! <strong>원하시는 기능</strong>을 골라주세요. (없으면 그냥 넘어가도 됩니다)")
-    chosen = []
-    for key, label in feats:
-        if st.checkbox(label, key=f"feat_{key}"):
-            chosen.append(key)
+
+    if "_feat_sel" not in st.session_state:
+        st.session_state._feat_sel = set(ans.get("wanted_features", []))
+
+    for key, _ in feats:
+        cfg = FEAT_CONFIG.get(key)
+        if not cfg:
+            continue
+        lbl, _, _ = cfg
+        sel = key in st.session_state._feat_sel
+        btn_label = f"✓ {lbl}" if sel else lbl
+        if st.button(btn_label, key=f"feat_{key}", use_container_width=True):
+            if sel:
+                st.session_state._feat_sel.discard(key)
+            else:
+                st.session_state._feat_sel.add(key)
+            st.rerun()
+
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
     if st.button("이 기능으로 추천받기", type="primary", use_container_width=True):
         st.session_state.click_count += 1
         h = st.session_state.history
         if "features" not in h:
             h.append("features")
-        ans["wanted_features"] = chosen
+        ans["wanted_features"] = list(st.session_state._feat_sel)
         st.rerun()
 
 # ── 결과 ──
