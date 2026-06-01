@@ -1670,6 +1670,25 @@ ICON_JS = f"""
     smart_home: '🤖',
     interior: '🎨',
   }};
+  const OPTION_EMOJI = {{
+    'builtin':           '🏗️',
+    'fitmax':            '📐',
+    'freestanding':      '🏠',
+    'solo':              '🧑',
+    'couple':            '👫',
+    'family':            '👨‍👩‍👧‍👦',
+    'no-cooking':        '🥡',
+    'sometimes-cooking': '🍳',
+    'often-cooking':     '🥘',
+    'love-cooking':      '🥗',
+  }};
+  function makeOptionIcon(key) {{
+    if (OPTION_EMOJI[key]) {{
+      return '<span style="font-size:1.35rem;line-height:1;display:flex;align-items:center;justify-content:center;">'
+        + OPTION_EMOJI[key] + '</span>';
+    }}
+    return makeSvg(key);
+  }}
 
   function escapeHtml(value) {{
     return String(value || '').replace(/[&<>"']/g, function(ch) {{
@@ -1828,8 +1847,9 @@ ICON_JS = f"""
           p.innerHTML =
             '<span style="display:flex;align-items:center;justify-content:center;'
             + 'width:40px;height:40px;min-width:40px;border-radius:10px;'
-            + 'background:#F5F5F7;color:#555555;flex-shrink:0;" class="lg-icon-box">'
-            + makeSvg(iKey) + '</span>'
+            + (OPTION_EMOJI[iKey] ? 'background:#F5F5F7;' : 'background:#F5F5F7;color:#555555;')
+            + 'flex-shrink:0;" class="lg-icon-box">'
+            + makeOptionIcon(iKey) + '</span>'
             + '<span style="flex:1;min-width:0;text-align:left;">'
             + '<span style="display:block;font-size:0.93rem;font-weight:700;'
             + 'color:#111;line-height:1.3;">' + escapeHtml(title) + '</span>'
@@ -3156,7 +3176,7 @@ elif q == "result":
 # ── 하단 네비게이션 (이전 / 처음부터 / 결과 보기) — 단일 행 ──
 if q != "result" and ans:
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-    nb, ns, _, nr = st.columns([1, 3, 1, 1])
+    nb, ns, nr = st.columns([1, 2, 1])
     with nb:
         if st.button("← 이전", key="go_back", use_container_width=True):
             go_back()
