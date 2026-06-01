@@ -1671,9 +1671,6 @@ ICON_JS = f"""
     interior: '🎨',
   }};
   const OPTION_EMOJI = {{
-    'builtin':           '🏗️',
-    'fitmax':            '📐',
-    'freestanding':      '🏠',
     'solo':              '🧑',
     'couple':            '👫',
     'family':            '👨‍👩‍👧‍👦',
@@ -1741,6 +1738,8 @@ ICON_JS = f"""
       'button.lg-skip-btn>div{{justify-content:center!important;width:auto!important;}}',
       'button.lg-skip-btn p{{display:block!important;width:auto!important;text-align:center!important;font-size:.76rem!important;font-weight:500!important;}}',
       '[data-testid="stButton"]:has(button.lg-skip-btn){{display:flex!important;justify-content:center!important;}}',
+      /* ── 처음부터 (우측 끝 고정) ── */
+      '[data-testid="stButton"]:has(button.lg-reset-btn){{display:flex!important;justify-content:flex-end!important;}}',
       /* ── 뒤로가기 ── */
       'button.lg-back-btn{{background:transparent!important;border:none!important;',
       '  box-shadow:none!important;color:#AAA!important;font-size:.82rem!important;',
@@ -1783,6 +1782,7 @@ ICON_JS = f"""
         /* 뒤로가기/이전/처음부터 텍스트 링크 스타일 */
         if (rawText.startsWith('←') || rawText.startsWith('↩') || rawText === '처음부터') {{
           btn.classList.add('lg-back-btn');
+          if (rawText === '처음부터') btn.classList.add('lg-reset-btn');
           return;
         }}
         /* 바로 결과 보기 / 모름·건너뛰기 — 보조 버튼 스타일, 아이콘 처리 제외 */
