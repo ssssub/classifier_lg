@@ -2973,12 +2973,13 @@ elif q == "space":
         '<span class="hint-block">폭·높이·깊이를 입력하면 들어가지 않는 제품을 제외해요</span>'
     )
 
-    def _parse_mm(s):
+    def _parse_cm(s):
+        """cm 입력 → mm 변환 (엔진은 mm 단위 비교)"""
         if not s or not s.strip():
             return None
         try:
-            val = int(float(s.strip().replace(",", "")))
-            return val if val > 0 else None
+            val = float(s.strip().replace(",", ""))
+            return int(val * 10) if val > 0 else None
         except (ValueError, TypeError):
             return None
 
@@ -2992,41 +2993,50 @@ elif q == "space":
         else:
             _hist.append("space")
         ans["space"] = "skip" if skip else {
-            "w": _parse_mm(st.session_state.get("space_w", "")),
-            "h": _parse_mm(st.session_state.get("space_h", "")),
-            "d": _parse_mm(st.session_state.get("space_d", "")),
+            "w": _parse_cm(st.session_state.get("space_w", "")),
+            "h": _parse_cm(st.session_state.get("space_h", "")),
+            "d": _parse_cm(st.session_state.get("space_d", "")),
         }
 
     with st.container(border=True):
         col_w, col_h, col_d = st.columns(3, gap="small")
         with col_w:
-            w_str = st.text_input("폭", placeholder="폭 mm", key="space_w",
+            w_str = st.text_input("폭", placeholder="폭 (cm)", key="space_w",
                                   label_visibility="collapsed")
         with col_h:
-            h_str = st.text_input("높이", placeholder="높이 mm", key="space_h",
+            h_str = st.text_input("높이", placeholder="높이 (cm)", key="space_h",
                                   label_visibility="collapsed")
         with col_d:
-            d_str = st.text_input("깊이", placeholder="깊이 mm", key="space_d",
+            d_str = st.text_input("깊이", placeholder="깊이 (cm)", key="space_d",
                                   label_visibility="collapsed")
 
         bad_fields = [lbl for lbl, s in [("폭", w_str), ("높이", h_str), ("깊이", d_str)]
-                      if s and s.strip() and _parse_mm(s) is None]
+                      if s and s.strip() and _parse_cm(s) is None]
         if bad_fields:
-            st.error(f"{', '.join(bad_fields)} 값을 숫자(mm)로 입력해주세요.")
+            st.error(f"{', '.join(bad_fields)} 값을 숫자(cm)로 입력해주세요.")
 
         st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-        btn_skip_col, btn_next_col = st.columns(2, gap="small")
-        with btn_skip_col:
-            if st.button("모름 / 건너뛰기", use_container_width=True, key="space_skip"):
-                st.session_state.click_count += 1
-                _save_space(skip=True)
-                st.rerun()
-        with btn_next_col:
-            if st.button("다음 →", type="primary", use_container_width=False, key="space_confirm"):
+        _, btn_col, _ = st.columns([1, 2, 1])
+        with btn_col:
+            if st.button("입력 완료", type="primary", use_container_width=True, key="space_confirm"):
                 st.session_state.click_count += 1
                 if not bad_fields:
-                    _save_space(skip=False)
+                    all_empty = all(
+                        not s or not s.strip()
+                        for s in [
+                            st.session_state.get("space_w", ""),
+                            st.session_state.get("space_h", ""),
+                            st.session_state.get("space_d", ""),
+                        ]
+                    )
+                    _save_space(skip=all_empty)
                     st.rerun()
+
+        st.markdown(
+            "<p style='text-align:center;color:#C0392B;font-size:0.82rem;margin-top:10px;'>"
+            "모르시면 비워두고 입력 완료를 눌러도 됩니다.</p>",
+            unsafe_allow_html=True,
+        )
 
 elif q == "features":
     cand, _ = E.filter_candidates(PRODUCTS, ans)
