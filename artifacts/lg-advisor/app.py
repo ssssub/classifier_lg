@@ -1712,10 +1712,11 @@ ICON_JS = f"""
     s.textContent = [
       /* ── 선택지 카드 — option 전용 (skip/back 제외) ── */
       'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn){{',
+      '  display:flex!important;align-items:center!important;justify-content:flex-start!important;',
       '  background:#FFFFFF!important;border:1.5px solid #E8E8E8!important;',
       '  border-radius:14px!important;box-shadow:0 2px 10px rgba(0,0,0,.045)!important;',
-      '  justify-content:flex-start!important;padding:16px 20px!important;',
-      '  width:100%!important;align-items:center!important;',
+      '  padding:16px 20px!important;width:100%!important;min-height:72px!important;',
+      '  box-sizing:border-box!important;',
       '  transition:border-color .18s,box-shadow .18s,transform .18s!important;',
       '}}',
       'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn):hover{{',
@@ -1724,9 +1725,34 @@ ICON_JS = f"""
       '}}',
       'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn)>div{{',
       '  width:100%!important;display:flex!important;align-items:center!important;',
+      '  box-sizing:border-box!important;',
       '}}',
       'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn) p{{',
-      '  text-align:left!important;width:100%!important;margin:0!important;',
+      '  width:100%!important;margin:0!important;display:flex!important;',
+      '  align-items:center!important;justify-content:flex-start!important;',
+      '  gap:14px!important;box-sizing:border-box!important;',
+      '}}',
+      '.lg-icon-box{{',
+      '  display:flex!important;align-items:center!important;justify-content:center!important;',
+      '  width:40px!important;min-width:40px!important;height:40px!important;',
+      '  border-radius:10px!important;background:#F5F5F7!important;flex-shrink:0!important;',
+      '  box-sizing:border-box!important;',
+      '}}',
+      '.lg-card-text{{',
+      '  flex:1!important;min-width:0!important;text-align:left!important;',
+      '  display:flex!important;flex-direction:column!important;justify-content:center!important;',
+      '}}',
+      '.lg-card-title{{',
+      '  display:block!important;font-size:0.93rem!important;font-weight:700!important;',
+      '  color:#111!important;line-height:1.4!important;margin:0!important;',
+      '}}',
+      '.lg-card-desc{{',
+      '  display:block!important;font-size:0.78rem!important;font-weight:400!important;',
+      '  color:#999!important;line-height:1.4!important;margin:3px 0 0!important;',
+      '}}',
+      '.lg-card-arrow{{',
+      '  color:#D0D0D0!important;font-size:1.1rem!important;flex-shrink:0!important;',
+      '  margin-left:auto!important;align-self:center!important;',
       '}}',
       /* ── 바로 결과 보기 ── */
       'button.lg-skip-btn{{background:transparent!important;border:1.5px solid #E8E8E8!important;',
@@ -1842,23 +1868,17 @@ ICON_JS = f"""
             + '</span>';
         }} else {{
           p.style.cssText = 'width:100%!important;display:flex!important;'
-            + 'justify-content:flex-start!important;align-items:center!important;'
-            + 'margin:0!important;gap:14px!important;';
+            + 'align-items:center!important;justify-content:flex-start!important;'
+            + 'margin:0!important;gap:14px!important;box-sizing:border-box!important;';
           p.innerHTML =
-            '<span style="display:flex;align-items:center;justify-content:center;'
-            + 'width:40px;height:40px;min-width:40px;border-radius:10px;'
-            + (OPTION_EMOJI[iKey] ? 'background:#F5F5F7;' : 'background:#F5F5F7;color:#555555;')
-            + 'flex-shrink:0;" class="lg-icon-box">'
-            + makeOptionIcon(iKey) + '</span>'
-            + '<span style="flex:1;min-width:0;text-align:left;">'
-            + '<span style="display:block;font-size:0.93rem;font-weight:700;'
-            + 'color:#111;line-height:1.3;">' + escapeHtml(title) + '</span>'
-            + (desc
-                ? '<span style="display:block;font-size:0.78rem;font-weight:400;'
-                  + 'color:#999;margin-top:3px;line-height:1.3;">' + escapeHtml(desc) + '</span>'
-                : '')
+            '<span class="lg-icon-box"'
+            + (OPTION_EMOJI[iKey] ? '' : ' style="color:#555555;"')
+            + '>' + makeOptionIcon(iKey) + '</span>'
+            + '<span class="lg-card-text">'
+            + '<span class="lg-card-title">' + escapeHtml(title) + '</span>'
+            + (desc ? '<span class="lg-card-desc">' + escapeHtml(desc) + '</span>' : '')
             + '</span>'
-            + '<span style="color:#D0D0D0;font-size:1.1rem;flex-shrink:0;margin-left:auto;">›</span>';
+            + '<span class="lg-card-arrow">›</span>';
         }}
         btn.dataset.lgDone = '1';
         _paused = false;
