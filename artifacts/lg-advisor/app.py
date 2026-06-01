@@ -3167,7 +3167,7 @@ if q != "result" and ans:
             st.session_state.force_result = True
             st.rerun()
     with nr:
-        if st.button("처음부터 →", key="restart_top", use_container_width=True):
+        if st.button("처음부터", key="restart_top", use_container_width=True):
             reset()
             st.rerun()
 

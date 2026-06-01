@@ -46,34 +46,13 @@ ADMIN_CSS = """
 
 /* ── 탐색 효율 지표 설명 expander 텍스트 겹침 방지 ── */
 [data-testid="stExpander"] {
-  display: block !important;
   overflow: visible !important;
 }
-[data-testid="stExpander"] summary {
-  display: flex !important;
-  align-items: center !important;
-  padding: 12px 16px !important;
-  overflow: visible !important;
-  white-space: normal !important;
-  word-break: keep-all !important;
-}
-[data-testid="stExpander"] summary p,
-[data-testid="stExpander"] summary span {
-  display: block !important;
-  overflow: visible !important;
-  white-space: normal !important;
-  word-break: keep-all !important;
-  overflow-wrap: break-word !important;
-  line-height: 1.5 !important;
-}
-[data-testid="stExpander"] > div[data-testid="stExpanderDetails"] {
-  display: block !important;
+[data-testid="stExpanderDetails"] {
   overflow: visible !important;
   padding: 20px 16px 28px !important;
-  margin-top: 0 !important;
 }
-[data-testid="stExpander"] > div[data-testid="stExpanderDetails"] * {
-  overflow: visible !important;
+[data-testid="stExpanderDetails"] * {
   word-break: keep-all !important;
   overflow-wrap: break-word !important;
 }
