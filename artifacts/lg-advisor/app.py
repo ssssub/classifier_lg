@@ -3533,6 +3533,20 @@ elif q == "result":
                     ):
                         go_to_question("budget")
 
+        if ans.get("install") == "Fit & Max":
+            with st.container(border=True):
+                st.markdown(
+                    "다양한 선택지 추천을 원하면 설치 타입을 변경해보세요",
+                    unsafe_allow_html=False,
+                )
+                if st.button(
+                    "설치 타입 변경하기",
+                    key="adjust_install_from_result",
+                    type="primary",
+                    use_container_width=True,
+                ):
+                    go_to_question("install")
+
         color_options = get_unique_colors(scored_pool)
         control_sort_col, control_color_col, _ = st.columns([1, 1, 1])
         with control_sort_col:
