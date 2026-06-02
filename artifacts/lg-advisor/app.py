@@ -383,6 +383,41 @@ button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn)
   font-weight: 600 !important;
   color: #1A1A1A !important;
 }}
+button.lg-option-btn:not(.lg-persona-btn) > div,
+button.lg-option-btn:not(.lg-persona-btn) [data-testid="stMarkdownContainer"] {{
+  width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}}
+button.lg-option-btn:not(.lg-persona-btn) p {{
+  width: 100% !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: 40px minmax(0, 1fr) 20px !important;
+  column-gap: 14px !important;
+  align-items: center !important;
+  justify-content: normal !important;
+  justify-items: stretch !important;
+  text-align: left !important;
+}}
+button.lg-option-btn:not(.lg-persona-btn) .lg-card-text {{
+  width: 100% !important;
+  min-width: 0 !important;
+  justify-self: stretch !important;
+  text-align: left !important;
+}}
+button.lg-option-btn:not(.lg-persona-btn) .lg-card-title,
+button.lg-option-btn:not(.lg-persona-btn) .lg-card-desc,
+button.lg-option-btn:not(.lg-persona-btn) .lg-card-chipline {{
+  width: 100% !important;
+  text-align: left !important;
+}}
+button.lg-option-btn:not(.lg-persona-btn) .lg-card-arrow {{
+  justify-self: end !important;
+  margin-left: 0 !important;
+}}
 
 /* ── 바로 결과 보기 버튼 (.lg-skip-btn) ── */
 button.lg-skip-btn {{
@@ -1700,12 +1735,24 @@ ICON_JS = f"""
       '}}',
       'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn)>div{{',
       '  width:100%!important;display:flex!important;align-items:center!important;',
-      '  box-sizing:border-box!important;',
+      '  min-width:0!important;flex:1 1 auto!important;justify-content:flex-start!important;',
+      '  text-align:left!important;box-sizing:border-box!important;',
       '}}',
       'button[data-testid="stBaseButton-secondary"]:not(.lg-skip-btn):not(.lg-back-btn) p{{',
       '  width:100%!important;margin:0!important;display:flex!important;',
       '  align-items:center!important;justify-content:flex-start!important;',
       '  gap:14px!important;box-sizing:border-box!important;',
+      '}}',
+      'button.lg-option-btn:not(.lg-persona-btn)>div,',
+      'button.lg-option-btn:not(.lg-persona-btn) [data-testid="stMarkdownContainer"]{{',
+      '  width:100%!important;min-width:0!important;flex:1 1 auto!important;',
+      '  justify-content:flex-start!important;text-align:left!important;',
+      '}}',
+      'button.lg-option-btn:not(.lg-persona-btn) p{{',
+      '  width:100%!important;min-width:0!important;display:grid!important;',
+      '  grid-template-columns:40px minmax(0,1fr) 20px!important;',
+      '  column-gap:14px!important;align-items:center!important;',
+      '  justify-content:normal!important;justify-items:stretch!important;text-align:left!important;',
       '}}',
       '.lg-icon-box{{',
       '  display:flex!important;align-items:center!important;justify-content:center!important;',
@@ -1716,22 +1763,23 @@ ICON_JS = f"""
       '.lg-card-text{{',
       '  flex:1!important;min-width:0!important;text-align:left!important;',
       '  display:flex!important;flex-direction:column!important;justify-content:center!important;',
+      '  width:100%!important;justify-self:stretch!important;',
       '}}',
       '.lg-card-title{{',
       '  display:block!important;font-size:0.93rem!important;font-weight:700!important;',
-      '  color:#111!important;line-height:1.4!important;margin:0!important;',
+      '  color:#111!important;line-height:1.4!important;margin:0!important;width:100%!important;text-align:left!important;',
       '}}',
       '.lg-card-desc{{',
       '  display:block!important;font-size:0.78rem!important;font-weight:400!important;',
-      '  color:#999!important;line-height:1.35!important;margin:2px 0 0!important;',
+      '  color:#999!important;line-height:1.35!important;margin:2px 0 0!important;width:100%!important;text-align:left!important;',
       '}}',
       '.lg-card-chipline{{',
       '  display:block!important;font-size:0.72rem!important;font-weight:600!important;',
-      '  color:#777!important;line-height:1.35!important;margin:4px 0 0!important;',
+      '  color:#777!important;line-height:1.35!important;margin:4px 0 0!important;width:100%!important;text-align:left!important;',
       '}}',
       '.lg-card-arrow{{',
       '  color:#D0D0D0!important;font-size:1.1rem!important;flex-shrink:0!important;',
-      '  margin-left:auto!important;align-self:center!important;',
+      '  margin-left:0!important;align-self:center!important;justify-self:end!important;',
       '}}',
       /* ── 추가 기능 선택됨 ── */
       'button.lg-feat-selected{{',
@@ -1828,6 +1876,7 @@ ICON_JS = f"""
 
         const p = btn.querySelector('p');
         if (!p) return;
+        const contentWrap = p.parentElement;
 
         /* p에 카드 구조가 이미 있으면 건너뜀 (idempotent guard) */
         if (p.querySelector('.lg-card-title, .lg-persona-title')) return;
@@ -1854,6 +1903,13 @@ ICON_JS = f"""
         /* 인라인 스타일 (Emotion CSS 오버라이드) */
         btn.style.justifyContent = 'flex-start';
         btn.style.padding = isPersona ? '22px 20px' : '12px 16px';
+        if (contentWrap && !isPersona) {{
+          contentWrap.style.width = '100%';
+          contentWrap.style.minWidth = '0';
+          contentWrap.style.flex = '1 1 auto';
+          contentWrap.style.justifyContent = 'flex-start';
+          contentWrap.style.textAlign = 'left';
+        }}
         if (isPersona) {{
           btn.classList.add('lg-persona-btn');
           btn.style.height = '340px';
@@ -1878,9 +1934,11 @@ ICON_JS = f"""
             + '<span class="lg-persona-chips">' + chipHtml + '</span>'
             + '</span>';
         }} else {{
-          p.style.cssText = 'width:100%!important;display:flex!important;'
-            + 'align-items:center!important;justify-content:flex-start!important;'
-            + 'margin:0!important;gap:14px!important;box-sizing:border-box!important;';
+          p.style.cssText = 'width:100%!important;min-width:0!important;display:grid!important;'
+            + 'grid-template-columns:40px minmax(0,1fr) 20px!important;'
+            + 'column-gap:14px!important;align-items:center!important;'
+            + 'justify-content:normal!important;justify-items:stretch!important;'
+            + 'text-align:left!important;margin:0!important;box-sizing:border-box!important;';
           p.innerHTML =
             '<span class="lg-icon-box"'
             + (OPTION_EMOJI[iKey] ? '' : ' style="color:#555555;"')
