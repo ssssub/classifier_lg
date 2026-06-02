@@ -41,6 +41,14 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Python / Streamlit runtime artifacts
+__pycache__/
+*.py[cod]
+.streamlit/secrets.toml
+artifacts/lg-advisor/data/*.db
+!artifacts/lg-advisor/data/.gitkeep
+*.log
+
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 

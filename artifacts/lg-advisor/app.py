@@ -7,6 +7,7 @@ import os
 import re
 import time
 import uuid
+import base64
 from html import escape
 import streamlit as st
 import streamlit.components.v1 as components
@@ -22,6 +23,20 @@ try:
         _SKU_INDEX = {p["rep_code"]: p for p in json.load(_f)}
 except Exception:
     _SKU_INDEX = {}
+
+_PRODUCT_IMAGE_DIR = os.path.join(
+    os.path.dirname(__file__), "public", "product_images"
+)
+_PRODUCT_IMAGE_FILES: dict[str, str] = {}
+try:
+    for _fname in os.listdir(_PRODUCT_IMAGE_DIR):
+        _stem, _ext = os.path.splitext(_fname)
+        if _ext.lower() in {".avif", ".webp", ".png", ".jpg", ".jpeg"}:
+            _PRODUCT_IMAGE_FILES[_stem.strip()] = os.path.join(_PRODUCT_IMAGE_DIR, _fname)
+except Exception:
+    _PRODUCT_IMAGE_FILES = {}
+
+_IMAGE_DATA_URL_CACHE: dict[str, str] = {}
 
 # 색상명 → 배경색 hex 매핑 (시각적 스와치용)
 _COLOR_HEX: dict[str, str] = {
@@ -75,6 +90,7 @@ st.set_page_config(
     page_title=f"LG {CFG.name} 상담",
     page_icon="LG",
     layout="centered",
+    initial_sidebar_state="expanded",
 )
 
 PRODUCTS, IS_SAMPLE = load_products()
@@ -95,12 +111,6 @@ if "click_count" not in st.session_state:
     st.session_state.click_count = 0
 if "_session_start_logged" not in st.session_state:
     st.session_state._session_start_logged = False
-if "_rated" not in st.session_state:
-    st.session_state._rated = False
-if "_survey_submitted" not in st.session_state:
-    st.session_state._survey_submitted = False
-if "_survey_open" not in st.session_state:
-    st.session_state._survey_open = False
 
 ans = st.session_state.answers
 
@@ -114,9 +124,6 @@ def reset():
     st.session_state._db_logged = False
     st.session_state.click_count = 0
     st.session_state._session_start_logged = False
-    st.session_state._rated = False
-    st.session_state._survey_submitted = False
-    st.session_state._survey_open = False
     st.session_state._feat_sel = set()
 
 
@@ -137,6 +144,24 @@ def jump_to(q_id: str):
         st.session_state.history = h[:idx]
         for k in removed:
             st.session_state.answers.pop(k, None)
+
+
+QUESTION_RETURN_LABELS = {
+    "lifestyle": "라이프스타일 질문으로 돌아가기",
+    "budget": "예산 질문으로 돌아가기",
+    "install": "설치 타입 질문으로 돌아가기",
+    "household": "사용 인원 질문으로 돌아가기",
+    "cooking": "요리 빈도 질문으로 돌아가기",
+    "door_style": "도어 방식 질문으로 돌아가기",
+    "space": "설치 공간 질문으로 돌아가기",
+    "features": "추가 기능 질문으로 돌아가기",
+}
+
+
+def go_to_question(q_id: str):
+    jump_to(q_id)
+    st.session_state.force_result = False
+    st.rerun()
 
 
 # ── 추가 기능 카드 정의 (label, icon_key, desc) ────────────────────────
@@ -1172,9 +1197,48 @@ div[data-testid="stCheckbox"] label span {{
 .lg-product-header {{
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 2px 0 10px;
+  align-items: stretch;
+  gap: 18px;
+  margin: 2px 0 14px;
+}}
+.lg-product-info {{
+  flex: 1;
+  min-width: 0;
+}}
+.lg-product-visual {{
+  width: 312px;
+  min-width: 312px;
+  height: 312px;
+  border: 1px solid #F0F0F0;
+  border-radius: 10px;
+  background: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}}
+.lg-product-visual img {{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  position: relative;
+  z-index: 1;
+}}
+@media (max-width: 640px) {{
+  .lg-product-header {{
+    flex-direction: column;
+    gap: 10px;
+  }}
+  .lg-product-visual {{
+    width: 100%;
+    min-width: 0;
+    max-width: 312px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    align-self: center;
+  }}
 }}
 .lg-product-code {{
   font-size: 0.64rem;
@@ -1545,125 +1609,6 @@ div[data-testid="stCheckbox"] label span {{
   to   {{ opacity: 1; transform: translateY(0); }}
 }}
 
-/* ── 설문 배너 (2열 반응형) ── */
-.lg-survey-banner-wrap {{
-  background: #FFFFFF;
-  border: 1.5px solid #E8E8E8;
-  border-radius: 14px;
-  padding: 16px 22px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  animation: lgFadeUp 0.25s ease both;
-}}
-.lg-survey-banner-title {{
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: #111;
-  margin: 0 0 3px;
-  word-break: keep-all;
-}}
-.lg-survey-banner-desc {{
-  font-size: 0.77rem;
-  color: #888;
-  line-height: 1.55;
-  margin: 0;
-  word-break: keep-all;
-}}
-.lg-survey-completed {{
-  background: #F5FFF5;
-  border: 1.5px solid #C3E6CB;
-  border-radius: 14px;
-  padding: 13px 22px;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: #2E7D32;
-}}
-/* 배너 내 Streamlit 컬럼 패딩 제거 */
-.lg-survey-banner-wrap + div [data-testid="stHorizontalBlock"] {{
-  gap: 12px !important;
-}}
-
-/* ── 설문 배너 버튼 — 우측 중앙 정렬 ── */
-div[data-testid="stHorizontalBlock"]:has(.lg-survey-banner-wrap) {{
-  align-items: center !important;
-}}
-
-/* ── 설문 모달 내부 ── */
-.sv-section-title {{
-  font-size: 0.68rem;
-  font-weight: 800;
-  color: #A50034;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  margin: 14px 0 8px;
-  padding-bottom: 5px;
-  border-bottom: 1.5px solid #F0F0F0;
-}}
-.sv-q-block {{
-  margin-bottom: 14px;
-}}
-.sv-q-label {{
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: #1A1A1A;
-  line-height: 1.5;
-  margin: 0 0 8px;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  display: block;
-}}
-/* 리커트 원형 버튼 */
-div[data-testid="stDialog"] [data-testid="stPills"] {{
-  gap: 6px !important;
-}}
-div[data-testid="stDialog"] [data-testid="stPills"] button {{
-  min-width: 40px !important;
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  padding: 0 !important;
-  font-size: 0.88rem !important;
-  font-weight: 700 !important;
-  transition: transform 150ms, border-color 150ms, background 150ms !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}}
-div[data-testid="stDialog"] [data-testid="stPills"] button:not([aria-pressed="true"]) {{
-  border: 2px solid #D0D0D0 !important;
-  background: #fff !important;
-  color: #555 !important;
-}}
-div[data-testid="stDialog"] [data-testid="stPills"] button:not([aria-pressed="true"]):hover {{
-  border-color: #A50034 !important;
-  color: #A50034 !important;
-  transform: scale(1.07) !important;
-}}
-div[data-testid="stDialog"] [data-testid="stPills"] button[aria-pressed="true"] {{
-  background: #A50034 !important;
-  border-color: #A50034 !important;
-  color: #fff !important;
-}}
-/* 텍스트 영역 */
-div[data-testid="stDialog"] div[data-testid="stTextArea"] {{
-  margin-top: 0 !important;
-}}
-div[data-testid="stDialog"] div[data-testid="stTextArea"] textarea {{
-  border: 1.5px solid #E8E8E8 !important;
-  border-radius: 10px !important;
-  font-size: 0.84rem !important;
-  padding: 10px 14px !important;
-  resize: vertical !important;
-}}
-div[data-testid="stDialog"] div[data-testid="stTextArea"] textarea:focus {{
-  border-color: #A50034 !important;
-  box-shadow: 0 0 0 3px rgba(165,0,52,0.07) !important;
-  outline: none !important;
-}}
 </style>
 """
 
@@ -1691,6 +1636,7 @@ ICON_JS = f"""
     smart_home: '🤖',
     interior: '🎨',
   }};
+  const PERSONA_KEYS = new Set(['freshness', 'hygiene', 'saving', 'storage', 'smart_home', 'interior']);
   const OPTION_EMOJI = {{
     'solo':              '🧑',
     'couple':            '👫',
@@ -1744,7 +1690,7 @@ ICON_JS = f"""
       '  display:flex!important;align-items:center!important;justify-content:flex-start!important;',
       '  background:#FFFFFF!important;border:1.5px solid #E8E8E8!important;',
       '  border-radius:14px!important;box-shadow:0 2px 10px rgba(0,0,0,.045)!important;',
-      '  padding:16px 20px!important;width:100%!important;min-height:72px!important;',
+      '  padding:12px 16px!important;width:100%!important;min-height:58px!important;',
       '  box-sizing:border-box!important;',
       '  transition:border-color .18s,box-shadow .18s,transform .18s!important;',
       '}}',
@@ -1777,7 +1723,11 @@ ICON_JS = f"""
       '}}',
       '.lg-card-desc{{',
       '  display:block!important;font-size:0.78rem!important;font-weight:400!important;',
-      '  color:#999!important;line-height:1.4!important;margin:3px 0 0!important;',
+      '  color:#999!important;line-height:1.35!important;margin:2px 0 0!important;',
+      '}}',
+      '.lg-card-chipline{{',
+      '  display:block!important;font-size:0.72rem!important;font-weight:600!important;',
+      '  color:#777!important;line-height:1.35!important;margin:4px 0 0!important;',
       '}}',
       '.lg-card-arrow{{',
       '  color:#D0D0D0!important;font-size:1.1rem!important;flex-shrink:0!important;',
@@ -1846,7 +1796,7 @@ ICON_JS = f"""
         const rawText = (btn.textContent || '').trim();
 
         /* 뒤로가기/이전/처음부터 텍스트 링크 스타일 */
-        if (rawText.startsWith('←') || rawText.startsWith('↩') || rawText === '처음부터') {{
+        if (rawText.startsWith('←') || rawText.startsWith('↩') || rawText.includes('질문으로 돌아가기') || rawText === '처음부터') {{
           btn.classList.add('lg-back-btn');
           if (rawText === '처음부터') btn.classList.add('lg-reset-btn');
           return;
@@ -1896,14 +1846,14 @@ ICON_JS = f"""
         const rawIKey = LABEL_ICONS[lookupTitle];
         const hasIcon = rawIKey !== undefined;
         const iKey = rawIKey || 'default';
-        const isPersona = chips.length > 0;
+        const isPersona = PERSONA_KEYS.has(iKey);
 
         /* 일반 카드 버튼 클래스 */
         btn.classList.add('lg-option-btn');
 
         /* 인라인 스타일 (Emotion CSS 오버라이드) */
         btn.style.justifyContent = 'flex-start';
-        btn.style.padding = isPersona ? '22px 20px' : '16px 20px';
+        btn.style.padding = isPersona ? '22px 20px' : '12px 16px';
         if (isPersona) {{
           btn.classList.add('lg-persona-btn');
           btn.style.height = '340px';
@@ -1938,6 +1888,7 @@ ICON_JS = f"""
             + '<span class="lg-card-text">'
             + '<span class="lg-card-title">' + escapeHtml(lookupTitle) + '</span>'
             + (desc ? '<span class="lg-card-desc">' + escapeHtml(desc) + '</span>' : '')
+            + (chips.length ? '<span class="lg-card-chipline">' + escapeHtml(chips[0]) + '</span>' : '')
             + '</span>'
             + '<span class="lg-card-arrow">' + (isFeatureSel ? '✓' : '›') + '</span>';
         }}
@@ -1968,6 +1919,9 @@ def render_header():
     lifestyle_label = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"))
     if lifestyle_label:
         crumb_data.append(("lifestyle", lifestyle_label))
+    budget_label = E.budget_label(ans.get("budget"))
+    if budget_label:
+        crumb_data.append(("budget", budget_label))
     if ans.get("install"):
         crumb_data.append(("install", ans["install"]))
     hh = dict(E.HOUSEHOLD_OPTS).get(ans.get("household"))
@@ -1995,17 +1949,6 @@ def render_header():
             if parts:
                 crumb_data.append(("space", " · ".join(parts)))
 
-    crumbs_html = ""
-    if crumb_data:
-        crumbs_html = (
-            '<div class="lg-crumbs">'
-            + "".join(
-                f'<span class="lg-crumb" data-qid="{qid}">{lbl}</span>'
-                for qid, lbl in crumb_data
-            )
-            + "</div>"
-        )
-
     st.markdown(
         f"""
     <div class="lg-header">
@@ -2013,10 +1956,23 @@ def render_header():
       <div class="lg-title">나에게 맞는 LG {CFG.name} 찾기</div>
       <div class="lg-subtitle">{CFG.subtitle}</div>
     </div>
-    {crumbs_html}
     """,
         unsafe_allow_html=True,
     )
+
+    if crumb_data:
+        label_by_qid = dict(crumb_data)
+        st.caption("아래 선택한 답변을 누르면 해당 질문으로 돌아갑니다.")
+        selected_qid = st.pills(
+            "선택한 답변",
+            [qid for qid, _ in crumb_data],
+            format_func=lambda qid: label_by_qid.get(qid, qid),
+            selection_mode="single",
+            key=f"answer_jump_{len(st.session_state.get('history', []))}_{q}",
+            label_visibility="collapsed",
+        )
+        if selected_qid:
+            go_to_question(selected_qid)
 
 
 def render_progress(q: str):
@@ -2025,6 +1981,7 @@ def render_progress(q: str):
 
     labels = {
         "lifestyle": "라이프스타일",
+        "budget": "예산",
         "install": "설치 타입",
         "household": "사용 인원",
         "cooking": "요리 빈도",
@@ -2032,9 +1989,30 @@ def render_progress(q: str):
         "space": "설치 공간",
         "features": "추가 기능",
     }
-    steps = ["lifestyle", "install"]
+    steps = ["lifestyle", "budget"]
+    cand_now, _ = E.filter_candidates(PRODUCTS, ans)
+    if (
+        q == "install"
+        or "install" in ans
+        or "install" in st.session_state.get("history", [])
+        or E.is_question_meaningful("install", cand_now, ans)
+    ):
+        steps.append("install")
     if ans.get("install") != "빌트인":
-        steps.extend(["household", "cooking"])
+        if (
+            q == "household"
+            or "household" in ans
+            or "household" in st.session_state.get("history", [])
+            or E.is_question_meaningful("household", cand_now, ans)
+        ):
+            steps.append("household")
+        if (
+            q == "cooking"
+            or "cooking" in ans
+            or "cooking" in st.session_state.get("history", [])
+            or E.is_question_meaningful("cooking", cand_now, ans)
+        ):
+            steps.append("cooking")
         if (
             q == "door_style"
             or "door_style" in ans
@@ -2043,12 +2021,23 @@ def render_progress(q: str):
             steps.append("door_style")
         elif ans.get("household") and ans.get("cooking"):
             cand_now, _ = E.filter_candidates(PRODUCTS, ans)
-            if E.needs_door_style(cand_now, ans):
+            if E.is_question_meaningful("door_style", cand_now, ans):
                 steps.append("door_style")
-    if ans.get("install") != "빌트인":
+    if ans.get("install") != "빌트인" and (
+        q == "space"
+        or "space" in ans
+        or "space" in st.session_state.get("history", [])
+        or E.is_question_meaningful("space", cand_now, ans)
+    ):
         steps.append("space")
 
-    steps.append("features")
+    if (
+        q == "features"
+        or "wanted_features" in ans
+        or "features" in st.session_state.get("history", [])
+        or E.is_question_meaningful("features", cand_now, ans)
+    ):
+        steps.append("features")
 
     if q not in steps:
         steps.append(q)
@@ -2069,6 +2058,39 @@ def render_progress(q: str):
         """,
         unsafe_allow_html=True,
     )
+
+
+def render_return_nav(q: str):
+    answered_steps = [
+        step
+        for step in st.session_state.get("history", [])
+        if step in QUESTION_RETURN_LABELS
+    ]
+    if "wanted_features" in ans and "features" not in answered_steps:
+        answered_steps.append("features")
+    answered_steps = list(dict.fromkeys(answered_steps))
+    if not answered_steps:
+        return
+
+    with st.sidebar:
+        st.markdown(
+            """
+            <div style="padding:10px 0 8px;">
+              <div style="font-size:0.72rem;font-weight:800;letter-spacing:.08em;color:#A50034;text-transform:uppercase;margin-bottom:6px;">선택한 질문</div>
+              <div style="font-size:0.82rem;color:#777;line-height:1.45;margin-bottom:10px;">이전에 답한 단계로 돌아가 조건을 바꿀 수 있어요.</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        for step in answered_steps:
+            if step == q:
+                continue
+            if st.button(
+                QUESTION_RETURN_LABELS[step],
+                key=f"return_to_{step}",
+                use_container_width=True,
+            ):
+                go_to_question(step)
 
 
 def q_bubble(text: str):
@@ -2130,198 +2152,6 @@ def show_skip_btn():
             st.session_state.click_count += 1
             st.session_state.force_result = True
             st.rerun()
-
-
-_LIKERT_NUMS = ["1", "2", "3", "4", "5"]
-
-
-def _sv_q(key: str, text: str) -> str | None:
-    """설문 문항 1개 렌더링 — 질문 텍스트 + pills 숫자 선택."""
-    st.markdown(
-        f'<div class="sv-q-block"><span class="sv-q-label">{text}</span></div>',
-        unsafe_allow_html=True,
-    )
-    val = st.pills(
-        key,
-        _LIKERT_NUMS,
-        selection_mode="single",
-        default=None,
-        label_visibility="collapsed",
-        key=f"sv_{key}",
-    )
-    return val
-
-
-@st.dialog("서비스 이용 경험 설문", width="large")
-def open_survey_dialog():
-    st.markdown(
-        "<p style='font-size:0.83rem;color:#666;line-height:1.6;margin:0 0 6px;'>"
-        "추천 결과를 확인하신 후 서비스 이용 경험에 대한 간단한 설문에 참여해 주세요. "
-        "응답은 익명으로 처리되며 약 1분 정도 소요됩니다."
-        "</p>"
-        "<p style='font-size:0.74rem;color:#aaa;margin:0 0 4px;'>"
-        "1 = 전혀 그렇지 않다 &nbsp;·&nbsp; 5 = 매우 그렇다"
-        "</p>",
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="sv-section-title">탐색 경험</div>', unsafe_allow_html=True)
-    q1 = _sv_q("q1", "Q1. 원하는 냉장고를 쉽게 찾을 수 있었다.")
-    q2 = _sv_q("q2", "Q2. 어떤 제품을 선택해야 할지 탐색 과정이 명확했다.")
-    q3 = _sv_q("q3", "Q3. 제품을 탐색하는 과정이 복잡하지 않았다.")
-
-    st.markdown(
-        '<div class="sv-section-title">의사결정 지원</div>', unsafe_allow_html=True
-    )
-    q4 = _sv_q("q4", "Q4. 제품 간 차이점을 이해하기 쉬웠다.")
-    q5 = _sv_q("q5", "Q5. 제품 선택에 필요한 정보를 충분히 제공받았다.")
-    q6 = _sv_q("q6", "Q6. 이 서비스는 제품 선택에 도움이 되었다.")
-
-    st.markdown(
-        '<div class="sv-section-title">선택 확신도</div>', unsafe_allow_html=True
-    )
-    q7 = _sv_q("q7", "Q7. 최종 선택한 제품이 나의 요구에 적합하다고 생각한다.")
-    q8 = _sv_q("q8", "Q8. 실제 구매 상황에서도 이 제품을 선택할 의향이 있다.")
-
-    st.markdown(
-        '<div class="sv-section-title">개인 정보 <span style="color:#A50034;font-size:.75rem;">(필수)</span></div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q9. 나이 및 성별을 입력해주세요. <span style="color:#A50034;">*</span></span>'
-        "</div>",
-        unsafe_allow_html=True,
-    )
-    q9 = st.text_input(
-        "Q9 입력",
-        placeholder="예) 26세,여성",
-        label_visibility="collapsed",
-        key="sv_q9_ti",
-    )
-
-    st.markdown(
-        '<div class="sv-section-title" style="margin-top:10px;">주관식 <span style="color:#999;font-size:.75rem;">(선택)</span></div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q10. 서비스 이용 중 가장 도움이 되었던 기능이나 정보는 무엇이었습니까?</span>'
-        "</div>",
-        unsafe_allow_html=True,
-    )
-    q10 = st.text_area(
-        "Q10 입력",
-        placeholder="자유롭게 작성해 주세요.",
-        label_visibility="collapsed",
-        key="sv_q10_ta",
-        height=88,
-    )
-
-    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q11. 개선이 필요하다고 생각한 부분이 있다면 자유롭게 작성해 주세요.</span>'
-        "</div>",
-        unsafe_allow_html=True,
-    )
-    q11 = st.text_area(
-        "Q11 입력",
-        placeholder="자유롭게 작성해 주세요.",
-        label_visibility="collapsed",
-        key="sv_q11_ta",
-        height=88,
-    )
-
-    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sv-q-block">'
-        '<span class="sv-q-label">Q12. 기프티콘 추첨을 원하시면 전화번호를 기입해주세요.</span>'
-        "</div>",
-        unsafe_allow_html=True,
-    )
-    q12 = st.text_input(
-        "Q12 입력",
-        placeholder="예) 010-1234-5678",
-        label_visibility="collapsed",
-        key="sv_q12_ti",
-    )
-
-    likert_vals = [q1, q2, q3, q4, q5, q6, q7, q8]
-    q9_filled = bool(q9 and q9.strip())
-    all_answered = all(v is not None for v in likert_vals) and q9_filled
-
-    if not all(v is not None for v in likert_vals):
-        st.caption("📌 Q1~Q의 모든 문항에 응답해 주세요.")
-    elif not q9_filled:
-        st.caption("📌 Q9(나이 및 성별)을 입력해 주세요.")
-
-    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
-
-    if st.button(
-        "제출하기",
-        type="primary",
-        use_container_width=True,
-        disabled=not all_answered,
-        key="sv_submit",
-    ):
-        DB.log_survey_response(
-            session_id=st.session_state.session_id,
-            responses={
-                "q1": int(q1) if q1 else None,
-                "q2": int(q2) if q2 else None,
-                "q3": int(q3) if q3 else None,
-                "q4": int(q4) if q4 else None,
-                "q5": int(q5) if q5 else None,
-                "q6": int(q6) if q6 else None,
-                "q7": int(q7) if q7 else None,
-                "q8": int(q8) if q8 else None,
-                "q9": q9.strip() if q9 else None,
-                "q10": q10.strip() if q10 else None,
-                "q11": q11.strip() if q11 else None,
-                "q12": q12.strip() if q12 else None,
-            },
-        )
-        st.session_state._survey_submitted = True
-        st.session_state._survey_open = False
-        st.rerun()
-
-
-def render_survey_banner():
-    """결과 페이지 상단 설문 배너 — 2열 레이아웃."""
-    if st.session_state._survey_submitted:
-        st.markdown(
-            '<div class="lg-survey-completed">'
-            '<span style="font-size:1.1rem;">✅</span>'
-            "<span>설문 참여 완료 — 소중한 의견 감사합니다.</span>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
-        return
-
-    left_col, right_col = st.columns([3, 1])
-    with left_col:
-        st.markdown(
-            '<div class="lg-survey-banner-wrap">'
-            '<div class="lg-survey-banner-title">📝 서비스 이용 경험 설문</div>'
-            '<p class="lg-survey-banner-desc">'
-            "추천 결과를 확인하신 후 간단한 설문에 참여해 주세요. <br> 추첨을 통해 3분께 배달의 민족 기프티콘 10000원권을 드립니다.<br>"
-            "응답은 연구 목적으로만 사용되며 약 1분 소요됩니다."
-            "</p>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
-    with right_col:
-        st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
-        if st.button(
-            "설문 참여하기",
-            key="survey_open_btn",
-            type="primary",
-            use_container_width=True,
-        ):
-            open_survey_dialog()
-
 
 def compute_fit_score(p: dict, ans: dict, applied_tier) -> float:
     """UI 표시용 종합 적합도 (0.0~1.0). 후보 필터링 로직은 engine.py 그대로."""
@@ -2387,16 +2217,18 @@ def compute_breakdown(p: dict, ans: dict, applied_tier) -> list[dict]:
             {"label": "용량", "score": score, "bullet": bullet if score >= 75 else ""}
         )
 
-    # 예산 — 현재 질문에 없으므로 ans에 budget 키가 있을 때만 표시
     budget = ans.get("budget")
-    if budget is not None:
-        price = p.get("price_min") or p.get("price_max") or 0
+    if budget and budget != "any":
+        band = E.PRICE_BANDS.get(budget, {})
+        lo = band.get("min")
+        hi = band.get("max")
+        price = E.parse_price(p.get("price_min") or p.get("price_max")) or 0
         if price:
-            if price <= budget:
-                b_score, bullet = 100, "예산 범위 안에 있어요"
+            in_band = (lo is None or price >= lo) and (hi is None or price < hi)
+            if in_band:
+                b_score, bullet = 100, f"{band.get('label', '선택한 가격대')} 안에 있어요"
             else:
-                b_score = max(0, round(budget / price * 100))
-                bullet = ""
+                b_score, bullet = 0, ""
             rows.append(
                 {
                     "label": "예산",
@@ -2673,6 +2505,7 @@ def render_lg_result_page(
     applied_tier,
     cand_count: int,
     db_total: int,
+    selected_color: str = "전체",
 ) -> None:
     """Render the final result with the LG result-screen visual system."""
     lifestyle = E.LIFESTYLE_LABELS.get(ans.get("lifestyle"), "고객")
@@ -2682,7 +2515,7 @@ def render_lg_result_page(
         "lgc-" + "".join(ch for ch in st.session_state.session_id if ch.isalnum())[:10]
     )
     slides = "".join(
-        f'<section class="lg-carousel-slide">{_lg_result_card_html(fit, rank, p, ans, applied_tier, total)}</section>'
+        f'<section class="lg-carousel-slide">{_lg_result_card_html(fit, rank, p, ans, applied_tier, total, selected_color)}</section>'
         for fit, rank, p in scored
     )
     nav = _lg_carousel_nav(total, carousel_id)
@@ -2713,24 +2546,32 @@ def render_lg_result_page(
 
 
 def _lg_result_card_html(
-    fit: float, rank: int, p: dict, ans: dict, applied_tier, total: int
+    fit: float,
+    rank: int,
+    p: dict,
+    ans: dict,
+    applied_tier,
+    total: int,
+    selected_color: str = "전체",
 ) -> str:
-    sku_html, init_code, init_mat, init_price = _lg_sku_html(p, rank)
+    sku_html, init_code, init_mat, init_price = _lg_sku_html(p, rank, selected_color)
     reasons = _lg_reason_tags(p, ans, applied_tier)
     ai_text = _lg_ai_text(p, ans, applied_tier, reasons)
     feature_chips = _lg_feature_tags(p, ans)
     price_html = _lg_price_html(init_price or p.get("price_min"))
     product_url = _lge_product_url(init_code)
+    product_image_html = _lg_product_image_html(p)
     badge = "BEST MATCH" if rank == 1 else f"TOP {rank} / {total}"
     return "".join(
         [
             '<div class="lg-result-card">',
             f'<div class="lg-best-badge">{badge}</div>',
             '<div class="lg-product-header">',
-            '<div style="flex:1;min-width:0;">',
+            '<div class="lg-product-info">',
             f'<h3 class="lg-product-name">{_html(p.get("name") or "LG 냉장고")}<span class="lg-product-code-inline" id="card-code-{rank}">{_html(init_code)}</span></h3>',
             f'<p class="lg-product-spec" id="card-spec-{rank}">{_html(_lg_spec_line(p, init_mat))}</p>',
             "</div>",
+            product_image_html,
             "</div>",
             '<div class="lg-ai-box">',
             '<div class="lg-ai-label-wrap">',
@@ -2749,8 +2590,8 @@ def _lg_result_card_html(
             '<p class="lg-price-label">최저가</p>',
             f'<p class="lg-price-num"><span id="card-price-{rank}">{price_html}</span><span class="lg-price-suffix">~</span></p>',
             "</div>",
-            '<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">',
-            '<span class="lg-link-btn">자세히</span>',
+            '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">',
+            '<span style="font-size:0.68rem;color:var(--text-secondary);font-weight:600;">색깔이 적용된 사진을 원하면?</span>',
             f'<a class="lg-link-btn primary" id="card-link-{rank}" href="{_html(product_url)}" target="_blank" rel="noopener noreferrer">LG.com에서 보기 →</a>',
             "</div>",
             "</div>",
@@ -2771,6 +2612,132 @@ def _lg_carousel_nav(total: int, carousel_id: str) -> str:
 
 def _html(value) -> str:
     return escape(str(value or ""))
+
+
+def _mime_for_image(path: str) -> str:
+    ext = os.path.splitext(path)[1].lower()
+    return {
+        ".avif": "image/avif",
+        ".webp": "image/webp",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+    }.get(ext, "application/octet-stream")
+
+
+def _image_data_url(image_class: str) -> str:
+    key = str(image_class or "").strip()
+    if not key:
+        return ""
+    if key in _IMAGE_DATA_URL_CACHE:
+        return _IMAGE_DATA_URL_CACHE[key]
+    path = _PRODUCT_IMAGE_FILES.get(key)
+    if not path or not os.path.exists(path):
+        return ""
+    try:
+        with open(path, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode("ascii")
+        data_url = f"data:{_mime_for_image(path)};base64,{encoded}"
+    except Exception:
+        data_url = ""
+    _IMAGE_DATA_URL_CACHE[key] = data_url
+    return data_url
+
+
+def _lg_product_image_html(p: dict) -> str:
+    image_class = p.get("image_class", "")
+    data_url = _image_data_url(image_class)
+    if not data_url:
+        return ""
+    return (
+        '<div class="lg-product-visual">'
+        f'<img src="{_html(data_url)}" alt="{_html(image_class or p.get("name") or "냉장고 이미지")}">'
+        "</div>"
+    )
+
+
+def normalize_color_name(color_name) -> str:
+    name = re.sub(r"\s+", " ", str(color_name or "").strip())
+    if not name or name in {"-", "X", "nan"}:
+        return ""
+    name = re.sub(r"^오브제\s*컬렉션\s*", "", name)
+    name = re.sub(r"^오브제컬렉션\s*", "", name)
+    replacements = {
+        "에센스화이트": "에센스 화이트",
+        "크림화이트": "크림 화이트",
+        "프라임실버": "프라임 실버",
+        "클레이브라운": "클레이 브라운",
+        "크림피치": "크림 피치",
+        "크림그레이": "크림 그레이",
+        "크림스카이": "크림 스카이",
+        "크림라벤더": "크림 라벤더",
+        "크림레몬": "크림 레몬",
+        "다크그라파이트": "다크 그라파이트",
+        "네이처베이지": "네이처 베이지",
+        "네이처그린": "네이처 그린",
+    }
+    compact = name.replace(" ", "")
+    name = replacements.get(compact, name)
+    name = re.sub(r"\s+", " ", name).strip()
+    return name
+
+
+def split_color_options(color_string) -> list[str]:
+    raw_parts = re.split(r"\s*/\s*|,", str(color_string or ""))
+    colors = []
+    seen = set()
+    for part in raw_parts:
+        normalized = normalize_color_name(part)
+        if normalized and normalized not in seen:
+            seen.add(normalized)
+            colors.append(normalized)
+    return colors
+
+
+def product_color_options(product: dict) -> list[str]:
+    values = list(product.get("colors") or [])
+    sku = _SKU_INDEX.get(product.get("code", ""))
+    if sku:
+        values.extend(v.get("color", "") for v in sku.get("variants", []))
+    colors = []
+    seen = set()
+    for value in values:
+        for color in split_color_options(value):
+            if color not in seen:
+                seen.add(color)
+                colors.append(color)
+    return colors
+
+
+def get_unique_colors(scored_items: list[tuple[float, int, dict]]) -> list[str]:
+    seen = set()
+    colors = []
+    for _, _, product in scored_items:
+        for color in product_color_options(product):
+            if color not in seen:
+                seen.add(color)
+                colors.append(color)
+    return sorted(colors)
+
+
+def filter_by_single_color(
+    scored_items: list[tuple[float, int, dict]], selected_color: str
+) -> list[tuple[float, int, dict]]:
+    if not selected_color or selected_color == "전체":
+        return list(scored_items)
+    normalized = normalize_color_name(selected_color)
+    return [
+        item
+        for item in scored_items
+        if normalized in product_color_options(item[2])
+    ]
+
+
+def color_value_matches(color_value, selected_color: str) -> bool:
+    if not selected_color or selected_color == "전체":
+        return False
+    normalized = normalize_color_name(selected_color)
+    return normalized in split_color_options(color_value)
 
 
 def _lg_spec_line(p: dict, material: str | None = None) -> str:
@@ -2804,9 +2771,9 @@ def _lge_product_url(code: str | None) -> str:
 
 def _color_name_parts(color_name: str) -> list[str]:
     parts = [
-        part.strip()
+        normalize_color_name(part)
         for part in re.split(r"\s*/\s*", str(color_name or ""))
-        if part.strip()
+        if normalize_color_name(part)
     ]
     return parts[:2] if parts else [str(color_name or "").strip()]
 
@@ -2948,11 +2915,18 @@ def _lg_keyword_chips(p: dict, ans: dict) -> str:
     )
 
 
-def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
+def _lg_sku_html(
+    p: dict, rank: int, selected_color: str = "전체"
+) -> tuple[str, str, str, int | None]:
     rep_code = p.get("code", "")
     sku = _SKU_INDEX.get(rep_code)
     variants = sku["variants"] if sku else []
     init_v = variants[0] if variants else {}
+    if selected_color != "전체":
+        init_v = next(
+            (v for v in variants if color_value_matches(v.get("color", ""), selected_color)),
+            init_v,
+        )
     init_code = init_v.get("code") or rep_code
     init_mat = init_v.get("material") or p.get("material", "")
     init_price = init_v.get("price") or p.get("price_min")
@@ -2960,10 +2934,24 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
     if variants:
         chip_items = ""
         material_options: dict[str, dict] = {}
+        seen_variant_colors: set[str] = set()
+        active_assigned = False
         for idx, v in enumerate(variants):
             cname = v.get("color", "")
+            display_parts = split_color_options(cname)
+            display_name = "/".join(display_parts) if display_parts else str(cname or "").strip()
+            if display_name in seen_variant_colors:
+                continue
+            seen_variant_colors.add(display_name)
             swatch_style = _color_swatch_style(cname)
-            active_cls = "active" if idx == 0 else ""
+            is_active = (
+                selected_color != "전체"
+                and color_value_matches(cname, selected_color)
+                and not active_assigned
+            ) or (selected_color == "전체" and len(seen_variant_colors) == 1)
+            if is_active:
+                active_assigned = True
+            active_cls = "active" if is_active else ""
             v_price = int(v.get("price") or 0)
             v_price_fmt = f"{v_price:,}원" if v_price else ""
             v_code = v.get("code") or ""
@@ -2988,7 +2976,7 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
                 f' data-spec="{_html(v_spec)}"'
                 f' data-url="{_html(_lge_product_url(v_code))}">'
                 f'<span class="cs-dot" style="{swatch_style}"></span>'
-                f"{_html(cname)}</button>"
+                f"{_html(display_name)}</button>"
             )
         material_select = ""
         if len(material_options) > 1:
@@ -3027,10 +3015,30 @@ def _lg_sku_html(p: dict, rank: int) -> tuple[str, str, str, int | None]:
 
     colors = p.get("colors") or []
     if colors:
+        display_colors = []
+        seen_colors = set()
+        for color in colors:
+            display_parts = split_color_options(color)
+            display_name = "/".join(display_parts) if display_parts else str(color or "").strip()
+            if display_name and display_name not in seen_colors:
+                seen_colors.add(display_name)
+                display_colors.append((display_name, color))
+        active_color_assigned = False
+        chip_parts = []
+        for idx, (display_color, raw_color) in enumerate(display_colors):
+            is_active = (
+                selected_color != "전체"
+                and color_value_matches(raw_color, selected_color)
+                and not active_color_assigned
+            ) or (selected_color == "전체" and idx == 0)
+            if is_active:
+                active_color_assigned = True
+            chip_parts.append(
+                f'<span class="cs-chip {"active" if is_active else ""}" style="cursor:default;">'
+                f'<span class="cs-dot" style="{_color_swatch_style(raw_color)}"></span>{_html(display_color)}</span>'
+            )
         chips = "".join(
-            f'<span class="cs-chip {"active" if idx == 0 else ""}" style="cursor:default;">'
-            f'<span class="cs-dot" style="{_color_swatch_style(color)}"></span>{_html(color)}</span>'
-            for idx, color in enumerate(colors)
+            chip_parts
         )
         html = (
             '<div class="cs-section">'
@@ -3198,6 +3206,11 @@ def render_top5_compare(scored: list[tuple[float, int, dict]]) -> None:
 # ════════════════════════════════════════════════════════════════════
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
+if st.session_state.force_result:
+    q = "result"
+else:
+    q = E.next_question(PRODUCTS, ans)
+
 render_header()
 
 if IS_SAMPLE:
@@ -3214,21 +3227,20 @@ if IS_SAMPLE:
         unsafe_allow_html=True,
     )
 
-if st.session_state.force_result:
-    q = "result"
-else:
-    q = E.next_question(PRODUCTS, ans)
-
 # ── Q1 첫 답변 시 세션 시작 기록 (이탈 추적 기준점) ──
 if "lifestyle" in ans and not st.session_state._session_start_logged:
     DB.log_session_start(st.session_state.session_id)
     st.session_state._session_start_logged = True
 
 render_progress(q)
+render_return_nav(q)
 
 # ── 질문 흐름 ──
 if q == "lifestyle":
     option_buttons("lifestyle")
+
+elif q == "budget":
+    option_buttons("budget")
 
 elif q == "install":
     option_buttons("install")
@@ -3400,7 +3412,10 @@ elif q == "result":
                 item[1],
             )
         )
-        scored = [(fit, rank + 1, p) for rank, (fit, _, p) in enumerate(scored_all[:5])]
+        scored_pool = [
+            (fit, rank + 1, p) for rank, (fit, _, p) in enumerate(scored_all)
+        ]
+        scored = scored_pool[:5]
         if not scored:
             st.markdown(
                 """
@@ -3439,36 +3454,80 @@ elif q == "result":
             )
             st.session_state._db_logged = True
 
-        # ── 설문 배너 (정렬 기준 위) ──────────────────────────────────────
-        render_survey_banner()
+        if ans.get("budget") and ans.get("budget") != "any":
+            budget_install_scope = {"budget": ans.get("budget")}
+            if ans.get("install"):
+                budget_install_scope["install"] = ans.get("install")
+            budget_install_candidates, _ = E.filter_candidates(
+                PRODUCTS, budget_install_scope
+            )
+            if len(budget_install_candidates) <= 3:
+                with st.container(border=True):
+                    st.markdown(
+                        "예산을 조정하면 더 다양한 선택을 할 수 있어요.",
+                        unsafe_allow_html=False,
+                    )
+                    if st.button(
+                        "예산 조정하기",
+                        key="adjust_budget_from_result",
+                        type="primary",
+                        use_container_width=True,
+                    ):
+                        go_to_question("budget")
 
-        # ── 정렬 기준 선택 드롭다운 ──────────────────────────────────────
-        sort_col, _ = st.columns([1, 2])
-        with sort_col:
+        color_options = get_unique_colors(scored_pool)
+        control_sort_col, control_color_col, _ = st.columns([1, 1, 1])
+        with control_sort_col:
             sort_opt = st.selectbox(
                 "정렬 기준",
                 ["추천 순", "가격 낮은 순"],
                 key="result_sort",
             )
-
-        # 선택된 정렬 기준으로 표시용 리스트 재정렬 (Top 5 후보 자체는 변경 없음)
-        if sort_opt == "가격 낮은 순":
-            scored_display = sorted(
-                scored,
-                key=lambda item: (item[2].get("price_min") or 10**12),
+        with control_color_col:
+            selected_color = st.selectbox(
+                "색상 전체 보기",
+                ["전체"] + color_options,
+                key="result_color_filter",
             )
-            scored_display = [
-                (fit, i + 1, p) for i, (fit, _, p) in enumerate(scored_display)
-            ]
-        else:
-            scored_display = scored
 
-        # 통계 박스
-        q_count = len(st.session_state.get("history", []))
-        db_total = len(PRODUCTS)
-        cand_count = len(cand)
-        render_lg_result_page(scored_display, ans, tier, cand_count, db_total)
-        render_top5_compare(scored_display)
+        filtered_pool = filter_by_single_color(scored_pool, selected_color)
+        if not filtered_pool:
+            st.markdown(
+                '<div class="q-bubble" style="color:#888;">선택한 색상이 포함된 추천 제품이 없어요. 다른 색상을 선택해보세요.</div>',
+                unsafe_allow_html=True,
+            )
+            scored_display = []
+        else:
+            scored = [
+                (fit, rank + 1, p)
+                for rank, (fit, _, p) in enumerate(filtered_pool[:5])
+            ]
+
+            # 선택된 정렬 기준으로 표시용 리스트 재정렬 (Top 5 후보 자체는 변경 없음)
+            if sort_opt == "가격 낮은 순":
+                scored_display = sorted(
+                    scored,
+                    key=lambda item: (item[2].get("price_min") or 10**12),
+                )
+                scored_display = [
+                    (fit, i + 1, p) for i, (fit, _, p) in enumerate(scored_display)
+                ]
+            else:
+                scored_display = scored
+
+            # 통계 박스
+            q_count = len(st.session_state.get("history", []))
+            db_total = len(PRODUCTS)
+            cand_count = len(filtered_pool)
+            render_lg_result_page(
+                scored_display,
+                ans,
+                tier,
+                cand_count,
+                db_total,
+                selected_color,
+            )
+            render_top5_compare(scored_display)
 
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
     if st.button("처음부터 다시 상담", type="primary", use_container_width=True):

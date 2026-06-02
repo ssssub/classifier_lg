@@ -1,4 +1,6 @@
 """상담 엔진 — 설계된 트리(베스트샵 매니저 스크립트)를 그대로 따라가는 추천 로직."""
+import re
+
 from data_loader import SOFT_FEATURES
 
 def tier_index(total_l):
@@ -34,6 +36,39 @@ INSTALL_OPTS = [
     ("프리스탠딩", "프리스탠딩 — 자유롭게 어디든", "원하는 자리에 자유롭게 설치"),
 ]
 
+PRICE_BANDS = {
+    "under_150": {
+        "label": "150만원 미만",
+        "desc": "가성비, 일반형, 소형 중심",
+        "min": None,
+        "max": 1_500_000,
+    },
+    "150_300": {
+        "label": "150~300만원",
+        "desc": "가장 일반적인 대형 냉장고 후보군",
+        "min": 1_500_000,
+        "max": 3_000_000,
+    },
+    "300_500": {
+        "label": "300~500만원",
+        "desc": "4도어, 오브제, Fit & Max, 고급 기능 중심",
+        "min": 3_000_000,
+        "max": 5_000_000,
+    },
+    "over_500": {
+        "label": "500만원 이상",
+        "desc": "시그니처급 또는 일부 최상위 모델",
+        "min": 5_000_000,
+        "max": None,
+    },
+    "any": {
+        "label": "상관없어요",
+        "desc": "예산 제한 없이 추천을 볼게요",
+        "min": None,
+        "max": None,
+    },
+}
+
 LIFESTYLE_LABELS = {
     "freshness_keeper": "신선집착형",
     "hygiene_master": "깔끔관리형",
@@ -57,6 +92,63 @@ def lifestyle_feature_set(ans):
     return set(LIFESTYLE_FEATURES.get(ans.get("lifestyle"), set()))
 
 
+def parse_price(value):
+    """숫자, 쉼표, 원, 만원 표기를 안전하게 원 단위 정수로 바꾼다."""
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return int(value) if value > 0 else None
+    text = str(value).strip()
+    if not text or text.lower() == "nan":
+        return None
+    match = re.search(r"\d[\d,]*(?:\.\d+)?", text)
+    if not match:
+        return None
+    number = float(match.group(0).replace(",", ""))
+    if "만원" in text:
+        number *= 10_000
+    return int(number) if number > 0 else None
+
+
+def _product_price(product):
+    return (
+        parse_price(product.get("price_min"))
+        or parse_price(product.get("price_max"))
+    )
+
+
+def budget_label(value):
+    return PRICE_BANDS.get(value, {}).get("label", "")
+
+
+def budget_message(value):
+    label = budget_label(value)
+    if value == "any":
+        return "예산을 상관없다고 선택해 가격 제한 없이 추천했어요."
+    if label:
+        return f"선택한 {label} 가격대 안에서 추천했어요."
+    return ""
+
+
+def filter_by_budget(products, budget):
+    band = PRICE_BANDS.get(budget)
+    if not band or budget == "any":
+        return list(products)
+    lo = band.get("min")
+    hi = band.get("max")
+    filtered = []
+    for product in products:
+        price = _product_price(product)
+        if price is None:
+            continue
+        if lo is not None and price < lo:
+            continue
+        if hi is not None and price >= hi:
+            continue
+        filtered.append(product)
+    return filtered
+
+
 def _by_install(products, install):
     return [p for p in products if p["install"] == install]
 
@@ -73,16 +165,33 @@ def _target_in_install(products, install, target_tier):
     return [p for p in pool if tier_index(p["total_l"]) == nearest], nearest
 
 
+def _target_in_pool(products, target_tier):
+    exact = [p for p in products if tier_index(p["total_l"]) == target_tier]
+    if exact:
+        return exact, target_tier
+    tiers = sorted({tier_index(p["total_l"]) for p in products if tier_index(p["total_l"])})
+    if not tiers:
+        return list(products), target_tier
+    nearest = min(tiers, key=lambda t: abs(t - target_tier))
+    return [p for p in products if tier_index(p["total_l"]) == nearest], nearest
+
+
 def filter_candidates(products, ans):
     c = list(products)
     applied_tier = None
+
+    if ans.get("budget"):
+        c = filter_by_budget(c, ans.get("budget"))
 
     if ans.get("install"):
         c = _by_install(c, ans["install"])
 
     if ans.get("install") != "빌트인" and ans.get("household") and ans.get("cooking"):
         tt = LIFESTYLE_TIER[(ans["household"], ans["cooking"])]
-        c, applied_tier = _target_in_install(c, ans["install"], tt)
+        if ans.get("install"):
+            c, applied_tier = _target_in_install(c, ans["install"], tt)
+        else:
+            c, applied_tier = _target_in_pool(c, tt)
 
     if ans.get("door_style"):
         ds = ans["door_style"]
@@ -137,6 +246,41 @@ def available_soft_features(candidates):
     return [(k, SOFT_FEATURES[k][0]) for k in SOFT_FEATURES if k in present]
 
 
+def is_question_meaningful(question_id, candidates, ans=None):
+    ans = ans or {}
+    if len(candidates) < 2:
+        return False
+
+    if question_id == "install":
+        return len({p.get("install") for p in candidates if p.get("install")}) >= 2
+
+    if question_id in {"household", "cooking"}:
+        if ans.get("install") == "빌트인":
+            return False
+        installs = {p.get("install") for p in candidates if p.get("install")}
+        if installs == {"빌트인"}:
+            return False
+        tiers = {tier_index(p.get("total_l")) for p in candidates if tier_index(p.get("total_l"))}
+        return len(tiers) >= 2
+
+    if question_id == "door_style":
+        return needs_door_style(candidates, ans)
+
+    if question_id == "space":
+        if ans.get("install") == "빌트인":
+            return False
+        return needs_space(candidates)
+
+    if question_id == "features":
+        for key, _ in available_soft_features(candidates):
+            has_feature = [key in p.get("features", set()) for p in candidates]
+            if any(has_feature) and not all(has_feature):
+                return True
+        return False
+
+    return True
+
+
 def score_and_rank(candidates, ans):
     wanted = set(ans.get("wanted_features", [])) | lifestyle_feature_set(ans)
     ranked = []
@@ -157,32 +301,37 @@ def next_question(products, ans):
     if "lifestyle" not in ans:
         return "lifestyle"
 
-    # Q2: 설치형태 (전체 공통)
-    if "install" not in ans:
+    # Q2: 가격대 (전체 공통)
+    if "budget" not in ans:
+        return "budget"
+
+    # Q3: 설치형태 (가격 필터 이후 의미 있을 때만)
+    cand, _ = filter_candidates(products, ans)
+    if "install" not in ans and is_question_meaningful("install", cand, ans):
         return "install"
 
-    # Q2: 인원 / 요리 (빌트인은 skip)
-    # Q2-1: 도어 방식 (프리스탠딩 800L+ 경로만 조건부)
+    # 인원 / 요리 (빌트인은 skip, 현재 후보군에서 의미 있을 때만)
+    # 도어 방식 (프리스탠딩 800L+ 경로만 조건부)
     # ※ cand <= 1 이어도 Q3(공통 필수)를 거쳐야 하므로 Q3 이전에는 early-exit 없음
     cand, _ = filter_candidates(products, ans)
     if ans.get("install") != "빌트인":
-        if "household" not in ans:
+        if "household" not in ans and is_question_meaningful("household", cand, ans):
             return "household"
-        if "cooking" not in ans:
+        if "cooking" not in ans and is_question_meaningful("cooking", cand, ans):
             return "cooking"
         cand, _ = filter_candidates(products, ans)
-        if "door_style" not in ans and needs_door_style(cand, ans):
+        if "door_style" not in ans and is_question_meaningful("door_style", cand, ans):
             return "door_style"
 
-    # Q3: 추가기능 (전체 공통)
+    # 추가기능 (전체 공통, 후보군을 실제로 나눌 때만)
     cand, _ = filter_candidates(products, ans)
     if len(cand) <= 1:
         return "result"
-    if "wanted_features" not in ans and available_soft_features(cand):
+    if "wanted_features" not in ans and is_question_meaningful("features", cand, ans):
         return "features"
 
-    # Q4: 설치공간 크기 (빌트인 제외)
-    if "space" not in ans and ans.get("install") != "빌트인":
+    # 설치공간 크기 (빌트인 제외, 후보군을 실제로 나눌 때만)
+    if "space" not in ans and is_question_meaningful("space", cand, ans):
         return "space"
 
     return "result"

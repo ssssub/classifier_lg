@@ -5,6 +5,7 @@ import os
 import re
 
 DATA_FILE = "LG_냉장고_대표상품기준_통합DB.xlsx"
+BASE_DIR = os.path.dirname(__file__)
 
 SOFT_FEATURES = {
     "door_cooling": ("도어쿨링+ (문쪽까지 균일 냉기)", ["도어쿨링"]),
@@ -64,7 +65,7 @@ def _dedup(lst: list) -> list:
 
 def _make_product(code, name, price_min, price_max, install, doors, total_l,
                   fridge_l, freezer_l, energy, width, size_raw, material,
-                  colors, feat_tokens, promo, model_codes=None):
+                  colors, feat_tokens, promo, model_codes=None, image_class=None):
     energy_val = _to_int(energy)
     full_blob = " ".join(feat_tokens) + " " + name
     features = set()
@@ -99,6 +100,7 @@ def _make_product(code, name, price_min, price_max, install, doors, total_l,
         "is_ai": "ai" in features,
         "promo": promo if isinstance(promo, list) else [],
         "raw_features": feat_tokens,
+        "image_class": str(image_class).strip() if image_class else "",
     }
 
 
@@ -154,7 +156,11 @@ def _sample_products():
 
 def load_products(path=None):
     if path is None:
-        path = DATA_FILE
+        path = os.path.join(BASE_DIR, DATA_FILE)
+    elif not os.path.isabs(path):
+        local_path = os.path.join(BASE_DIR, path)
+        if os.path.exists(local_path):
+            path = local_path
 
     if not os.path.exists(path):
         return _sample_products(), True  # (products, is_sample)
@@ -211,6 +217,11 @@ def load_products(path=None):
                 "is_ai": "ai" in features,
                 "promo": promo,
                 "raw_features": feat_tokens,
+                "image_class": (
+                    str(r.get("이미지 분류명", "")).strip()
+                    if r.get("이미지 분류명") is not None and pd.notna(r.get("이미지 분류명"))
+                    else ""
+                ),
             })
         return products, False
     except Exception as e:

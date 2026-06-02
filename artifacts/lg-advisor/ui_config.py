@@ -198,9 +198,35 @@ REFRIGERATOR_CONFIG = CategoryConfig(
             q_id="install",
             text="냉장고를 <strong>어떻게 설치</strong>하실 계획이세요?",
             options=[
-                OptionConfig("빌트인",     "빌트인",      "가구장에 완전히 통합",       "builtin"),
-                OptionConfig("Fit & Max",  "Fit & Max",  "기존 가구 사이에 빈틈 없이",  "fitmax"),
-                OptionConfig("프리스탠딩", "프리스탠딩",  "원하는 자리에 자유롭게",     "freestanding"),
+                OptionConfig(
+                    "빌트인",
+                    "빌트인",
+                    "가구장 안에 깔끔하게 맞춰 넣어 주방을 정돈감 있게 완성하는 타입||주방 가구와 일체감 있는 인테리어를 원할 때 추천",
+                    "builtin",
+                ),
+                OptionConfig(
+                    "Fit & Max",
+                    "Fit & Max",
+                    "단 4mm 여유 공간으로도 설치 가능한 제로 클리어런스 힌지로, 가구와 자연스럽게 어우러지는 타입||가구와 자연스럽게 어우러지는 미니멀한 주방을 원할 때 추천",
+                    "fitmax",
+                ),
+                OptionConfig(
+                    "프리스탠딩",
+                    "프리스탠딩",
+                    "500~800L대의 넉넉한 용량과 자유로운 배치로 다양한 공간에 두기 좋은 타입||이사가 잦거나 공간 연출에 자유로움을 두고 싶을 때 추천",
+                    "freestanding",
+                ),
+            ],
+        ),
+        "budget": QuestionConfig(
+            q_id="budget",
+            text="<strong>예산은 어느 정도로</strong> 생각하고 계신가요?",
+            options=[
+                OptionConfig("under_150", "150만원 미만", "가성비, 일반형, 소형 중심", "default"),
+                OptionConfig("150_300", "150~300만원", "가장 일반적인 대형 냉장고 후보군", "default"),
+                OptionConfig("300_500", "300~500만원", "프리미엄 라인업 및 고급 기능 중심", "default"),
+                OptionConfig("over_500", "500만원 이상", "시그니처급 또는 일부 최상위 모델", "default"),
+                OptionConfig("any", "상관없어요", "예산 제한 없이 추천을 볼게요", "default"),
             ],
         ),
         "household": QuestionConfig(
