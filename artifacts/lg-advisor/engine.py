@@ -260,6 +260,8 @@ def is_question_meaningful(question_id, candidates, ans=None):
         installs = {p.get("install") for p in candidates if p.get("install")}
         if installs == {"빌트인"}:
             return False
+        if ans.get("budget") == "300_500":
+            return True
         tiers = {tier_index(p.get("total_l")) for p in candidates if tier_index(p.get("total_l"))}
         return len(tiers) >= 2
 
