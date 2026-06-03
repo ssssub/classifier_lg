@@ -164,6 +164,17 @@ def go_to_question(q_id: str):
     st.rerun()
 
 
+def show_empty_result_back_button(key: str):
+    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+    if st.button("← 이전 질문으로 돌아가기", key=key, type="primary", use_container_width=True):
+        st.session_state.force_result = False
+        if st.session_state.history:
+            go_back()
+        else:
+            reset()
+        st.rerun()
+
+
 # ── 추가 기능 카드 정의 (label, icon_key, desc) ────────────────────────
 FEAT_CONFIG: dict[str, tuple[str, str, str]] = {
     "door_cooling": ("도어쿨링+", "feat-door-cool", "문쪽까지 균일하게 냉기 순환"),
@@ -3455,6 +3466,7 @@ elif q == "result":
         </div>""",
             unsafe_allow_html=True,
         )
+        show_empty_result_back_button("empty_result_go_back")
     else:
         # 후보 전체에 가중치 적합도를 계산한 뒤, 점수가 가장 높은 5개만 표시합니다.
         scored_all = [
@@ -3482,6 +3494,7 @@ elif q == "result":
             </div>""",
                 unsafe_allow_html=True,
             )
+            show_empty_result_back_button("empty_scored_go_back")
             ranked = []
             st.stop()
 
